@@ -121,7 +121,7 @@ tooling
 
 ### For ML Engineers
 
-#### 1. Clone the repo
+#### 1. Clone the repo and navigate to notebooks
 
 ```
 git clone https://github.com/trevorpfiz/BioxML-allergen-epitopes.git
