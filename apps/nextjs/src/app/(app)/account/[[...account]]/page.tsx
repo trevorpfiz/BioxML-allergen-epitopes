@@ -17,7 +17,8 @@ export default async function Account() {
         <div className="space-y-4 pb-4">
           <UserSettings user={data.user} />
         </div>
-        <SignOutButton />
+        {/* FIXME: leading to multiple anonymous profiles being created? */}
+        {!data.user.is_anonymous && <SignOutButton />}
       </div>
     </main>
   );
