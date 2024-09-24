@@ -43,9 +43,20 @@ export async function updateSession(request: NextRequest) {
   // supabase.auth.getUser(). A simple mistake could make it very hard to debug
   // issues with users being randomly logged out.
 
-  const {
+  let {
     data: { user },
   } = await supabase.auth.getUser();
+
+  // If user is not authenticated, sign in anonymously
+  if (!user) {
+    const { data, error } = await supabase.auth.signInAnonymously();
+    if (error) {
+      console.error("Error signing in anonymously:", error);
+    } else {
+      console.log("Anonymous user signed in:", data.user);
+      user = data.user;
+    }
+  }
 
   // If protected route and user is not authenticated, redirect to signin
   const isProtectedRoute = protectedRoutes.includes(request.nextUrl.pathname);

@@ -1,5 +1,4 @@
 import "~/app/globals.css";
-import "~/styles/prosemirror.css";
 
 import type { Metadata, Viewport } from "next";
 import { GeistMono } from "geist/font/mono";

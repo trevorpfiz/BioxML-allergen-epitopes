@@ -2,7 +2,6 @@ import { Suspense } from "react";
 import { notFound } from "next/navigation";
 
 import Loading from "~/app/loading";
-import TailwindAdvancedEditor from "~/components/reports/novel/advanced-editor";
 import ReportModal from "~/components/reports/report-modal";
 import { BackButton } from "~/components/shared/back-button";
 import { api } from "~/trpc/server";
@@ -32,10 +31,7 @@ export default async function Report({
               <div
                 className={"text-wrap break-all rounded-lg bg-secondary p-1"}
               >
-                <TailwindAdvancedEditor
-                  reportId={report.id}
-                  content={report.content ?? ""}
-                />
+                <p>Content</p>
               </div>
             </div>
           </div>

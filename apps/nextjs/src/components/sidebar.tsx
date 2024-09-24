@@ -32,22 +32,23 @@ export default Sidebar;
 
 const UserDetails = ({ user }: { user: User }) => {
   const name = getNameFromUser(user);
+  const displayEmail = user.email ?? "Guest";
+  // const initials = name
+  //   .split(" ")
+  //   .map((word) => word[0]?.toUpperCase())
+  //   .join("")
+  //   .slice(0, 2);
 
   return (
     <Link href="/account">
       <div className="flex w-full items-center justify-between border-t border-border px-2 pt-4">
         <div className="text-muted-foreground">
           <p className="text-xs">{name}</p>
-          <p className="pr-4 text-xs font-light">
-            {user.email ?? "john@doe.com"}
-          </p>
+          <p className="pr-4 text-xs font-light">{displayEmail}</p>
         </div>
         <Avatar className="h-10 w-10">
-          <AvatarFallback className="border-2 border-border text-muted-foreground">
-            {name
-              .split(" ")
-              .map((word) => word[0]?.toUpperCase())
-              .join("")}
+          <AvatarFallback className="border-2 border-border bg-gradient-to-r from-indigo-500 via-purple-500 to-pink-500 text-white">
+            {/* {initials || ""} */}
           </AvatarFallback>
         </Avatar>
       </div>

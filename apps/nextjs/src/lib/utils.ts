@@ -5,5 +5,5 @@ export function getNameFromUser(user: User) {
   if (typeof meta.name === "string") return meta.name;
   if (typeof meta.full_name === "string") return meta.full_name;
   if (typeof meta.user_name === "string") return meta.user_name;
-  return "[redacted]";
+  return "Guest User";
 }
