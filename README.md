@@ -24,8 +24,8 @@
 
 ## Goals
 
-1. Design an oral, T-cell epitope-based vaccine in silico for a target allergen
-2. Refine and detail our in silico pipeline to empower allergy vaccine research
+1. Advance B-cell and T-cell epitope prediction through a web platform powered by ESM-3
+2. Refine and detail the platform to empower allergy vaccine research
 
 ## Overview
 
