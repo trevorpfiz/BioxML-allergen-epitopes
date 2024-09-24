@@ -1,130 +1,259 @@
-# BioxML - Allergen Peptides
+<a name="readme-top"></a>
 
-## Table of Contents
+<!-- PROJECT LOGO -->
+<br>
+<div align="center">
+  <a href="https://github.com/trevorpfiz/BioxML-allergen-epitopes">
+    <img src="https://github.com/user-attachments/assets/75fa5507-721d-4c0a-92ee-92a9002aff0c" alt="Logo" width="80" height="80">
+  </a>
 
-- [Demo](#demo)
-- [Goals](#goals)
-- [Overview](#overview)
-  1. [Allergen selection](#1-allergen-selection)
-  2. [Protein sequence retrieval and analysis](#2-protein-sequence-retrieval-and-analysis)
-  3. [Physicochemical analysis and secondary structure prediction](#3-physicochemical-analysis-and-secondary-structure-prediction)
-  4. [Epitope prediction](#4-epitope-prediction)
-  5. [Population coverage analysis](#5-population-coverage-analysis)
-  6. [Evaluate and select epitopes](#6-evaluate-and-select-epitopes)
-  7. [Molecular docking of the selected epitopes](#7-molecular-docking-of-the-selected-epitopes)
-  8. [Construct the T-cell epitope-based vaccine (TEV)](#8-construct-the-t-cell-epitope-based-vaccine-tev)
-  9. [In silico TEV evaluation](#9-in-silico-tev-evaluation)
-  10. [Molecular docking of TEV with immune receptors](#10-molecular-docking-of-tev-with-immune-receptors)
-  11. [Molecular dynamics simulation](#11-molecular-dynamics-simulation)
-  12. [Codon optimization and in silico cloning](#12-codon-optimization-and-in-silico-cloning)
-  13. [Analyze all in silico results](#13-analyze-all-in-silico-results)
-  14. [Next Steps](#14-next-steps)
+<h3 align="center">Epitope Prediction Platform - B-cell and T-cell Epitope Prediction Powered by ESM-3</h3>
+
+  <p align="center">
+    This is an open source web platform powered by ESM-3 to advance B-cell and T-cell epitope prediction. One of our aims is to discover new allergen epitopes not listed in the IEDB and advance allergy research.
+  </p>
+</div>
+
+<!-- TABLE OF CONTENTS -->
+<details open>
+  <summary><strong>Table of Contents</strong></summary>
+  <ol>
+    <li><a href="#demo">Demo</a></li>
+    <li><a href="#project-details">Project Details</a></li>
+    <li><a href="#technical-details">Technical Details</a></li>
+    <li><a href="#installation-and-usage">Installation and Usage</a></li>
+    <li><a href="#feedback">Feedback</a></li>
+    <li><a href="#contributing">Contributing</a></li>
+    <li><a href="#license">License</a></li>
+    <li><a href="#references">References</a></li>
+  </ol>
+</details>
+
+<!-- DEMO -->
 
 ## Demo
 
-## Goals
+Coming soon
 
-1. Advance B-cell and T-cell epitope prediction through a web platform powered by ESM-3
-2. Refine and detail the platform to empower allergy vaccine research
+<p align="right">(<a href="#readme-top">back to top</a>)</p>
 
-## Overview
+<!-- PROJECT DETAILS -->
 
-### 1. Allergen selection
+## Project Details
 
-#### Ara h 2
+### Apps
 
-### 2. Protein sequence retrieval and analysis
+- **Next.js** web platform for B-cell and T-cell epitope predictions powered by ESM-3.
+- **FastAPI** for hosting ESM-3 and predicting epitopes.
 
-- Retrieve protein sequences of chosen allergen isoforms (IUIS, NCBI)
+### Features
 
-  #### Ara h 2 Isoforms
+- **Authentication:** Anonymous Sign-Ins with Supabase Auth.
+- **Epitope Predictions:** ESM-3 for linear B-cell, conformational B-cell, MHC-I, and MHC-II epitope predictions.
+- **Web Dashboard:** Next.js app for managing epitope predictions.
 
-  ##### 1. Ara h 2.0101 - AAK96887
+<p align="right">(<a href="#readme-top">back to top</a>)</p>
 
-  ```bash
-  >AAK96887.1 allergen II, partial [Arachis hypogaea]
-  MAKLTILVALALFLLAAHASARQQWELQGDRRCQSQLERANLRPCEQHLMQKIQRDEDSYERDPYSPSQD
-  PYSPSPYDRRGAGSSQHQERCCNELNEFENNQRCMCEALQQIMENQSDRLQGRQQEQQFKRELRNLPQQC
-  GLRAPQRCDLDVESGG
-  ```
+<!-- TECHNICAL DETAILS -->
 
-  ##### 2. Ara h 2.0201 - AAN77576
+## Technical Details
 
-  ```bash
-  >AAN77576.1 allergen Ara h 2.02 [Arachis hypogaea]
-  MAKLTILVALALFLLAAHASARQQWELQGDRRCQSQLERANLRPCEQHLMQKIQRDEDSYGRDPYSPSQD
-  PYSPSQDPDRRDPYSPSPYDRRGAGSSQHQERCCNELNEFENNQRCMCEALQQIMENQSDRLQGRQQEQQ
-  FKRELRNLPQQCGLRAPQRCDLEVESGGRDRY
-  ```
+### Tech Stack
 
-- Align sequences (Clustal Omega / MEGA)
+- [ESM-3](https://www.evolutionaryscale.ai/)
+- [TypeScript](https://www.typescriptlang.org/)
+- [tRPC](https://trpc.io/)
+- [Drizzle ORM](https://orm.drizzle.team/)
+- [Supabase](https://supabase.com/)
+- [Next.js](https://nextjs.org/)
+- [Tailwind CSS](https://tailwindcss.com/)
+- [FastAPI](https://fastapi.tiangolo.com/)
+- [Turborepo](https://turbo.build/repo/docs)
 
-  Input:
+```text
+.github
+  └─ workflows
+        └─ CI with pnpm cache setup
+.vscode
+  ├─ Recommended extensions and settings for VSCode users
+  └─ Multi-root Workspaces for smoother python experience in monorepo
+apps
+  ├─ nextjs
+  |   ├─ Next.js 14
+  |   ├─ React 18
+  |   ├─ Tailwind CSS
+  |   └─ E2E Typesafe API Server & Client
+  └─ fastapi
+      ├─ FastAPI for uploading and processing protein sequences
+      └─ ESM-3 for epitope predictions
+notebooks
+  └─ working with the models
+packages
+  ├─ api
+  |   ├─ tRPC v11 router definition.
+  |   └─ Generated TypeScript client from FastAPI OpenAPI spec.
+  ├─ db
+  |   └─ Typesafe db calls using Drizzle & Amazon RDS
+  ├─ ui
+  |   └─ shadcn/ui.
+  └─ validators
+      └─ Zod schemas for repo-wide type-safety and validation.
+tooling
+  ├─ eslint
+  |   └─ shared, fine-grained, eslint presets
+  ├─ prettier
+  |   └─ shared prettier configuration
+  ├─ tailwind
+  |   └─ shared tailwind configuration
+  ├─ github
+  |   └─ shared github actions
+  └─ typescript
+      └─ shared tsconfig you can extend from
+```
 
-  ```bash
-  >AAK96887.1 allergen II, partial [Arachis hypogaea]
-  MAKLTILVALALFLLAAHASARQQWELQGDRRCQSQLERANLRPCEQHLMQKIQRDEDSYERDPYSPSQD
-  PYSPSPYDRRGAGSSQHQERCCNELNEFENNQRCMCEALQQIMENQSDRLQGRQQEQQFKRELRNLPQQC
-  GLRAPQRCDLDVESGG
-  >AAN77576.1 allergen Ara h 2.02 [Arachis hypogaea]
-  MAKLTILVALALFLLAAHASARQQWELQGDRRCQSQLERANLRPCEQHLMQKIQRDEDSYGRDPYSPSQD
-  PYSPSQDPDRRDPYSPSPYDRRGAGSSQHQERCCNELNEFENNQRCMCEALQQIMENQSDRLQGRQQEQQ
-  FKRELRNLPQQCGLRAPQRCDLEVESGGRDRY
-  ```
+> In this project, we use `@epi` as a placeholder for package names. As a user, you might want to replace it with your own organization or project name. You can use find-and-replace to change all the instances of `@epi` to something like `@my-company` or `@project-name`.
 
-  Output:
+<p align="right">(<a href="#readme-top">back to top</a>)</p>
 
-  ```bash
-  CLUSTAL O(1.2.4) multiple sequence alignment
+<!-- INSTALLATION AND USAGE -->
 
+## Installation and Usage
 
-  AAK96887.1      MAKLTILVALALFLLAAHASARQQWELQGDRRCQSQLERANLRPCEQHLMQKIQRDEDSY	60
-  AAN77576.1      MAKLTILVALALFLLAAHASARQQWELQGDRRCQSQLERANLRPCEQHLMQKIQRDEDSY	60
-                  ************************************************************
+### 1. Setup dependencies
 
-  AAK96887.1      ERDPYSPSQDP------------YSPSPYDRRGAGSSQHQERCCNELNEFENNQRCMCEA	108
-  AAN77576.1      GRDPYSPSQDPYSPSQDPDRRDPYSPSPYDRRGAGSSQHQERCCNELNEFENNQRCMCEA	120
-                   **********            *************************************
+```diff
+# Install dependencies
+pnpm i
 
-  AAK96887.1      LQQIMENQSDRLQGRQQEQQFKRELRNLPQQCGLRAPQRCDLDVESGG----	156
-  AAN77576.1      LQQIMENQSDRLQGRQQEQQFKRELRNLPQQCGLRAPQRCDLEVESGGRDRY	172
-                  ******************************************:*****
-  ```
+# Configure environment variables.
+# There is an `.env.example` in the root directory you can use for reference
+# Ensure that the POSTGRES_URL is in the same format as in the example
+cp .env.example .env
 
-- Create consensus sequence (EMBOSS Cons)
+# Push the Drizzle schema to your database (w/ drizzle-kit push)
+pnpm db:push
 
-  ```bash
-  >EMBOSS0001
-  MAKLTILVALALFLLAAHASARQQWELQGDRRCQSQLERANLRPCEQHLMQKIQRDEDSY
-  eRDPYSPSQDPyspsqdpdrrdpYSPSPYDRRGAGSSQHQERCCNELNEFENNQRCMCEA
-  LQQIMENQSDRLQGRQQEQQFKRELRNLPQQCGLRAPQRCDLDVESGGrdry
-  ```
+# Or use migrations (w/ drizzle-kit generate and drizzle-kit migrate)
+pnpm db:generate
+pnpm db:migrate
+```
 
-- Find homologous sequences (BLASTp query)
-- Investigate family classification (Pfam, InterPro)
-- Predict transmembrane helices (DeepTMHMM)
-- Conduct phylogenetic analysis (MEGA 11)
+> **NOTE:** Migrations seem preferable for Supabase. Still figuring out the best way to do migrations for local development/branching. <https://twitter.com/plushdohn/status/1780126181490135371>
 
-### 3. Physicochemical analysis and secondary structure prediction
+### 2. Setup Supabase
 
-### 4. Epitope prediction
+1. Go to [the Supabase dashboard](https://app.supabase.com/projects) and create a new project.
+2. Under project settings, retrieve the environment variables `reference id`, `project url` & `anon public key` and paste them into [.env](./.env.example) in the necessary places. You'll also need the database password you set when creating the project.
+3. Under `Auth`, configure any auth provider(s) of your choice. This repo is using Github for Web and Apple for Mobile.
+4. If you want to use the `Email` provider and `email confirmation`, go to `Auth` -> `Email Templates` and change the `Confirm signup` from `{{ .ConfirmationURL }}` to `{{ .RedirectTo }}&token_hash={{ .TokenHash }}&type=signup`, according to <https://supabase.com/docs/guides/auth/redirect-urls#email-templates-when-using-redirectto>. `.RedirectTo` will need to be added to your `Redirect URLs` in the next step.
+5. Under `Auth` -> `URL Configuration`, set the `Site URL` to your production URL and add `http://localhost:3000/**` and `https://*-username.vercel.app/**` to `Redirect URLs` as detailed here <https://supabase.com/docs/guides/auth/redirect-urls#vercel-preview-urls>.
+6. Set up a trigger when a new user signs up: <https://supabase.com/docs/guides/auth/managing-user-data#using-triggers>. You can run this in the SQL Editor.
 
-### 5. Population coverage analysis
+```sql
+-- inserts a row into public.profile
+create function public.handle_new_user()
+returns trigger
+language plpgsql
+security definer set search_path = public
+as $$
+begin
+  insert into public.epi_profile (id, email, name, image)
+  values (
+    new.id,
+    new.email,
+    COALESCE(
+      new.raw_user_meta_data ->> 'name',
+      new.raw_user_meta_data ->> 'full_name',
+      new.raw_user_meta_data ->> 'user_name',
+      'Guest User'
+    ),
+    new.raw_user_meta_data ->> 'avatar_url'
+  )
+  on conflict (id) do update set
+    email = excluded.email,
+    name = excluded.name,
+    image = excluded.image;
+  return new;
+end;
+$$;
 
-### 6. Evaluate and select epitopes
+-- trigger the function every time a user is created
+create trigger on_auth_user_created
+  after insert on auth.users
+  for each row execute procedure public.handle_new_user();
 
-### 7. Molecular docking of the selected epitopes
+-- trigger the function when a user signs in/their email is confirmed to get missing values
+create trigger on_auth_user_verified
+  after update on auth.users
+  for each row when (
+    old.last_sign_in_at is null
+    and new.last_sign_in_at is not null
+  ) execute procedure public.handle_new_user();
+```
 
-### 8. Construct the T-cell epitope-based vaccine (TEV)
+```sql
+-- drop a trigger if needed
+drop trigger "on_auth_user_verified" on auth.users;
+```
 
-### 9. In silico TEV evaluation
+7. Remove access to the `public` schema as we are only using the server
 
-### 10. Molecular docking of TEV with immune receptors
+By default, Supabase exposes the `public` schema to the PostgREST API to allow the `supabase-js` client query the database directly from the client. However, since we route all our requests through the Next.js application (through tRPC), we don't want our client to have this access. To disable this, execute the following SQL query in the SQL Editor on your Supabase dashboard:
 
-### 11. Molecular dynamics simulation
+```sql
+REVOKE USAGE ON SCHEMA public FROM anon, authenticated;
+```
 
-### 12. Codon optimization and in silico cloning
+![disable public access](https://user-images.githubusercontent.com/51714798/231810706-88b1db82-0cfd-485f-9043-ef12a53dc62f.png)
 
-### 13. Analyze all in silico results
+> Note: This means you also don't need to enable row-level security (RLS) on your database if you don't want to.
 
-### 14. Next Steps
+<p align="right">(<a href="#readme-top">back to top</a>)</p>
+
+<!-- FEEDBACK -->
+
+## Feedback
+
+Share your thoughts in [Discussions](https://github.com/trevorpfiz/BioxML-allergen-epitopes/discussions)
+
+<p align="right">(<a href="#readme-top">back to top</a>)</p>
+
+<!-- CONTRIBUTING -->
+
+## Contributing
+
+We welcome contributions! Find out how you can contribute to the project in `CONTRIBUTING.md`: [Contributing Guidelines](https://github.com/trevorpfiz/BioxML-allergen-epitopes/blob/main/CONTRIBUTING.md)
+
+<a href="https://github.com/trevorpfiz/BioxML-allergen-epitopes/graphs/contributors">
+  <p align="center">
+    <img src="https://contrib.rocks/image?repo=trevorpfiz/BioxML-allergen-epitopes" alt="A table of avatars from the project's contributors" />
+  </p>
+</a>
+
+<p align="center">
+  Made with <a rel="noopener noreferrer" target="_blank" href="https://contrib.rocks">contrib.rocks</a>
+</p>
+
+<p align="right">(<a href="#readme-top">back to top</a>)</p>
+
+<!-- LICENSE -->
+
+## License
+
+Distributed under the [MIT License](https://github.com/trevorpfiz/BioxML-allergen-epitopes/blob/main/LICENSE). See `LICENSE` for more information.
+
+<p align="right">(<a href="#readme-top">back to top</a>)</p>
+
+<!-- REFERENCES -->
+
+## References
+
+This repo originates from [create-t3-turbo](https://github.com/t3-oss/create-t3-turbo). Feel free to check out the project if you are running into issues with running/deploying the starter.
+
+Thanks as well to the following:
+
+- [SEMA 2.0](https://sema.airi.net/) for fueling the original idea of this project.
+
+- [next-fast-turbo](https://github.com/cording12/next-fast-turbo) for the learnings on how to bring FastAPI into the project.
+
+<p align="right">(<a href="#readme-top">back to top</a>)</p>
