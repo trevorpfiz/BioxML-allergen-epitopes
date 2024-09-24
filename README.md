@@ -119,7 +119,21 @@ tooling
 
 ## Installation and Usage
 
-### 1. Setup dependencies
+### For ML Engineers
+
+#### 1. Clone the repo
+
+```
+git clone https://github.com/trevorpfiz/BioxML-allergen-epitopes.git
+cd BioxML-allergen-epitopes/notebooks
+```
+
+#### 2. VS Code-GitHub-Google Colab
+https://peter-jp-xie.medium.com/develop-colab-notebooks-with-visual-studio-code-de830dde9baa
+
+### For Web Developers
+
+#### 1. Setup dependencies
 
 ```diff
 # Install dependencies
@@ -140,7 +154,7 @@ pnpm db:migrate
 
 > **NOTE:** Migrations seem preferable for Supabase. Still figuring out the best way to do migrations for local development/branching. <https://twitter.com/plushdohn/status/1780126181490135371>
 
-### 2. Setup Supabase
+#### 2. Setup Supabase
 
 1. Go to [the Supabase dashboard](https://app.supabase.com/projects) and create a new project.
 2. Under project settings, retrieve the environment variables `reference id`, `project url` & `anon public key` and paste them into [.env](./.env.example) in the necessary places. You'll also need the database password you set when creating the project.
