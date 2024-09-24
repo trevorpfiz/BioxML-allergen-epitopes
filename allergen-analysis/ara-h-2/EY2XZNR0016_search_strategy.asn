@@ -1,0 +1,113 @@
+Blast4-request ::= {
+  body queue-search {
+    program "blastp",
+    service "plain",
+    queries bioseq-set {
+      seq-set {
+        seq {
+          id {
+            local str "Query_4725344"
+          },
+          descr {
+            user {
+              type str "CFastaReader",
+              data {
+                {
+                  label str "DefLine",
+                  data str ">EMBOSS0001"
+                }
+              }
+            },
+            title "EMBOSS0001"
+          },
+          inst {
+            repr raw,
+            mol aa,
+            length 172,
+            seq-data ncbieaa "MAKLTILVALALFLLAAHASARQQWELQGDRRCQSQLERANLRPCEQH
+LMQKIQRDEDSYERDPYSPSQDPYSPSQDPDRRDPYSPSPYDRRGAGSSQHQERCCNELNEFENNQRCMCEALQQIME
+NQSDRLQGRQQEQQFKRELRNLPQQCGLRAPQRCDLDVESGGRDRY"
+          }
+        }
+      }
+    },
+    subject database "nr",
+    algorithm-options {
+      {
+        name "EvalueThreshold",
+        value cutoff e-value { 5, 10, -2 }
+      },
+      {
+        name "WordSize",
+        value integer 5
+      },
+      {
+        name "WordThreshold",
+        value integer 20
+      },
+      {
+        name "UngappedMode",
+        value boolean FALSE
+      },
+      {
+        name "PercentIdentity",
+        value real { 0, 10, 0 }
+      },
+      {
+        name "HitlistSize",
+        value integer 100
+      },
+      {
+        name "EffectiveSearchSpace",
+        value big-integer 0
+      },
+      {
+        name "DbLength",
+        value big-integer 0
+      },
+      {
+        name "WindowSize",
+        value integer 40
+      },
+      {
+        name "SegFiltering",
+        value boolean FALSE
+      },
+      {
+        name "MaskAtHash",
+        value boolean FALSE
+      },
+      {
+        name "MatrixName",
+        value string "BLOSUM62"
+      },
+      {
+        name "GapOpeningCost",
+        value integer 11
+      },
+      {
+        name "GapExtensionCost",
+        value integer 1
+      },
+      {
+        name "CompositionBasedStats",
+        value integer 2
+      },
+      {
+        name "SmithWatermanMode",
+        value boolean FALSE
+      }
+    },
+    format-options {
+      {
+        name "Web_JobTitle",
+        value string "ara-h-2-cons-blastp"
+      },
+      {
+        name "Web_ShortQueryAdjust",
+        value boolean TRUE
+      }
+    }
+  }
+}
+

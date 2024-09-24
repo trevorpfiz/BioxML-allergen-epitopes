@@ -1,0 +1,55 @@
+{
+  "name": "@epi/db",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "default": "./src/index.ts"
+    },
+    "./client": {
+      "types": "./dist/client.d.ts",
+      "default": "./src/client.ts"
+    },
+    "./schema": {
+      "types": "./dist/schema/index.d.ts",
+      "default": "./src/schema/index.ts"
+    }
+  },
+  "license": "MIT",
+  "scripts": {
+    "build": "tsc",
+    "clean": "git clean -xdf .cache .turbo dist node_modules",
+    "dev": "tsc",
+    "format": "prettier --check . --ignore-path ../../.gitignore",
+    "lint": "eslint",
+    "dk-generate": "pnpm with-env drizzle-kit generate",
+    "migrate": "pnpm with-env drizzle-kit migrate",
+    "migrate:script": "pnpm with-env tsx src/migrate.ts",
+    "push": "pnpm with-env drizzle-kit push",
+    "studio": "pnpm with-env drizzle-kit studio",
+    "typecheck": "tsc --noEmit --emitDeclarationOnly false",
+    "with-env": "dotenv -e ../../.env --"
+  },
+  "dependencies": {
+    "@t3-oss/env-core": "^0.11.1",
+    "@vercel/postgres": "^0.10.0",
+    "drizzle-orm": "^0.33.0",
+    "drizzle-zod": "^0.5.1",
+    "pg": "^8.13.0",
+    "zod": "catalog:"
+  },
+  "devDependencies": {
+    "@epi/eslint-config": "workspace:*",
+    "@epi/prettier-config": "workspace:*",
+    "@epi/tsconfig": "workspace:*",
+    "dotenv-cli": "^7.4.2",
+    "drizzle-kit": "^0.24.2",
+    "eslint": "catalog:",
+    "prettier": "catalog:",
+    "tsx": "^4.19.1",
+    "typescript": "catalog:"
+  },
+  "prettier": "@epi/prettier-config"
+}

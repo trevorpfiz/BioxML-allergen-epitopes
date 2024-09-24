@@ -1,0 +1,47 @@
+{
+  "name": "@epi/api",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "default": "./src/index.ts"
+    },
+    "./client": {
+      "types": "./dist/client.d.ts",
+      "default": "./dist/lib/api/client/index.js"
+    }
+  },
+  "license": "MIT",
+  "scripts": {
+    "build": "tsc",
+    "clean": "git clean -xdf .cache .turbo dist node_modules",
+    "dev": "tsc --watch",
+    "format": "prettier --check . --ignore-path ../../.gitignore",
+    "lint": "eslint",
+    "typecheck": "tsc --noEmit --emitDeclarationOnly false",
+    "generate-client": "pnpm dlx @hey-api/openapi-ts --input https://next-fast-turbo.vercel.app/openapi.json --output ./src/lib/api/client --client fetch",
+    "generate-client:dev": "pnpm dlx @hey-api/openapi-ts --input http://127.0.0.1:8000/openapi.json --output ./src/lib/api/client --client fetch"
+  },
+  "dependencies": {
+    "@epi/db": "workspace:*",
+    "@epi/validators": "workspace:*",
+    "@supabase/supabase-js": "catalog:supabase",
+    "@trpc/server": "catalog:",
+    "date-fns": "catalog:dates",
+    "@date-fns/tz": "catalog:dates",
+    "nanoid": "^5.0.7",
+    "superjson": "catalog:",
+    "zod": "catalog:"
+  },
+  "devDependencies": {
+    "@epi/eslint-config": "workspace:*",
+    "@epi/prettier-config": "workspace:*",
+    "@epi/tsconfig": "workspace:*",
+    "eslint": "catalog:",
+    "prettier": "catalog:",
+    "typescript": "catalog:"
+  },
+  "prettier": "@epi/prettier-config"
+}

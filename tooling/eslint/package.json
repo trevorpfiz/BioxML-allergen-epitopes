@@ -1,0 +1,38 @@
+{
+  "name": "@epi/eslint-config",
+  "private": true,
+  "version": "0.3.0",
+  "type": "module",
+  "exports": {
+    "./base": "./base.js",
+    "./nextjs": "./nextjs.js",
+    "./react": "./react.js",
+    "./expo": "./expo.js"
+  },
+  "scripts": {
+    "clean": "git clean -xdf .cache .turbo node_modules",
+    "format": "prettier --check . --ignore-path ../../.gitignore",
+    "typecheck": "tsc --noEmit"
+  },
+  "dependencies": {
+    "@next/eslint-plugin-next": "^14.2.7",
+    "eslint-plugin-import": "^2.29.1",
+    "eslint-plugin-jsx-a11y": "^6.9.0",
+    "eslint-plugin-react": "^7.35.0",
+    "eslint-plugin-react-hooks": "rc",
+    "eslint-plugin-testing-library": "^6.3.0",
+    "eslint-plugin-turbo": "^2.1.2",
+    "typescript-eslint": "^8.3.0"
+  },
+  "devDependencies": {
+    "@eslint/compat": "^1.1.1",
+    "@eslint/eslintrc": "^3.1.0",
+    "@epi/prettier-config": "workspace:*",
+    "@epi/tsconfig": "workspace:*",
+    "@types/eslint__eslintrc": "^2.1.2",
+    "eslint": "catalog:",
+    "prettier": "catalog:",
+    "typescript": "catalog:"
+  },
+  "prettier": "@epi/prettier-config"
+}
