@@ -54,3 +54,5 @@ dist/
 
 # sst
 .sst
+
+.venv
