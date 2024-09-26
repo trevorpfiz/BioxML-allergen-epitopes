@@ -9,6 +9,8 @@ import {
   TooltipTrigger,
 } from "@epi/ui/tooltip";
 
+import { EPITOPE_THRESHOLD } from "~/lib/constants";
+
 interface SequenceVisualizationProps {
   epitopeData: {
     AA: string;
@@ -20,8 +22,6 @@ interface SequenceVisualizationProps {
   }[];
   inputSequence: string;
 }
-
-const EPITOPE_THRESHOLD = 0.361;
 
 const Legend = () => (
   <div className="flex flex-col gap-2">

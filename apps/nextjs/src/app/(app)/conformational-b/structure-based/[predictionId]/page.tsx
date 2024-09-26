@@ -80,7 +80,7 @@ export default async function ConformationalBStructureBasedPredictionPage() {
       <div className="mx-auto flex w-full max-w-3xl flex-col gap-8 pb-16">
         <EpitopeViewer prediction={prediction} />
 
-        <MoleculeViewer />
+        <MoleculeViewer epitopeData={prediction.results} />
       </div>
     </main>
   );
