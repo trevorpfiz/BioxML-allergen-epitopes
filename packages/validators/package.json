@@ -12,9 +12,9 @@
       "types": "./dist/auth/index.d.ts",
       "default": "./src/auth/index.ts"
     },
-    "./dexcom": {
-      "types": "./dist/dexcom/index.d.ts",
-      "default": "./src/dexcom/index.ts"
+    "./epitopes": {
+      "types": "./dist/epitopes/index.d.ts",
+      "default": "./src/epitopes/index.ts"
     }
   },
   "license": "MIT",

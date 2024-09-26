@@ -1,4 +1,4 @@
-import { Clipboard, Cog, HomeIcon } from "lucide-react";
+import { Cog, Cpu, HomeIcon } from "lucide-react";
 
 import type { SidebarLink } from "~/components/sidebar-items";
 
@@ -9,18 +9,52 @@ interface AdditionalLinks {
 
 export const defaultLinks: SidebarLink[] = [
   { href: "/dashboard", title: "Home", icon: HomeIcon },
-  { href: "/account", title: "Account", icon: Cog },
   { href: "/settings", title: "Settings", icon: Cog },
 ];
 
 export const additionalLinks: AdditionalLinks[] = [
   {
-    title: "Entities",
+    title: "Linear B-cell",
     links: [
       {
-        href: "/reports",
-        title: "Reports",
-        icon: Clipboard,
+        href: "/linear-b/prediction",
+        title: "Prediction",
+        icon: Cpu,
+      },
+    ],
+  },
+  {
+    title: "Conformational B-cell",
+    links: [
+      {
+        href: "/conformational-b/sequence-based",
+        title: "Sequence-based",
+        icon: Cpu,
+      },
+      {
+        href: "/conformational-b/structure-based",
+        title: "Structure-based",
+        icon: Cpu,
+      },
+    ],
+  },
+  {
+    title: "MHC-I",
+    links: [
+      {
+        href: "/mhc-i/prediction",
+        title: "Prediction",
+        icon: Cpu,
+      },
+    ],
+  },
+  {
+    title: "MHC-II",
+    links: [
+      {
+        href: "/mhc-ii/prediction",
+        title: "Prediction",
+        icon: Cpu,
       },
     ],
   },

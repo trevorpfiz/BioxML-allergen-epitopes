@@ -33,6 +33,17 @@
     --ring: 222.2 84% 4.9%;
 
     --radius: 0.5rem;
+
+    /* epitopes */
+    --epitope-low-r: 218; /* Yellow-orange */
+    --epitope-low-g: 165;
+    --epitope-low-b: 96;
+    --epitope-mid-r: 230;
+    --epitope-mid-g: 230; /* Off-white */
+    --epitope-mid-b: 230;
+    --epitope-high-r: 64;
+    --epitope-high-g: 230;
+    --epitope-high-b: 180; /* Blue-green */
   }
 
   .dark {
@@ -63,6 +74,17 @@
     --border: 217.2 32.6% 17.5%;
     --input: 217.2 32.6% 17.5%;
     --ring: 212.7 26.8% 83.9%;
+
+    /* epitopes */
+    --epitope-low-r: 100;
+    --epitope-low-g: 149;
+    --epitope-low-b: 237; /* Steel Blue */
+    --epitope-mid-r: 40;
+    --epitope-mid-g: 40; /* Off-dark */
+    --epitope-mid-b: 40;
+    --epitope-high-r: 255;
+    --epitope-high-g: 140;
+    --epitope-high-b: 64; /* Bright Orange */
   }
 }
 

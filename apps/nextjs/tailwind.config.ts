@@ -14,6 +14,14 @@ export default {
         sans: ["var(--font-geist-sans)", ...fontFamily.sans],
         mono: ["var(--font-geist-mono)", ...fontFamily.mono],
       },
+      colors: {
+        "epitope-low":
+          "rgb(var(--epitope-low-r), var(--epitope-low-g), var(--epitope-low-b))",
+        "epitope-mid":
+          "rgb(var(--epitope-mid-r), var(--epitope-mid-g), var(--epitope-mid-b))",
+        "epitope-high":
+          "rgb(var(--epitope-high-r), var(--epitope-high-g), var(--epitope-high-b))",
+      },
     },
   },
 } satisfies Config;

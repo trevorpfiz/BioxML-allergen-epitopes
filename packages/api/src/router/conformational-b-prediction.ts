@@ -77,6 +77,70 @@ export const conformationalBPredictionRouter = {
       return { prediction };
     }),
 
+  predictOrRetrieve: protectedProcedure
+    .input(
+      insertConformationalBPredictionParams.extend({
+        refresh: z.boolean().optional(),
+      }),
+    )
+    .mutation(async ({ ctx, input }) => {
+      const {
+        sequence,
+        isStructureBased,
+        pdbId,
+        chain,
+        refresh = false,
+      } = input;
+      const userId = ctx.user.id;
+
+      // Check for existing prediction
+      const existingPrediction =
+        await ctx.db.query.ConformationalBPrediction.findFirst({
+          where: and(
+            eq(ConformationalBPrediction.sequence, sequence),
+            eq(ConformationalBPrediction.isStructureBased, isStructureBased),
+            pdbId ? eq(ConformationalBPrediction.pdbId, pdbId) : undefined,
+            chain ? eq(ConformationalBPrediction.chain, chain) : undefined,
+          ),
+        });
+
+      if (existingPrediction && !refresh) {
+        return { prediction: existingPrediction, cached: true };
+      }
+
+      // Perform new prediction
+      const result = await performConformationalBPrediction(input);
+
+      if (existingPrediction) {
+        // Update existing prediction
+        const [updatedPrediction] = await ctx.db
+          .update(ConformationalBPrediction)
+          .set({
+            result,
+            updatedAt: new Date(),
+          })
+          .where(eq(ConformationalBPrediction.id, existingPrediction.id))
+          .returning();
+
+        return { prediction: updatedPrediction, cached: false, updated: true };
+      } else {
+        // Insert new prediction
+        const [newPrediction] = await ctx.db
+          .insert(ConformationalBPrediction)
+          .values({
+            sequence,
+            isStructureBased,
+            pdbId,
+            chain,
+            result,
+            profileId: userId,
+          })
+          .returning();
+
+        return { prediction: newPrediction, cached: false };
+      }
+    }),
+
   delete: protectedProcedure
     .input(z.object({ id: z.string() }))
     .mutation(async ({ ctx, input }) => {

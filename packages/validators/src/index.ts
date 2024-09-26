@@ -1,2 +1,2 @@
 export * as auth from "./auth";
-export * as dexcom from "./dexcom";
+export * as epitopes from "./epitopes";
