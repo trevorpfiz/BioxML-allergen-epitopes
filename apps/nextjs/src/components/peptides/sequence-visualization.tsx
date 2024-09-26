@@ -120,8 +120,13 @@ const SequenceVisualization: React.FC<SequenceVisualizationProps> = ({
               </TooltipTrigger>
               <TooltipContent sideOffset={4}>
                 <p>Value: {data.Epitope_score.toFixed(2)}</p>
-                <p>Position: {data.Seq_pos ?? data.Residue_position}</p>
-                {data.Chain && <p>Chain: {data.Chain}</p>}
+                {data.Chain ? (
+                  <p>
+                    PDB Position: {data.Chain}_{data.Residue_position}
+                  </p>
+                ) : (
+                  <p>Position: {data.Seq_pos ?? data.Residue_position}</p>
+                )}
               </TooltipContent>
             </Tooltip>
           ))}

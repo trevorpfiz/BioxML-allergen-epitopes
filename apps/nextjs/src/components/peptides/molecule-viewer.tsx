@@ -41,14 +41,11 @@ const createColorFunc = (
     const score = epitopeMap[key];
     if (score !== undefined && !isNaN(score)) {
       const colorHex = getColorFromScore(colors, score, minScore, maxScore);
-      console.log(
-        `Residue: ${key}, Score: ${score}, Color: #${colorHex.toString(16).padStart(6, "0")}`,
-      );
+
       return colorHex;
     }
 
     // Default color if no score is available
-    console.log(`Residue: ${key}, Score: N/A, Color: #888888`);
     return 0x888888; // Gray
   };
 };
@@ -76,8 +73,6 @@ const MoleculeViewer: React.FC<MoleculeViewerProps> = ({ epitopeData }) => {
       const minScore = Math.min(...scores);
       const maxScore = Math.max(...scores);
 
-      console.log(`Min Score: ${minScore}, Max Score: ${maxScore}`);
-
       // Select the appropriate color scheme based on the theme
       const colors =
         resolvedTheme === "dark" ? EPITOPE_COLORS_DARK : EPITOPE_COLORS_LIGHT;
@@ -92,11 +87,8 @@ const MoleculeViewer: React.FC<MoleculeViewerProps> = ({ epitopeData }) => {
 
       // Download and load the PDB structure
       const pdbID = epitopeData.length > 0 ? epitopeData[0].PDB_ID : "3OB4"; // Default to "3OB4" if not provided
-      console.log(`Downloading PDB: ${pdbID}`);
 
       $3Dmol.download(`pdb:${pdbID}`, viewer, {}, () => {
-        console.log(`Downloaded PDB: ${pdbID}`);
-
         // Apply the custom color function to the cartoon style
         viewer.setStyle({}, { cartoon: { colorfunc: colorAsEpitopeGradient } });
 
@@ -106,7 +98,6 @@ const MoleculeViewer: React.FC<MoleculeViewerProps> = ({ epitopeData }) => {
         // Zoom to fit the structure in the viewer
         viewer.zoomTo();
         viewer.render();
-        console.log(`Rendered PDB: ${pdbID}`);
       });
 
       // Cleanup on unmount
@@ -116,12 +107,7 @@ const MoleculeViewer: React.FC<MoleculeViewerProps> = ({ epitopeData }) => {
     }
   }, [epitopeData, resolvedTheme]); // Re-run effect when epitopeData or theme changes
 
-  return (
-    <div
-      ref={viewerRef}
-      style={{ width: "100%", height: "400px", position: "relative" }}
-    />
-  );
+  return <div ref={viewerRef} className="relative h-[400px] w-full" />;
 };
 
 export default MoleculeViewer;
