@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import { useRouter } from "next/navigation";
 
 import type { ConformationalBStructureForm } from "@epi/validators/epitopes";
 import { Button } from "@epi/ui/button";
@@ -19,6 +20,7 @@ import { Separator } from "@epi/ui/separator";
 import { ConformationalBStructureFormSchema } from "@epi/validators/epitopes";
 
 const ConformationalBStructureForm = () => {
+  const router = useRouter();
   const [isLoading, setIsLoading] = useState(false);
 
   const form = useForm({
@@ -30,12 +32,7 @@ const ConformationalBStructureForm = () => {
   });
 
   function onSubmit(values: ConformationalBStructureForm) {
-    setIsLoading(true);
-    // Simulate API call
-    setTimeout(() => {
-      console.log(values);
-      setIsLoading(false);
-    }, 1000);
+    void router.push(`/conformational-b/structure-based/1`);
   }
 
   // ara-h-2/AAK96887
