@@ -1,4 +1,4 @@
-import { ConformationalBSequenceForm } from "~/components/peptides/conformational-b-sequence-form";
+import { ConformationalBSequenceForm } from "~/components/peptides/forms/conformational-b-sequence-form";
 import { createClient } from "~/utils/supabase/server";
 
 export default async function ConformationalBSequenceBasedPage() {

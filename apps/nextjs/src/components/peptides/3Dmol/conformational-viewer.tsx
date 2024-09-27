@@ -18,7 +18,7 @@ interface EpitopeData {
   N_glyco_label: number;
 }
 
-interface MoleculeViewerProps {
+interface ConformationalViewerProps {
   epitopeData: EpitopeData[];
 }
 
@@ -50,7 +50,9 @@ const createColorFunc = (
   };
 };
 
-const MoleculeViewer: React.FC<MoleculeViewerProps> = ({ epitopeData }) => {
+const ConformationalViewer: React.FC<ConformationalViewerProps> = ({
+  epitopeData,
+}) => {
   const viewerRef = useRef<HTMLDivElement>(null);
   const { resolvedTheme } = useTheme();
 
@@ -110,4 +112,4 @@ const MoleculeViewer: React.FC<MoleculeViewerProps> = ({ epitopeData }) => {
   return <div ref={viewerRef} className="relative h-[400px] w-full" />;
 };
 
-export default MoleculeViewer;
+export default ConformationalViewer;

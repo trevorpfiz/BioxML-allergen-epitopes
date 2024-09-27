@@ -1,7 +1,7 @@
 import dynamic from "next/dynamic";
 
-const MoleculeViewer = dynamic(
-  () => import("../../../components/peptides/molecule-viewer"),
+const BasicMoleculeViewer = dynamic(
+  () => import("~/components/peptides/3Dmol/basic-viewer"),
   {
     ssr: false,
   },
@@ -17,7 +17,9 @@ export default function Home() {
           <h2 className="mb-2 text-xl font-semibold">
             3OB4 - MBP-fusion protein of the major peanut allergen Ara h 2
           </h2>
-          <MoleculeViewer />
+          <div className="min-h-[402px] w-full border shadow">
+            <BasicMoleculeViewer pdbId="3OB4" />
+          </div>
         </div>
       </div>
     </main>

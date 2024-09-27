@@ -1,7 +1,7 @@
-import { ConformationalBStructureForm } from "~/components/peptides/forms/conformational-b-structure-form";
+import { ConformationalBCompareForm } from "~/components/peptides/forms/conformational-b-compare-form";
 import { createClient } from "~/utils/supabase/server";
 
-export default async function ConformationalBStructureBasedPage() {
+export default async function ConformationalBComparePage() {
   const supabase = createClient();
   const { data, error } = await supabase.auth.getUser();
 
@@ -13,9 +13,9 @@ export default async function ConformationalBStructureBasedPage() {
     <main>
       <div className="mx-auto flex w-full max-w-2xl flex-col gap-4">
         <h1 className="my-4 text-2xl font-semibold">
-          Conformational B-cell structure-based prediction
+          Compare conformational B-cell epitopes
         </h1>
-        <ConformationalBStructureForm />
+        <ConformationalBCompareForm />
       </div>
     </main>
   );

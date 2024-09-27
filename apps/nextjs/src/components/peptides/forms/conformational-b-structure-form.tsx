@@ -21,7 +21,7 @@ import { ConformationalBStructureFormSchema } from "@epi/validators/epitopes";
 
 const ConformationalBStructureForm = () => {
   const router = useRouter();
-  const [isLoading, setIsLoading] = useState(false);
+  const [isLoading] = useState(false);
 
   const form = useForm({
     schema: ConformationalBStructureFormSchema,

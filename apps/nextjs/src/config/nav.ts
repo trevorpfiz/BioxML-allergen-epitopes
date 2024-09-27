@@ -36,6 +36,11 @@ export const additionalLinks: AdditionalLinks[] = [
         title: "Structure-based",
         icon: Cpu,
       },
+      {
+        href: "/conformational-b/compare",
+        title: "Compare",
+        icon: Cpu,
+      },
     ],
   },
   {

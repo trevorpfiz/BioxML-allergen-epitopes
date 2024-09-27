@@ -10,8 +10,8 @@ import type {
 import EpitopeViewer from "~/components/peptides/epitope-viewer";
 import { createClient } from "~/utils/supabase/server";
 
-const MoleculeViewer = dynamic(
-  () => import("../../../../../components/peptides/molecule-viewer"),
+const ConformationalViewer = dynamic(
+  () => import("~/components/peptides/3Dmol/conformational-viewer"),
   {
     ssr: false,
   },
@@ -83,7 +83,7 @@ export default async function ConformationalBStructureBasedPredictionPage() {
         <div className="flex flex-col gap-4">
           <h3 className="text-sm font-semibold">3D Visualization</h3>
           <div className="w-full border shadow">
-            <MoleculeViewer epitopeData={prediction.results} />
+            <ConformationalViewer epitopeData={prediction.results} />
           </div>
         </div>
       </div>
