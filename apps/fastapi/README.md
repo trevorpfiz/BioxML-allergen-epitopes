@@ -20,6 +20,8 @@ background.
 
 ## Trying it out
 
+Docker Desktop - <https://www.docker.com/products/docker-desktop/>
+
 A [`run.sh`](./run.sh) utility is provided for quickly building the image and starting a container.
 This script demonstrates best practices for developing using the container, using bind mounts for
 the project and virtual environment directories.

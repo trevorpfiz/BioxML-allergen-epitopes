@@ -1,4 +1,5 @@
 import { SignOutButton } from "~/components/auth/sign-out-button";
+import TestFastAPI from "~/components/test-fastapi";
 import { createClient } from "~/utils/supabase/server";
 import UserSettings from "./user-settings";
 
@@ -17,6 +18,7 @@ export default async function Account() {
         <div className="space-y-4 pb-4">
           <UserSettings user={data.user} />
         </div>
+        <TestFastAPI />
         {/* FIXME: leading to multiple anonymous profiles being created? */}
         {!data.user.is_anonymous && <SignOutButton />}
       </div>

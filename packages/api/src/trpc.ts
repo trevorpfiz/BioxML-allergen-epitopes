@@ -13,6 +13,8 @@ import { ZodError } from "zod";
 
 import { db } from "@epi/db/client";
 
+import { client } from "./lib/api/client";
+
 /**
  * 1. CONTEXT
  *
@@ -35,6 +37,8 @@ export const createTRPCContext = async (opts: {
   // browsers will have the session cookie set
   const token = opts.headers.get("Authorization");
 
+  console.log(">>> tRPC Request with token", token);
+
   const user = token
     ? await supabase.auth.getUser(token)
     : await supabase.auth.getUser();
@@ -42,9 +46,14 @@ export const createTRPCContext = async (opts: {
   const source = opts.headers.get("x-trpc-source") ?? "unknown";
   console.log(">>> tRPC Request from", source, "by", user.data.user?.email);
 
+  client.setConfig({
+    baseUrl: "http://localhost:8000",
+  });
+
   return {
     user: user.data.user,
     db,
+    heyClient: client,
   };
 };
 

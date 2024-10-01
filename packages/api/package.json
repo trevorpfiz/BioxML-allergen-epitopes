@@ -21,16 +21,16 @@
     "format": "prettier --check . --ignore-path ../../.gitignore",
     "lint": "eslint",
     "typecheck": "tsc --noEmit --emitDeclarationOnly false",
-    "generate-client": "pnpm dlx @hey-api/openapi-ts --input https://next-fast-turbo.vercel.app/openapi.json --output ./src/lib/api/client --client fetch",
-    "generate-client:dev": "pnpm dlx @hey-api/openapi-ts --input http://127.0.0.1:8000/openapi.json --output ./src/lib/api/client --client fetch"
+    "openapi-ts": "openapi-ts"
   },
   "dependencies": {
+    "@date-fns/tz": "catalog:dates",
     "@epi/db": "workspace:*",
     "@epi/validators": "workspace:*",
+    "@hey-api/client-fetch": "^0.4.0",
     "@supabase/supabase-js": "catalog:supabase",
     "@trpc/server": "catalog:",
     "date-fns": "catalog:dates",
-    "@date-fns/tz": "catalog:dates",
     "nanoid": "^5.0.7",
     "superjson": "catalog:",
     "zod": "catalog:"
@@ -39,6 +39,7 @@
     "@epi/eslint-config": "workspace:*",
     "@epi/prettier-config": "workspace:*",
     "@epi/tsconfig": "workspace:*",
+    "@hey-api/openapi-ts": "^0.53.6",
     "eslint": "catalog:",
     "prettier": "catalog:",
     "typescript": "catalog:"
