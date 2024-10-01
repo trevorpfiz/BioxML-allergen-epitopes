@@ -1,7 +1,7 @@
 from fastapi import APIRouter, Depends, HTTPException
 from fastapi.responses import JSONResponse
 
-from api.endpoints.v1.auth.verify import verify_token
+from app.services.auth import verify_token
 
 router = APIRouter()
 

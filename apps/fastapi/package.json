@@ -1,9 +1,8 @@
 {
-  "name": "api",
+  "name": "fastapi",
   "version": "0.1.0",
   "scripts": {
-    "dev": ".venv/bin/python run.py",
-    "generate:requirements": "poetry export --without-hashes --format=requirements.txt > requirements.txt",
-    "update:dependencies": "python updater.py --pyproject pyproject.toml --lockfile poetry.lock"
+    "dev": "./run.sh",
+    "dev:compose": "docker compose up --watch "
   }
 }

@@ -4,8 +4,9 @@ from fastapi import APIRouter, FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.routing import APIRoute
 
-from api.config import settings
-from api.endpoints.v1.api import api_router
+from app.api.api_v1.api import api_router
+from app.core.config import settings
+from app.core.events import lifespan
 
 info_router = APIRouter()
 
@@ -29,15 +30,12 @@ def custom_generate_unique_id(route: APIRoute):
 
 def get_application():
     _app = FastAPI(
+        lifespan=lifespan,
         title=settings.PROJECT_NAME,
         description=settings.PROJECT_DESCRIPTION,
         generate_unique_id_function=custom_generate_unique_id,
-        root_path=settings.ROOT,
-        root_path_in_servers=True,
-        openapi_url=settings.openapi_url,
+        openapi_url=f"{settings.API_VERSION}/openapi.json",
     )
-
-    origins = ["http://localhost:3000/"]  # TODO: Change to your production URL
 
     if settings.ENVIRONMENT == "development":
         logger = logging.getLogger("uvicorn")
@@ -52,7 +50,7 @@ def get_application():
     else:
         _app.add_middleware(
             CORSMiddleware,
-            allow_origins=origins,
+            allow_origins=[str(origin) for origin in settings.BACKEND_CORS_ORIGINS],
             allow_credentials=True,
             allow_methods=["*"],
             allow_headers=["*"],
