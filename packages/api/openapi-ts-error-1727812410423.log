@@ -1,6 +1,0 @@
-Error downloading http://localhost:8000/api/v1/openapi.json 
-fetch failed
-JSONParserError: Error downloading http://localhost:8000/api/v1/openapi.json 
-fetch failed
-    at download (/home/spark/projects/bioml-allergies/monorepo/node_modules/@apidevtools/json-schema-ref-parser/dist/lib/resolvers/http.js:113:15)
-    at process.processTicksAndRejections (node:internal/process/task_queues:95:5)

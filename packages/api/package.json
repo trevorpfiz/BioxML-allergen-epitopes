@@ -10,7 +10,7 @@
     },
     "./client": {
       "types": "./dist/client.d.ts",
-      "default": "./dist/lib/api/client/index.js"
+      "default": "./src/lib/api/client/index.ts"
     }
   },
   "license": "MIT",

@@ -15,4 +15,5 @@ export default defineConfig({
   services: {
     asClass: false, // flat
   },
+  plugins: ["@tanstack/react-query"],
 });
