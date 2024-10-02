@@ -41,7 +41,9 @@ class Settings(BaseSettings):
     SUPERUSER_PASSWORD: str = Field(..., env="SUPERUSER_PASSWORD")
     JWT_SECRET: str = Field(..., env="JWT_SECRET")
 
-    OPENAI_API_KEY: str = Field(None, env="OPENAI_API_KEY")  # Optional
+    # Optional
+    HUGGINGFACE_ACCESS_TOKEN: str = Field(None, env="HUGGINGFACE_ACCESS_TOKEN")
+    OPENAI_API_KEY: str = Field(None, env="OPENAI_API_KEY")
 
     # Project details
     API_VERSION: str = "/api/v1"

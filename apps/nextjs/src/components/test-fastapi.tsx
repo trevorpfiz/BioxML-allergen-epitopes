@@ -9,7 +9,12 @@ export default async function TestFastAPI() {
     token: data.session?.access_token ?? "",
   });
 
+  const predictQuery = await api.auth.predict({
+    token: data.session?.access_token ?? "",
+  });
+
   console.log("query", query.data);
+  console.log("predictQuery", predictQuery.data);
 
   console.log("error", query.error);
 
@@ -17,6 +22,7 @@ export default async function TestFastAPI() {
     <div className="flex flex-col gap-4">
       <h1 className="my-4 text-2xl font-semibold">Test FastAPI</h1>
       <p>{query.data?.title}</p>
+      <p>{predictQuery.data?.results[0].label}</p>
     </div>
   );
 }

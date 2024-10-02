@@ -25,12 +25,12 @@ export const MhcIIPrediction = createTable("mhc_ii_prediction", {
   peptideLength: integer("peptide_length").notNull(),
   result: jsonb("result").notNull(),
   csvDownloadUrl: varchar("csv_download_url", { length: 255 }),
-  profileId: uuid("user_id")
+  profileId: uuid("profile_id")
     .notNull()
     .references(() => Profile.id),
 
   createdAt: timestamp("created_at").defaultNow().notNull(),
-  updatedAt: timestamp("updatedAt", {
+  updatedAt: timestamp("updated_at", {
     mode: "date",
     withTimezone: true,
   }).$onUpdateFn(() => new Date()),

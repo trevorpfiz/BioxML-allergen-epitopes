@@ -1,7 +1,7 @@
 import type { TRPCRouterRecord } from "@trpc/server";
 import { z } from "zod";
 
-import { healthCheck } from "../lib/api/client";
+import { healthCheck, hfPredict } from "../lib/api/client";
 import { protectedProcedure, publicProcedure } from "../trpc";
 
 export const authRouter = {
@@ -21,6 +21,25 @@ export const authRouter = {
       const response = await healthCheck({
         headers: {
           Authorization: `Bearer ${token}`,
+        },
+      });
+
+      return response;
+    }),
+
+  predict: protectedProcedure
+    .input(z.object({ token: z.string() }))
+    .query(async ({ input }) => {
+      const { token } = input;
+
+      const fixedInput = "I am really happy this works.";
+
+      const response = await hfPredict({
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+        body: {
+          inputs: fixedInput,
         },
       });
 

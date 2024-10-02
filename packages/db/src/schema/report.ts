@@ -16,7 +16,7 @@ export const Report = createTable("report", {
     .references(() => Profile.id),
 
   createdAt: timestamp("created_at").defaultNow().notNull(),
-  updatedAt: timestamp("updatedAt", {
+  updatedAt: timestamp("updated_at", {
     mode: "date",
     withTimezone: true,
   }).$onUpdateFn(() => new Date()),

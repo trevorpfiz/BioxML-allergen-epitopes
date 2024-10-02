@@ -34,7 +34,7 @@ AccessTokenDep = Annotated[str, Depends(reusable_oauth2)]
 
 
 async def get_current_user(access_token: AccessTokenDep) -> UserIn:
-    """get current user from access_token and  validate same time"""
+    """get current user from access_token and validate same time"""
     if not super_client:
         raise HTTPException(status_code=500, detail="Super client not initialized")
 

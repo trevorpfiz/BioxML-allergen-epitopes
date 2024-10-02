@@ -1,3 +1,4 @@
+from datetime import datetime
 from typing import ClassVar
 
 from pydantic import BaseModel, ConfigDict
@@ -31,8 +32,9 @@ class UpdateBase(BaseModel):
 # Properties shared by models stored in DB
 class InDBBase(BaseModel):
     id: str
-    user_id: str
-    created_at: str
+    profile_id: str
+    created_at: datetime
+    updated_at: datetime
 
 
 # Properties to return to client

@@ -10,6 +10,11 @@ services:
     env_file:
       - .env
 
+    # Fixes the `openapi.json` not regenrating on changes
+    # volumes:
+    #   - .:/app
+    #   - /app/.venv
+
     develop:
       # Create a `watch` configuration to update the app
       #
