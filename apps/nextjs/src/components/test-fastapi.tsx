@@ -1,34 +1,33 @@
 "use client";
 
-import React, { useEffect, useState } from "react";
+import React, { useMemo } from "react";
+import { createClient } from "@hey-api/client-fetch";
 import { useMutation, useQuery } from "@tanstack/react-query";
 
-import { client, healthCheckOptions, hfPredictMutation } from "@epi/api/client";
+import { healthCheckOptions, hfPredictMutation } from "@epi/api/client";
 
 import { useMySession } from "~/utils/supabase/client";
 
 const TestFastApi: React.FC = () => {
   const { session, loading } = useMySession();
-  const [isConfigSet, setIsConfigSet] = useState(false);
 
-  // TODO: figure out a better way to set client config - https://heyapi.vercel.app/openapi-ts/clients/fetch.html
-  // Step 1: Configure the API client once the session is available
-  useEffect(() => {
-    if (session?.access_token && !isConfigSet) {
-      client.setConfig({
-        baseUrl: "http://localhost:8000", // Replace with your actual API base URL
-        headers: {
-          Authorization: `Bearer ${session.access_token}`,
-        },
-      });
-      setIsConfigSet(true);
+  // Step 1: Create a local API client instance
+  const localClient = useMemo(() => {
+    if (!session?.access_token) {
+      return undefined;
     }
-  }, [session, isConfigSet]);
+    return createClient({
+      baseUrl: "http://localhost:8000", // Replace with your actual API base URL
+      headers: {
+        Authorization: `Bearer ${session.access_token}`,
+      },
+    });
+  }, [session?.access_token]);
 
   // Step 2: Health Check Query
   const healthCheckQuery = useQuery({
-    ...healthCheckOptions(),
-    enabled: isConfigSet, // Enable the query only if the client is configured
+    ...healthCheckOptions({ client: localClient }),
+    enabled: !!localClient,
   });
 
   // Step 3: HuggingFace Predict Mutation
@@ -43,7 +42,7 @@ const TestFastApi: React.FC = () => {
   });
 
   // Step 4: Handle Loading States
-  if (loading || !isConfigSet) {
+  if (loading) {
     return <div>Loading authentication...</div>;
   }
 
@@ -84,7 +83,8 @@ const TestFastApi: React.FC = () => {
         <button
           onClick={() =>
             predictMutation.mutate({
-              body: { inputs: "New input data" },
+              client: localClient,
+              body: { inputs: "Happy this works!" },
             })
           }
           className="mt-2 rounded bg-green-500 px-4 py-2 text-white"

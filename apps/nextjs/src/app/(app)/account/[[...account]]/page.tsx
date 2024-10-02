@@ -1,23 +1,14 @@
 import { SignOutButton } from "~/components/auth/sign-out-button";
 import { TestFastApi } from "~/components/test-fastapi";
-import { TestTrpcFastApi } from "~/components/test-trpc-fastapi";
 import { createClient } from "~/utils/supabase/server";
 import UserSettings from "./user-settings";
 
 export default async function Account() {
   const supabase = createClient();
   const { data, error } = await supabase.auth.getUser();
-  const {
-    data: { session },
-    error: sessionError,
-  } = await supabase.auth.getSession();
 
   if (error ?? !data.user.id) {
     throw new Error("User not found");
-  }
-
-  if (sessionError ?? !session?.access_token) {
-    throw new Error("Session not found");
   }
 
   return (
