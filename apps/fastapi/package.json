@@ -3,6 +3,10 @@
   "version": "0.1.0",
   "scripts": {
     "dev": "./run.sh",
-    "dev:compose": "docker compose up --watch "
+    "dev:compose": "docker compose up --watch",
+    "dev:lambda": "docker run --platform linux/amd64 -p 9000:8080 --env-file .env --read-only docker-image:test",
+    "dev:lambda:compose": "docker compose -f compose.lambda.yaml up --build",
+    "build": "docker build -t fastapi .",
+    "build:lambda": "docker build --platform linux/amd64 -t docker-image:test -f lambda.Dockerfile ."
   }
 }

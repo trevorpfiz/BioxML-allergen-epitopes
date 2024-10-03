@@ -3,6 +3,7 @@ import logging
 from fastapi import APIRouter, FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.routing import APIRoute
+from mangum import Mangum
 
 from app.api.api_v1.api import api_router
 from app.core.config import settings
@@ -13,7 +14,15 @@ info_router = APIRouter()
 
 @info_router.get("/", status_code=200, include_in_schema=False)
 async def info():
-    return [{"Status": "API Running"}]
+    return [{"Status": "API Runninggg"}]
+
+
+test_router = APIRouter()
+
+
+@test_router.get("/test", status_code=200)
+async def test_route():
+    return {"message": "This is a test route!"}
 
 
 def custom_generate_unique_id(route: APIRoute):
@@ -58,8 +67,11 @@ def get_application():
 
     _app.include_router(api_router, prefix=settings.API_VERSION)
     _app.include_router(info_router, tags=[""])
+    _app.include_router(test_router, tags=["Test"])
 
     return _app
 
 
 app = get_application()
+
+handler = Mangum(app=app, lifespan="auto")

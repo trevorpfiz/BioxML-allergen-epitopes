@@ -4,7 +4,7 @@ from typing import Annotated
 from fastapi import Depends, HTTPException
 from fastapi.security import OAuth2PasswordBearer
 from gotrue.errors import AuthApiError
-from supabase._async.client import AsyncClient, create_client
+from supabase._async.client import AsyncClient, SupabaseException, create_client
 from supabase.lib.client_options import ClientOptions
 
 from app.core.config import settings
@@ -16,11 +16,20 @@ super_client: AsyncClient | None = None
 async def init_super_client() -> None:
     """for validation access_token init at life span event"""
     global super_client
-    super_client = await create_client(
-        settings.SUPABASE_URL,
-        settings.SUPABASE_KEY,
-        options=ClientOptions(postgrest_client_timeout=10, storage_client_timeout=10),
-    )
+
+    try:
+        super_client = await create_client(
+            settings.SUPABASE_URL,
+            settings.SUPABASE_KEY,
+            options=ClientOptions(
+                postgrest_client_timeout=10, storage_client_timeout=10
+            ),
+        )
+        logging.info("Supabase client initialized successfully.")
+    except SupabaseException as e:
+        logging.error(f"Error initializing Supabase client: {e}")
+        super_client = None  # Optionally set to None to indicate failure
+
     # await super_client.auth.sign_in_with_password(
     #     {"email": settings.SUPERUSER_EMAIL, "password": settings.SUPERUSER_PASSWORD}
     # )

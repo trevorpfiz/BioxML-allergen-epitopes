@@ -1,0 +1,11 @@
+services:
+  lambda:
+    platform: linux/amd64
+    ports:
+      - 9000:8080
+    env_file:
+      - .env
+    read_only: true
+    image: docker-image:test
+    # volumes:
+    #   - .:/app
