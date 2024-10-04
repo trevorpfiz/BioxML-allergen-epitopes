@@ -4,17 +4,12 @@ import type { Metadata, Viewport } from "next";
 import { GeistMono } from "geist/font/mono";
 import { GeistSans } from "geist/font/sans";
 
-// import { OpenAPI } from "@epi/api/client";
 import { cn } from "@epi/ui";
 import { Toaster } from "@epi/ui/sonner";
 import { ThemeProvider } from "@epi/ui/theme";
 
 import { env } from "~/env";
 import { TRPCReactProvider } from "~/trpc/react";
-
-// if (env.NODE_ENV === "production") {
-//   OpenAPI.BASE = env.NEXT_PUBLIC_FASTAPI_URL;
-// }
 
 export const metadata: Metadata = {
   metadataBase: new URL(

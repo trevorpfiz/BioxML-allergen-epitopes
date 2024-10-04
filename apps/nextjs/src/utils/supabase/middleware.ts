@@ -47,8 +47,14 @@ export async function updateSession(request: NextRequest) {
     data: { user },
   } = await supabase.auth.getUser();
 
+  console.log("User:", user);
+
+  // If protected route and user is not authenticated, redirect to signin
+  const isProtectedRoute = protectedRoutes.includes(request.nextUrl.pathname);
+
   // If user is not authenticated, sign in anonymously
-  if (!user) {
+  if (!user && isProtectedRoute) {
+    console.log("User is not authenticated, signing in anonymously");
     const { data, error } = await supabase.auth.signInAnonymously();
     if (error) {
       console.error("Error signing in anonymously:", error);
@@ -57,9 +63,6 @@ export async function updateSession(request: NextRequest) {
       user = data.user;
     }
   }
-
-  // If protected route and user is not authenticated, redirect to signin
-  const isProtectedRoute = protectedRoutes.includes(request.nextUrl.pathname);
 
   if (isProtectedRoute && !user) {
     const url = new URL(DEFAULT_AUTH_ROUTE, request.url);

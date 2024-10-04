@@ -6,10 +6,16 @@ import { useMutation, useQuery } from "@tanstack/react-query";
 
 import { healthCheckOptions, hfPredictMutation } from "@epi/api/client";
 
+import { env } from "~/env";
 import { useMySession } from "~/utils/supabase/client";
 
 const TestFastApi: React.FC = () => {
   const { session, loading } = useMySession();
+
+  const apiUrl =
+    env.NEXT_PUBLIC_USE_LAMBDA_API === "true"
+      ? env.NEXT_PUBLIC_FASTAPI_STAGE_URL
+      : env.NEXT_PUBLIC_FASTAPI_URL;
 
   // Step 1: Create a local API client instance
   const localClient = useMemo(() => {
@@ -17,12 +23,12 @@ const TestFastApi: React.FC = () => {
       return undefined;
     }
     return createClient({
-      baseUrl: "http://localhost:8000", // Replace with your actual API base URL
+      baseUrl: apiUrl,
       headers: {
         Authorization: `Bearer ${session.access_token}`,
       },
     });
-  }, [session?.access_token]);
+  }, [apiUrl, session?.access_token]);
 
   // Step 2: Health Check Query
   const healthCheckQuery = useQuery({

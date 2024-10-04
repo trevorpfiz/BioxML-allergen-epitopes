@@ -35,7 +35,7 @@ $ ./run.sh
 If permission errors:
 
 ```console
-$ chmod +x ./run.sh
+$ chmod -R +x ./scripts
 ```
 
 Then, check out [`http://localhost:8000`](http://localhost:8000) to see the website.
@@ -128,6 +128,12 @@ To build the multistage image:
 ```console
 $ docker build . --file multistage.Dockerfile
 ```
+
+## Deployment
+
+<https://fanchenbao.medium.com/api-service-with-fastapi-aws-lambda-api-gateway-and-make-it-work-c20edcf77bff>
+
+<https://guide.sst.dev/chapters/create-an-iam-user.html>
 
 Can test lambda locally with this:
 

@@ -14,15 +14,7 @@ info_router = APIRouter()
 
 @info_router.get("/", status_code=200, include_in_schema=False)
 async def info():
-    return [{"Status": "API Runninggg"}]
-
-
-test_router = APIRouter()
-
-
-@test_router.get("/test", status_code=200)
-async def test_route():
-    return {"message": "This is a test route!"}
+    return [{"Status": "API Running"}]
 
 
 def custom_generate_unique_id(route: APIRoute):
@@ -44,9 +36,10 @@ def get_application():
         description=settings.PROJECT_DESCRIPTION,
         generate_unique_id_function=custom_generate_unique_id,
         openapi_url=f"{settings.API_VERSION}/openapi.json",
+        root_path=f"/{settings.ENV}" if settings.ENV in ["stage", "prod"] else "",
     )
 
-    if settings.ENVIRONMENT == "development":
+    if settings.ENV == "" or settings.ENV == "dev":
         logger = logging.getLogger("uvicorn")
         logger.warning("Running in development mode - allowing CORS for all origins")
         _app.add_middleware(
@@ -59,7 +52,7 @@ def get_application():
     else:
         _app.add_middleware(
             CORSMiddleware,
-            allow_origins=[str(origin) for origin in settings.BACKEND_CORS_ORIGINS],
+            allow_origins=["*"],  # TODO: Use BACKEND_CORS_ORIGINS
             allow_credentials=True,
             allow_methods=["*"],
             allow_headers=["*"],
@@ -67,7 +60,6 @@ def get_application():
 
     _app.include_router(api_router, prefix=settings.API_VERSION)
     _app.include_router(info_router, tags=[""])
-    _app.include_router(test_router, tags=["Test"])
 
     return _app
 

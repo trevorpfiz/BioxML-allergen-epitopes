@@ -131,6 +131,9 @@ venv/
 ENV/
 env.bak/
 venv.bak/
+.env.local
+.env.stage
+.env.prod
 
 # Spyder project settings
 .spyderproject

@@ -5,6 +5,7 @@ import { redirect } from "next/navigation";
 import { Avatar, AvatarFallback } from "@epi/ui/avatar";
 
 import SidebarItems from "~/components/sidebar-items";
+import { DEFAULT_AUTH_ROUTE } from "~/config/routes";
 import { getNameFromUser } from "~/lib/utils";
 import { createClient } from "~/utils/supabase/server";
 
@@ -12,7 +13,8 @@ const Sidebar = async () => {
   const supabase = createClient();
   const { data, error } = await supabase.auth.getUser();
   if (error || !data.user.id) {
-    redirect("/login");
+    console.log("Error getting user:", error);
+    // redirect(DEFAULT_AUTH_ROUTE);
   }
 
   return (

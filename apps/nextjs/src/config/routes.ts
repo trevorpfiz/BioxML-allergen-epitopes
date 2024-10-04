@@ -10,7 +10,16 @@ export const publicRoutes = ["/"];
  * Users must be logged in to access these routes.
  * @type {string[]} protectedRoutes - The protected routes.
  */
-export const protectedRoutes = ["/onboarding", "/dashboard"];
+export const protectedRoutes = [
+  "/onboarding",
+  "/dashboard",
+  "/settings",
+  "/account",
+  "/linear-b",
+  "/conformational-b",
+  "/mhc-i",
+  "/mhc-ii",
+];
 
 /**
  * Represents an array of routes used for authentication.

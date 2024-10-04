@@ -1,8 +1,7 @@
 import logging
-from typing import List, Union
 
 from dotenv import load_dotenv
-from pydantic import AnyHttpUrl, Field, field_validator
+from pydantic import Field
 from pydantic_settings import BaseSettings, SettingsConfigDict
 
 log_format = logging.Formatter("%(asctime)s : %(levelname)s - %(message)s")
@@ -22,18 +21,8 @@ load_dotenv()
 
 
 class Settings(BaseSettings):
-    ENVIRONMENT: str = Field(default="development", env="ENVIRONMENT")
-    BACKEND_CORS_ORIGINS: list[AnyHttpUrl] = [
-        "http://localhost:3000/"
-    ]  # TODO: Change to your production URL
-
-    # Validator to ensure BACKEND_CORS_ORIGINS is parsed correctly
-    @field_validator("BACKEND_CORS_ORIGINS", mode="before")
-    def assemble_cors_origins(cls, v: Union[str, List[str]]) -> List[str]:
-        if isinstance(v, str):
-            # If a comma-separated string is provided, split it into a list
-            return [i.strip() for i in v.split(",")]
-        return v
+    ENV: str = Field(default="", env="ENV")
+    BACKEND_CORS_ORIGINS = ["http://localhost:3000"]
 
     SUPABASE_URL: str = Field(..., env="SUPABASE_URL")
     SUPABASE_KEY: str = Field(..., env="SUPABASE_KEY")
