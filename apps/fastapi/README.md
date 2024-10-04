@@ -135,6 +135,14 @@ $ docker build . --file multistage.Dockerfile
 
 <https://guide.sst.dev/chapters/create-an-iam-user.html>
 
+Can test lambda CORS with:
+
+```bash
+curl -i -X OPTIONS https://rv06h0ruaa.execute-api.us-east-1.amazonaws.com/stage/api/v1/health \
+  -H "Origin: http://localhost:3000" \
+  -H "Access-Control-Request-Method: GET"
+```
+
 Can test lambda locally with this:
 
 ```bash

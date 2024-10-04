@@ -37,7 +37,7 @@ export const healthCheck = <ThrowOnError extends boolean = false>(
 export const hfPredict = <ThrowOnError extends boolean = false>(
   options: Options<HfPredictData, ThrowOnError>,
 ) => {
-  return (options.client ?? client).post<
+  return (options?.client ?? client).post<
     HfPredictResponse,
     HfPredictError,
     ThrowOnError

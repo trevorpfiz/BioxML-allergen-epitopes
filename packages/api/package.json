@@ -9,8 +9,12 @@
       "default": "./src/index.ts"
     },
     "./client": {
-      "types": "./dist/client.d.ts",
+      "types": "./dist/lib/api/client/index.d.ts",
       "default": "./src/lib/api/client/index.ts"
+    },
+    "./client/react-query": {
+      "types": "./dist/lib/api/client/@tanstack/react-query.gen.d.ts",
+      "default": "./src/lib/api/client/@tanstack/react-query.gen.ts"
     }
   },
   "license": "MIT",
@@ -39,7 +43,7 @@
     "@epi/eslint-config": "workspace:*",
     "@epi/prettier-config": "workspace:*",
     "@epi/tsconfig": "workspace:*",
-    "@hey-api/openapi-ts": "^0.53.6",
+    "@hey-api/openapi-ts": "^0.53.7",
     "eslint": "catalog:",
     "prettier": "catalog:",
     "typescript": "catalog:"

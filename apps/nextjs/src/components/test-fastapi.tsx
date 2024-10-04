@@ -4,7 +4,10 @@ import React, { useMemo } from "react";
 import { createClient } from "@hey-api/client-fetch";
 import { useMutation, useQuery } from "@tanstack/react-query";
 
-import { healthCheckOptions, hfPredictMutation } from "@epi/api/client";
+import {
+  healthCheckOptions,
+  hfPredictMutation,
+} from "@epi/api/client/react-query";
 
 import { env } from "~/env";
 import { useMySession } from "~/utils/supabase/client";

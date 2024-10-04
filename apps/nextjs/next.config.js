@@ -12,12 +12,7 @@ const config = {
   },
 
   /** Enables hot reloading for local packages without a build step */
-  transpilePackages: [
-    "@epi/api",
-    "@epi/db",
-    "@epi/ui",
-    "@epi/validators",
-  ],
+  transpilePackages: ["@epi/api", "@epi/db", "@epi/ui", "@epi/validators"],
 
   // Allow optimizing avatar images from GitHub
   images: {

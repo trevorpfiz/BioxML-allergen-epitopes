@@ -73,7 +73,7 @@ const SidebarLink = ({
     <Link
       href={link.href}
       className={`group inline-block rounded-md p-2 text-xs text-muted-foreground transition-colors hover:bg-popover hover:text-primary hover:shadow w-full${
-        active ? " font-semibold text-primary" : ""
+        active ? "font-semibold text-primary" : ""
       }`}
     >
       <div className="flex items-center">

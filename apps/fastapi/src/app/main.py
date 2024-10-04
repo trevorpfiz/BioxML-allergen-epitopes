@@ -53,6 +53,7 @@ def get_application():
         _app.add_middleware(
             CORSMiddleware,
             allow_origins=["*"],  # TODO: Use BACKEND_CORS_ORIGINS
+            # allow_origins=settings.BACKEND_CORS_ORIGINS,
             allow_credentials=True,
             allow_methods=["*"],
             allow_headers=["*"],

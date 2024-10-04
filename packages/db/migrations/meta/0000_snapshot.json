@@ -93,12 +93,8 @@
           "name": "epi_conformational_b_prediction_user_id_epi_profile_id_fk",
           "tableFrom": "epi_conformational_b_prediction",
           "tableTo": "epi_profile",
-          "columnsFrom": [
-            "user_id"
-          ],
-          "columnsTo": [
-            "id"
-          ],
+          "columnsFrom": ["user_id"],
+          "columnsTo": ["id"],
           "onDelete": "no action",
           "onUpdate": "no action"
         }
@@ -173,12 +169,8 @@
           "tableFrom": "epi_profile",
           "tableTo": "users",
           "schemaTo": "auth",
-          "columnsFrom": [
-            "id"
-          ],
-          "columnsTo": [
-            "id"
-          ],
+          "columnsFrom": ["id"],
+          "columnsTo": ["id"],
           "onDelete": "cascade",
           "onUpdate": "no action"
         }
@@ -235,12 +227,8 @@
           "name": "epi_report_profile_id_epi_profile_id_fk",
           "tableFrom": "epi_report",
           "tableTo": "epi_profile",
-          "columnsFrom": [
-            "profile_id"
-          ],
-          "columnsTo": [
-            "id"
-          ],
+          "columnsFrom": ["profile_id"],
+          "columnsTo": ["id"],
           "onDelete": "no action",
           "onUpdate": "no action"
         }
@@ -303,12 +291,8 @@
           "name": "epi_linear_b_prediction_user_id_epi_profile_id_fk",
           "tableFrom": "epi_linear_b_prediction",
           "tableTo": "epi_profile",
-          "columnsFrom": [
-            "user_id"
-          ],
-          "columnsTo": [
-            "id"
-          ],
+          "columnsFrom": ["user_id"],
+          "columnsTo": ["id"],
           "onDelete": "no action",
           "onUpdate": "no action"
         }
@@ -395,12 +379,8 @@
           "name": "epi_mhc_i_prediction_user_id_epi_profile_id_fk",
           "tableFrom": "epi_mhc_i_prediction",
           "tableTo": "epi_profile",
-          "columnsFrom": [
-            "user_id"
-          ],
-          "columnsTo": [
-            "id"
-          ],
+          "columnsFrom": ["user_id"],
+          "columnsTo": ["id"],
           "onDelete": "no action",
           "onUpdate": "no action"
         }
@@ -493,12 +473,8 @@
           "name": "epi_mhc_ii_prediction_user_id_epi_profile_id_fk",
           "tableFrom": "epi_mhc_ii_prediction",
           "tableTo": "epi_profile",
-          "columnsFrom": [
-            "user_id"
-          ],
-          "columnsTo": [
-            "id"
-          ],
+          "columnsFrom": ["user_id"],
+          "columnsTo": ["id"],
           "onDelete": "no action",
           "onUpdate": "no action"
         }

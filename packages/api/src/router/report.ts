@@ -3,11 +3,7 @@ import { TRPCError } from "@trpc/server";
 import { z } from "zod";
 
 import { and, desc, eq } from "@epi/db";
-import {
-  insertReportParams,
-  Report,
-  updateReportParams,
-} from "@epi/db/schema";
+import { insertReportParams, Report, updateReportParams } from "@epi/db/schema";
 
 import { protectedProcedure, publicProcedure } from "../trpc";
 
