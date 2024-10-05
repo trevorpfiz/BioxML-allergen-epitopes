@@ -36,15 +36,15 @@ import {
 
 import { DataTablePagination } from "~/components/peptides/tables/similarity-pagination";
 
-interface SimilarityDataTableProps {
-  columns: ColumnDef<any, any>[];
-  data: any[];
+interface DataTableProps<TData, TValue> {
+  columns: ColumnDef<TData, TValue>[];
+  data: TData[];
 }
 
-const SimilarityDataTable: React.FC<SimilarityDataTableProps> = ({
+function SimilarityDataTable<TData, TValue>({
   columns,
   data,
-}) => {
+}: DataTableProps<TData, TValue>) {
   const [sorting, setSorting] = useState<SortingState>([]);
   const [columnVisibility, setColumnVisibility] = useState<VisibilityState>({});
 
@@ -143,7 +143,10 @@ const SimilarityDataTable: React.FC<SimilarityDataTableProps> = ({
               ))
             ) : (
               <TableRow>
-                <TableCell colSpan={columns.length} className="text-center">
+                <TableCell
+                  colSpan={columns.length}
+                  className="h-24 text-center"
+                >
                   No results.
                 </TableCell>
               </TableRow>
@@ -156,6 +159,6 @@ const SimilarityDataTable: React.FC<SimilarityDataTableProps> = ({
       <DataTablePagination table={table} />
     </div>
   );
-};
+}
 
 export { SimilarityDataTable };

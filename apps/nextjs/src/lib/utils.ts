@@ -22,10 +22,16 @@ export const interpolateColors = (
   color1: number[],
   color2: number[],
   factor: number,
-): number[] => {
-  const r = Math.round(color1[0] + factor * (color2[0] - color1[0]));
-  const g = Math.round(color1[1] + factor * (color2[1] - color1[1]));
-  const b = Math.round(color1[2] + factor * (color2[2] - color1[2]));
+) => {
+  const r = Math.round(
+    (color1[0] ?? 0) + factor * ((color2[0] ?? 0) - (color1[0] ?? 0)),
+  );
+  const g = Math.round(
+    (color1[1] ?? 0) + factor * ((color2[1] ?? 0) - (color1[1] ?? 0)),
+  );
+  const b = Math.round(
+    (color1[2] ?? 0) + factor * ((color2[2] ?? 0) - (color1[2] ?? 0)),
+  );
   return [r, g, b];
 };
 
@@ -34,8 +40,10 @@ export const interpolateColors = (
  * @param {number[]} rgb - Color as [r, g, b].
  * @returns {number} - Hexadecimal color.
  */
-export const rgbToHex = (rgb: number[]): number => {
-  const [r, g, b] = rgb;
+export const rgbToHex = (rgb: number[]) => {
+  const r = rgb[0] ?? 0;
+  const g = rgb[1] ?? 0;
+  const b = rgb[2] ?? 0;
   return (r << 16) | (g << 8) | b;
 };
 
@@ -59,8 +67,7 @@ export const getColorFromScore = (
   // Determine the interpolation phase
   if (normalizedScore < EPITOPE_THRESHOLD) {
     // Interpolate between low and mid
-    const factor =
-      EPITOPE_THRESHOLD === 0 ? 0 : normalizedScore / EPITOPE_THRESHOLD;
+    const factor = normalizedScore / EPITOPE_THRESHOLD;
     const interpolatedColor = interpolateColors(colors.low, colors.mid, factor);
     return rgbToHex(interpolatedColor);
   } else {

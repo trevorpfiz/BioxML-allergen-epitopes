@@ -47,8 +47,6 @@ export async function updateSession(request: NextRequest) {
     data: { user },
   } = await supabase.auth.getUser();
 
-  console.log("User:", user);
-
   // If protected route and user is not authenticated, redirect to signin
   const isProtectedRoute = protectedRoutes.includes(request.nextUrl.pathname);
 

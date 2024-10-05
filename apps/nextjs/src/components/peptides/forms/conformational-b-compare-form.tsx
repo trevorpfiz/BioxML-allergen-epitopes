@@ -32,6 +32,7 @@ const ConformationalBCompareForm = () => {
     },
   });
 
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   function onSubmit(values: ConformationalBCompareForm) {
     void router.push(`/conformational-b/compare/1`);
   }

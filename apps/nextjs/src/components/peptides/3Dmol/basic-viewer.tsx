@@ -1,8 +1,7 @@
 "use client";
 
 import { useEffect, useRef } from "react";
-// @ts-expect-error 3dmol types?
-import * as $3Dmol from "3dmol/build/3Dmol.js";
+import * as $3Dmol from "3dmol";
 import { useTheme } from "next-themes";
 
 interface BasicViewerProps {

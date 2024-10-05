@@ -1,5 +1,3 @@
-// File: conformationalBPredictionRouter.ts
-
 import type { TRPCRouterRecord } from "@trpc/server";
 import { TRPCError } from "@trpc/server";
 import { z } from "zod";

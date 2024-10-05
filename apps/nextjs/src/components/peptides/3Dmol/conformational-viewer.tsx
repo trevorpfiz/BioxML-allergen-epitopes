@@ -1,22 +1,13 @@
 "use client";
 
 import { useEffect, useRef } from "react";
-// @ts-expect-error 3dmol types?
-import * as $3Dmol from "3dmol/build/3Dmol.js";
+import * as $3Dmol from "3dmol";
 import { useTheme } from "next-themes";
 
 import type { EpitopeColors } from "~/lib/constants";
+import type { EpitopeData } from "~/types";
 import { EPITOPE_COLORS_DARK, EPITOPE_COLORS_LIGHT } from "~/lib/constants";
 import { getColorFromScore } from "~/lib/utils";
-
-interface EpitopeData {
-  PDB_ID: string;
-  Chain: string;
-  Residue_position: number;
-  AA: string;
-  Epitope_score: number;
-  N_glyco_label: number;
-}
 
 interface ConformationalViewerProps {
   epitopeData: EpitopeData[];
@@ -36,7 +27,7 @@ const createColorFunc = (
   minScore: number,
   maxScore: number,
 ) => {
-  return (atom: any) => {
+  return (atom: $3Dmol.AtomSpec) => {
     const key = `${atom.chain}_${atom.resi}`;
     const score = epitopeMap[key];
     if (score !== undefined && !isNaN(score)) {
@@ -60,7 +51,7 @@ const ConformationalViewer: React.FC<ConformationalViewerProps> = ({
     if (viewerRef.current) {
       // Initialize the viewer
       const viewer = $3Dmol.createViewer(viewerRef.current, {
-        backgroundColor: resolvedTheme === "dark" ? "#222222" : "white", // Optional: Change background based on theme
+        backgroundColor: resolvedTheme === "dark" ? "#222222" : "white",
       });
 
       // Map epitope scores by chain and residue position
@@ -88,14 +79,34 @@ const ConformationalViewer: React.FC<ConformationalViewerProps> = ({
       );
 
       // Download and load the PDB structure
-      const pdbID = epitopeData.length > 0 ? epitopeData[0].PDB_ID : "3OB4"; // Default to "3OB4" if not provided
+      const pdbID = epitopeData.length > 0 ? epitopeData[0]?.PDB_ID : "3OB4"; // Default to "3OB4" if not provided
 
       $3Dmol.download(`pdb:${pdbID}`, viewer, {}, () => {
         // Apply the custom color function to the cartoon style
         viewer.setStyle({}, { cartoon: { colorfunc: colorAsEpitopeGradient } });
 
-        // Optionally, add surfaces or other styles as needed
-        // viewer.addSurface($3Dmol.SurfaceType.VDW, { opacity: 0.85 }, {});
+        // Add spheres for all atoms in residues with N-glycosylation sites
+        epitopeData.forEach((residue) => {
+          if (residue.N_glyco_label) {
+            const selectionSpec = {
+              chain: residue.Chain,
+              resi: residue.Residue_position,
+            };
+
+            const atoms = viewer.selectedAtoms(selectionSpec);
+            if (atoms.length > 0) {
+              atoms.forEach((atom) => {
+                const color = colorAsEpitopeGradient(atom); // Get the color based on the epitope score
+
+                viewer.addSphere({
+                  center: { x: atom.x ?? 0, y: atom.y ?? 0, z: atom.z ?? 0 },
+                  radius: 1.5,
+                  color: color, // Set color based on epitope gradient
+                });
+              });
+            }
+          }
+        });
 
         // Zoom to fit the structure in the viewer
         viewer.zoomTo();

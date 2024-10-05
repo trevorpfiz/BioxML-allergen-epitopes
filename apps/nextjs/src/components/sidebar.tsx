@@ -1,11 +1,9 @@
 import type { User } from "@supabase/supabase-js";
 import Link from "next/link";
-import { redirect } from "next/navigation";
 
 import { Avatar, AvatarFallback } from "@epi/ui/avatar";
 
 import SidebarItems from "~/components/sidebar-items";
-import { DEFAULT_AUTH_ROUTE } from "~/config/routes";
 import { getNameFromUser } from "~/lib/utils";
 import { createClient } from "~/utils/supabase/server";
 
@@ -32,7 +30,11 @@ const Sidebar = async () => {
 
 export default Sidebar;
 
-const UserDetails = ({ user }: { user: User }) => {
+const UserDetails = ({ user }: { user: User | null }) => {
+  if (!user) {
+    return null;
+  }
+
   const name = getNameFromUser(user);
   const displayEmail = user.email ?? "Guest";
   // const initials = name

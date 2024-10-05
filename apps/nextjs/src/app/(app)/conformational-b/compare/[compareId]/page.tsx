@@ -1,34 +1,47 @@
-// app/compare-result/page.tsx
-
 import { promises as fs } from "fs";
 import path from "path";
-import dynamic from "next/dynamic";
 
 import type { SimilarityData } from "~/components/peptides/tables/similarity-columns";
+import type { EpitopeData } from "~/types";
+import CompareEpitopes from "~/components/peptides/compare-epitopes";
 import { columns } from "~/components/peptides/tables/similarity-columns";
 import { SimilarityDataTable } from "~/components/peptides/tables/similarity-data-table";
 
-// Dynamically import the molecule viewer to ensure it's a client component
-const BasicMoleculeViewer = dynamic(
-  () => import("~/components/peptides/3Dmol/basic-viewer"),
-  { ssr: false },
-);
-
 export default async function CompareResultPage() {
-  // Define the path to your CSV file
-  const csvPath = path.join(
+  // Define the paths to your CSV files
+  const similarityCSVPath = path.join(
     process.cwd(),
     "src",
     "data",
     "7b3o_E_7lm9_A_SEMA2_similarity_score.csv",
   );
 
-  // Read the CSV file
-  const fileContents = await fs.readFile(csvPath, "utf8");
+  const epitopeCSVPath1 = path.join(
+    process.cwd(),
+    "src",
+    "data",
+    "7b3o_E_SEMA2_epitopes_score.csv",
+  );
 
-  // Parse the CSV
-  const rows = fileContents.split("\n").slice(1); // Skip header row
-  const data: SimilarityData[] = rows
+  const epitopeCSVPath2 = path.join(
+    process.cwd(),
+    "src",
+    "data",
+    "7lm9_A_SEMA2_epitopes_score.csv",
+  );
+
+  // Read the CSV files
+  const [similarityFile, epitopeFile1, epitopeFile2] = await Promise.all([
+    fs.readFile(similarityCSVPath, "utf8"),
+    fs.readFile(epitopeCSVPath1, "utf8"),
+    fs.readFile(epitopeCSVPath2, "utf8"),
+  ]);
+
+  /**
+   * Step 1: Parse the Similarity CSV
+   */
+  const similarityRows = similarityFile.split("\n").slice(1); // Skip header row
+  const similarityData: SimilarityData[] = similarityRows
     .map((row) => {
       const [
         PDB_ID_1,
@@ -70,28 +83,59 @@ export default async function CompareResultPage() {
     })
     .filter((result): result is SimilarityData => result !== null); // Type guard
 
+  /**
+   * Step 2: Parse Epitope CSVs
+   */
+  const parseEpitopeCSV = (csv: string): EpitopeData[] => {
+    const rows = csv.split("\n").slice(1); // Skip header
+    return rows
+      .map((row) => {
+        const [PDB_ID, Chain, Residue_position, AA, Epitope_score] =
+          row.split(",");
+
+        if (
+          !PDB_ID ||
+          !Chain ||
+          !Residue_position ||
+          !AA ||
+          Epitope_score === undefined
+        ) {
+          return null; // Skip incomplete rows
+        }
+
+        return {
+          PDB_ID,
+          Chain,
+          Residue_position: parseInt(Residue_position, 10),
+          AA,
+          Epitope_score: parseFloat(Epitope_score),
+        };
+      })
+      .filter((result): result is EpitopeData => result !== null);
+  };
+
+  const epitopeData1: EpitopeData[] = parseEpitopeCSV(epitopeFile1);
+  const epitopeData2: EpitopeData[] = parseEpitopeCSV(epitopeFile2);
+
   return (
     <main className="container flex w-full flex-col gap-8 pb-48">
       <h1 className="text-3xl font-bold">Protein Structure Comparison</h1>
 
-      <div className="flex w-full flex-col gap-8 md:flex-row">
+      <div className="flex flex-col gap-8 md:flex-row">
         <div className="flex flex-1 flex-col gap-4">
-          <h2 className="text-xl font-semibold">7B3O</h2>
-          <div className="min-h-[402px] w-full border shadow">
-            <BasicMoleculeViewer pdbId="7B3O" />
-          </div>
-        </div>
-        <div className="flex flex-1 flex-col gap-4">
-          <h2 className="text-xl font-semibold">7LM9</h2>
-          <div className="min-h-[402px] w-full border shadow">
-            <BasicMoleculeViewer pdbId="7LM9" />
-          </div>
+          <CompareEpitopes
+            pdbId1="7b3o"
+            pdbId2="7lm9"
+            similarityData={similarityData}
+            epitopeData1={epitopeData1}
+            epitopeData2={epitopeData2}
+          />
         </div>
       </div>
 
       <div className="flex flex-col gap-4">
         <h2 className="text-2xl font-semibold">Similarity Table</h2>
-        <SimilarityDataTable columns={columns} data={data} />
+        <SimilarityDataTable columns={columns} data={similarityData} />
       </div>
     </main>
   );

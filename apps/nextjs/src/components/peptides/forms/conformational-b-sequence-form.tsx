@@ -20,7 +20,7 @@ import { ConformationalBSequenceFormSchema } from "@epi/validators/epitopes";
 
 const ConformationalBSequenceForm = () => {
   const router = useRouter();
-  const [isLoading, setIsLoading] = useState(false);
+  const [isLoading] = useState(false);
 
   const form = useForm({
     schema: ConformationalBSequenceFormSchema,
@@ -29,6 +29,7 @@ const ConformationalBSequenceForm = () => {
     },
   });
 
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   function onSubmit(values: ConformationalBSequenceForm) {
     void router.push(`/conformational-b/sequence-based/1`);
   }

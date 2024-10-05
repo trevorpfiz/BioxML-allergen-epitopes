@@ -31,6 +31,7 @@ const ConformationalBStructureForm = () => {
     },
   });
 
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   function onSubmit(values: ConformationalBStructureForm) {
     void router.push(`/conformational-b/structure-based/1`);
   }
