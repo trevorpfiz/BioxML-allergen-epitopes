@@ -1,0 +1,82 @@
+{
+    "User_Inputs": {
+        "Protein_Sequence": "MENFVLS",
+        "PDB_ID": "1A2B",
+        "Chain": "A",
+        "T_Cell_Class": "Class I",
+        "B_Cell_Epitope_Type": [
+            "Linear",
+            "Conformational"
+        ],
+        "HLA_Alleles": [
+            "HLA-A*02:01",
+            "HLA-B*07:02"
+        ],
+        "Epitope_Prediction_Methods": {
+            "pMHC_Immunogenicity": "NetMHCPan",
+            "TCR_Recognition": "MHCFlurry",
+            "MHC_Binding_Affinity": "MHCFlurry",
+            "pMHC_Stability": "ESM3",
+            "Linear_B_Cell_Immunogenicity": "BepiPred",
+            "Linear_B_Cell_Probability": "BepiPred",
+            "Conformational_B_Cell_Immunogenicity": "ESM3",
+            "Conformational_B_Cell_Probability": "ESM3",
+            "Surface_Accessibility": "NetMHCPan"
+        }
+    },
+    "Analysis_Outputs": [
+        {
+            "peptide_sequence": "EVDPIGHLY",
+            "pMHC_Immunogenicity": {
+                "Method": "NetMHCPan",
+                "Score": 0.75
+            },
+            "TCR_Recognition": {
+                "Method": "MHCFlurry",
+                "Score": 0.63
+            },
+            "MHC_Binding_Affinity": {
+                "Method": "MHCFlurry",
+                "Allele_Affinity": {
+                    "HLA-A*02:01": "30 nM",
+                    "HLA-B*07:02": "50 nM"
+                },
+                "Best_Affinity": {
+                    "Allele": "HLA-A*02:01",
+                    "Value": "30 nM"
+                }
+            },
+            "pMHC_Stability": {
+                "Method": "ESM3",
+                "Allele_Stability": {
+                    "HLA-A*02:01": "4.5 hrs",
+                    "HLA-B*07:02": "3.2 hrs"
+                },
+                "Best_Stability": {
+                    "Allele": "HLA-A*02:01",
+                    "Value": "4.5 hrs"
+                }
+            },
+            "Linear_B_Cell_Immunogenicity": {
+                "Method": "BepiPred",
+                "Score": 0.75
+            },
+            "Linear_B_Cell_Probability": {
+                "Method": "BepiPred",
+                "Score": 0.75
+            },
+            "Conformational_B_Cell_Immunogenicity": {
+                "Method": "ESM3",
+                "Score": 0.70
+            },
+            "Conformational_B_Cell_Probability": {
+                "Method": "ESM3",
+                "Score": 0.65
+            },
+            "Surface_Accessibility": {
+                "Method": "NetMHCPan",
+                "Score": 0.73
+            }
+        }
+    ]
+}

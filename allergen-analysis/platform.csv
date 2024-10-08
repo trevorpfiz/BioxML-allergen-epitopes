@@ -1,0 +1,3 @@
+Protein_Sequence,PDB_ID,Chain,T_Cell_Class,B_Cell_Epitope_Type,HLA_Alleles,peptide_sequence,pMHC_Immunogenicity,TCR_Recognition,MHC_Binding_Affinity,pMHC_Stability,Linear_B_Cell_Immunogenicity,Linear_B_Cell_Probability,Conformational_B_Cell_Immunogenicity,Conformational_B_Cell_Probability,Surface_Accessibility
+MENFVLS,1A2B,A,Class I,"Linear;Conformational","HLA-A*02:01;HLA-B*07:02","EVDPIGHLY",0.75,0.63,"HLA-A*02:01=30 nM|HLA-B*07:02=50 nM","HLA-A*02:01=4.5 hrs|HLA-B*07:02=3.2 hrs",0.75,0.75,0.70,0.65,0.73
+MENFVLS,1A2B,A,Class I,"Linear;Conformational","HLA-A*02:01;HLA-B*07:02","FVLSMENG",0.65,0.58,"HLA-A*02:01=25 nM|HLA-B*07:02=45 nM","HLA-A*02:01=4.2 hrs|HLA-B*07:02=3.0 hrs",0.65,0.70,0.68,0.60,0.70
