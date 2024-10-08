@@ -3,7 +3,7 @@
  * Users do not need to be logged in to access these routes.
  * @type {string[]} publicRoutes - The public routes.
  */
-export const publicRoutes = ["/"];
+export const publicRoutes = [];
 
 /**
  * Represents an array of routes that require authentication.
@@ -11,10 +11,13 @@ export const publicRoutes = ["/"];
  * @type {string[]} protectedRoutes - The protected routes.
  */
 export const protectedRoutes = [
+  "/",
   "/onboarding",
   "/dashboard",
   "/settings",
   "/account",
+  "/job",
+
   "/linear-b",
   "/conformational-b",
   "/mhc-i",

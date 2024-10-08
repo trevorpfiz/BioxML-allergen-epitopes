@@ -1,61 +1,57 @@
-import type { User } from "@supabase/supabase-js";
+import { Suspense } from "react";
 import Link from "next/link";
+import { PlusCircle } from "lucide-react";
 
-import { Avatar, AvatarFallback } from "@epi/ui/avatar";
+import { Button } from "@epi/ui/button";
 
-import SidebarItems from "~/components/sidebar-items";
-import { getNameFromUser } from "~/lib/utils";
-import { createClient } from "~/utils/supabase/server";
+import Loading from "~/app/(app)/loading";
+import JobsList from "~/components/jobs/jobs-list";
+import { api, HydrateClient } from "~/trpc/server";
 
-const Sidebar = async () => {
-  const supabase = createClient();
-  const { data, error } = await supabase.auth.getUser();
-  if (error || !data.user.id) {
-    console.log("Error getting user:", error);
-    // redirect(DEFAULT_AUTH_ROUTE);
-  }
+const Sidebar = () => {
+  void api.job.byUser.prefetch();
 
   return (
-    <aside className="hidden h-screen min-w-52 border-r border-border bg-muted p-4 pt-8 shadow-inner md:block">
-      <div className="flex h-full flex-col justify-between">
-        <div className="space-y-4">
-          <h3 className="ml-4 text-lg font-semibold">Epitope Prediction</h3>
-          <SidebarItems />
-        </div>
-        <UserDetails user={data.user} />
+    <HydrateClient>
+      <div className="hidden h-full min-w-64 flex-shrink-0 overflow-x-hidden bg-muted md:block">
+        <nav className="flex h-full w-full flex-col px-3">
+          {/* New Job */}
+          <div className="flex h-14 items-center justify-between">
+            <Button
+              asChild
+              className="w-full justify-start bg-muted"
+              variant="outline"
+            >
+              <Link href="/">
+                <PlusCircle className="mr-2 h-4 w-4" />
+                New Prediction
+              </Link>
+            </Button>
+          </div>
+
+          {/* Jobs Scroll Section */}
+          <div className="relative -mr-2 flex-1 flex-col overflow-y-auto pr-2 pt-2">
+            <div className="space-y-4">
+              <Suspense
+                fallback={
+                  <div className="flex w-full flex-col items-center justify-center gap-4">
+                    <Loading />
+                  </div>
+                }
+              >
+                <JobsList />
+              </Suspense>
+            </div>
+          </div>
+
+          {/* Bottom */}
+          {/* <div className="flex flex-col py-2">
+            <p>bottom</p>
+          </div> */}
+        </nav>
       </div>
-    </aside>
+    </HydrateClient>
   );
 };
 
 export default Sidebar;
-
-const UserDetails = ({ user }: { user: User | null }) => {
-  if (!user) {
-    return null;
-  }
-
-  const name = getNameFromUser(user);
-  const displayEmail = user.email ?? "Guest";
-  // const initials = name
-  //   .split(" ")
-  //   .map((word) => word[0]?.toUpperCase())
-  //   .join("")
-  //   .slice(0, 2);
-
-  return (
-    <Link href="/account">
-      <div className="flex w-full items-center justify-between border-t border-border px-2 pt-4">
-        <div className="text-muted-foreground">
-          <p className="text-xs">{name}</p>
-          <p className="pr-4 text-xs font-light">{displayEmail}</p>
-        </div>
-        <Avatar className="h-10 w-10">
-          <AvatarFallback className="border-2 border-border bg-gradient-to-r from-indigo-500 via-purple-500 to-pink-500 text-white">
-            {/* {initials || ""} */}
-          </AvatarFallback>
-        </Avatar>
-      </div>
-    </Link>
-  );
-};

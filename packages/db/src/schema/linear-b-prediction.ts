@@ -1,34 +1,37 @@
 import type { z } from "zod";
 import { relations } from "drizzle-orm";
-import { jsonb, text, timestamp, uuid, varchar } from "drizzle-orm/pg-core";
 import { createInsertSchema, createSelectSchema } from "drizzle-zod";
 
 import { timestamps } from "../lib/utils";
 import { createTable } from "./_table";
-import { Profile } from "./profile";
+import { Job } from "./job";
 
-export const LinearBPrediction = createTable("linear_b_prediction", {
-  id: uuid("id").primaryKey().defaultRandom(),
-  sequence: text("sequence").notNull(),
-  result: jsonb("result").notNull(),
-  csvDownloadUrl: varchar("csv_download_url", { length: 255 }),
-  profileId: uuid("profile_id")
+export const LinearBPrediction = createTable("linear_b_prediction", (t) => ({
+  id: t.uuid().primaryKey().defaultRandom(),
+  sequence: t.text().notNull(),
+  result: t.jsonb().notNull(),
+  csvDownloadUrl: t.varchar({ length: 255 }),
+
+  jobId: t
+    .uuid()
     .notNull()
-    .references(() => Profile.id),
+    .references(() => Job.id),
 
-  createdAt: timestamp("created_at").defaultNow().notNull(),
-  updatedAt: timestamp("updated_at", {
-    mode: "date",
-    withTimezone: true,
-  }).$onUpdateFn(() => new Date()),
-});
+  createdAt: t.timestamp().defaultNow().notNull(),
+  updatedAt: t
+    .timestamp({
+      mode: "date",
+      withTimezone: true,
+    })
+    .$onUpdateFn(() => new Date()),
+}));
 
 export const LinearBPredictionRelations = relations(
   LinearBPrediction,
   ({ one }) => ({
-    profile: one(Profile, {
-      fields: [LinearBPrediction.profileId],
-      references: [Profile.id],
+    job: one(Job, {
+      fields: [LinearBPrediction.jobId],
+      references: [Job.id],
     }),
   }),
 );
@@ -43,14 +46,14 @@ export const insertLinearBPredictionParams = insertLinearBPredictionSchema
   .extend({})
   .omit({
     id: true,
-    profileId: true,
+    jobId: true,
   });
 
 export const updateLinearBPredictionSchema = baseLinearBPredictionSchema;
 export const updateLinearBPredictionParams = baseLinearBPredictionSchema
   .extend({})
   .omit({
-    profileId: true,
+    jobId: true,
   })
   .partial()
   .extend({

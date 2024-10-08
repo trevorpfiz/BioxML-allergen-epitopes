@@ -37,7 +37,7 @@ export const createTRPCContext = async (opts: {
   // browsers will have the session cookie set
   const token = opts.headers.get("Authorization");
 
-  console.log(">>> tRPC Request with token", token);
+  // console.log(">>> tRPC Request with token", token);
 
   const user = token
     ? await supabase.auth.getUser(token)

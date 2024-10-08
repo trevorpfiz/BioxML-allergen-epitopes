@@ -15,6 +15,13 @@
       "when": 1727848039484,
       "tag": "0001_salty_sleepwalker",
       "breakpoints": true
+    },
+    {
+      "idx": 2,
+      "version": "7",
+      "when": 1728408358302,
+      "tag": "0002_lean_galactus",
+      "breakpoints": true
     }
   ]
 }
