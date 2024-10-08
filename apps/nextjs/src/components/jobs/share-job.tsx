@@ -1,3 +1,5 @@
+"use client";
+
 import { useEffect, useState } from "react";
 import { Copy, Link, Loader2 } from "lucide-react";
 
@@ -14,19 +16,16 @@ import { Input } from "@epi/ui/input";
 import { toast } from "@epi/ui/sonner";
 
 import { env } from "~/env";
+import { useShareDialogStore } from "~/providers/share-dialog-store-provider";
 import { api } from "~/trpc/react";
 
-interface ShareDialogProps {
-  jobId: string;
-  open: boolean;
-  onOpenChange: (open: boolean) => void;
-}
+export const ShareDialog = () => {
+  const { isOpen, jobId, closeShareDialog } = useShareDialogStore((state) => ({
+    isOpen: state.isOpen,
+    jobId: state.jobId,
+    closeShareDialog: state.closeShareDialog,
+  }));
 
-export const ShareDialog = ({
-  jobId,
-  open,
-  onOpenChange,
-}: ShareDialogProps) => {
   const utils = api.useUtils();
 
   const [isCopied, setIsCopied] = useState(false);
@@ -39,15 +38,15 @@ export const ShareDialog = ({
 
   // Fetch the job details including the shareToken on open
   const { isLoading, isError, data } = api.job.byId.useQuery(
-    { id: jobId },
+    { id: jobId ?? "" }, // jobId is guaranteed to be not null when isOpen is true
     {
-      enabled: open && !!jobId,
+      enabled: isOpen && !!jobId,
     },
   );
 
   const shareMutation = api.job.generateShareLink.useMutation({
     onSuccess: () => {
-      void utils.job.byId.invalidate({ id: jobId });
+      void utils.job.byId.invalidate({ id: jobId ?? "" });
     },
     onError: () => {
       toast.error("Failed to generate shareable link.");
@@ -55,7 +54,9 @@ export const ShareDialog = ({
   });
 
   const handleCreateLink = () => {
-    shareMutation.mutate({ id: jobId });
+    if (jobId) {
+      shareMutation.mutate({ id: jobId });
+    }
   };
 
   const handleCopyLink = () => {
@@ -81,43 +82,13 @@ export const ShareDialog = ({
     };
   }, [copyTimeout]);
 
-  if (isLoading) {
-    return (
-      <Dialog open={open} onOpenChange={onOpenChange}>
-        <DialogContent className="sm:max-w-md">
-          <DialogHeader>
-            <DialogTitle>Share public link to job</DialogTitle>
-            <DialogDescription>
-              Your jobs you add after sharing stay private.
-            </DialogDescription>
-          </DialogHeader>
-          <Loader2 className="mx-auto h-4 w-4 animate-spin" />
-        </DialogContent>
-      </Dialog>
-    );
-  }
-
-  if (isError) {
-    return (
-      <Dialog open={open} onOpenChange={onOpenChange}>
-        <DialogContent className="sm:max-w-md">
-          <DialogHeader>
-            <DialogTitle>Error</DialogTitle>
-            <DialogDescription>
-              Failed to load job details. Please try again.
-            </DialogDescription>
-          </DialogHeader>
-        </DialogContent>
-      </Dialog>
-    );
-  }
-
-  const shareLink = data?.job.shareToken
-    ? `${shareUrl}${data.job.shareToken}` // Use the full share URL if shareToken exists
-    : `${shareUrl}...`; // Fallback placeholder if shareToken is not available
+  const handleClose = () => {
+    closeShareDialog();
+    setIsCopied(false);
+  };
 
   return (
-    <Dialog open={open} onOpenChange={onOpenChange}>
+    <Dialog open={isOpen} onOpenChange={handleClose}>
       <DialogContent className="sm:max-w-md">
         <DialogHeader tabIndex={0}>
           <DialogTitle>Share public link to job</DialogTitle>
@@ -125,52 +96,68 @@ export const ShareDialog = ({
             Your jobs you add after sharing stay private.
           </DialogDescription>
         </DialogHeader>
-        <div className="flex items-center space-x-2">
-          <div className="flex-1">
-            <Input
-              value={shareLink}
-              readOnly
-              className={cn(
-                "w-full",
-                !data?.job.shareToken && "text-muted-foreground",
-              )}
-            />
-          </div>
 
-          {!data?.job.shareToken ? (
-            shareMutation.isPending ? (
-              <Button
-                disabled
-                size="sm"
-                className="flex items-center space-x-2 px-3"
-              >
-                <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-                Creating...
-              </Button>
+        {isLoading ? (
+          <Loader2 className="mx-auto h-4 w-4 animate-spin" />
+        ) : isError ? (
+          <div>
+            <DialogTitle>Error</DialogTitle>
+            <DialogDescription>
+              Failed to load job details. Please try again.
+            </DialogDescription>
+          </div>
+        ) : (
+          <div className="flex items-center space-x-2">
+            <div className="flex-1">
+              <Input
+                value={
+                  data?.job.shareToken
+                    ? `${shareUrl}${data.job.shareToken}`
+                    : `${shareUrl}...`
+                }
+                readOnly
+                className={cn(
+                  "w-full",
+                  !data?.job.shareToken && "text-muted-foreground",
+                )}
+              />
+            </div>
+
+            {!data?.job.shareToken ? (
+              shareMutation.isPending ? (
+                <Button
+                  disabled
+                  size="sm"
+                  className="flex items-center space-x-2 px-3"
+                >
+                  <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                  Creating...
+                </Button>
+              ) : (
+                <Button
+                  type="button"
+                  size="sm"
+                  className="flex items-center space-x-2 px-3"
+                  onClick={handleCreateLink}
+                >
+                  <Link className="mr-2 h-4 w-4" />
+                  Create link
+                </Button>
+              )
             ) : (
               <Button
                 type="button"
                 size="sm"
                 className="flex items-center space-x-2 px-3"
-                onClick={handleCreateLink}
+                onClick={handleCopyLink}
+                disabled={isCopied}
               >
-                <Link className="mr-2 h-4 w-4" />
-                Create link
+                <Copy className="mr-2 h-4 w-4" />
+                {isCopied ? "Copied" : "Copy Link"}
               </Button>
-            )
-          ) : (
-            <Button
-              type="button"
-              size="sm"
-              className="flex items-center space-x-2 px-3"
-              onClick={handleCopyLink}
-              disabled={isCopied}
-            >
-              <Copy className="mr-2 h-4 w-4" />
-              {isCopied ? "Copied" : "Copy Link"}
-            </Button>
-          )}
-        </div>
+            )}
+          </div>
+        )}
       </DialogContent>
     </Dialog>
   );
