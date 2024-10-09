@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from "react";
 import { Copy, Link, Loader2 } from "lucide-react";
+import { useShallow } from "zustand/react/shallow";
 
 import { cn } from "@epi/ui";
 import { Button } from "@epi/ui/button";
@@ -9,6 +10,7 @@ import {
   Dialog,
   DialogContent,
   DialogDescription,
+  DialogFooter,
   DialogHeader,
   DialogTitle,
 } from "@epi/ui/dialog";
@@ -20,11 +22,13 @@ import { useShareDialogStore } from "~/providers/share-dialog-store-provider";
 import { api } from "~/trpc/react";
 
 export const ShareDialog = () => {
-  const { isOpen, jobId, closeShareDialog } = useShareDialogStore((state) => ({
-    isOpen: state.isOpen,
-    jobId: state.jobId,
-    closeShareDialog: state.closeShareDialog,
-  }));
+  const { isOpen, jobId, closeShareDialog } = useShareDialogStore(
+    useShallow((state) => ({
+      isOpen: state.isOpen,
+      jobId: state.jobId,
+      closeShareDialog: state.closeShareDialog,
+    })),
+  );
 
   const utils = api.useUtils();
 
@@ -50,6 +54,16 @@ export const ShareDialog = () => {
     },
     onError: () => {
       toast.error("Failed to generate shareable link.");
+    },
+  });
+
+  const updateMutation = api.job.update.useMutation({
+    onSuccess: () => {
+      void utils.job.byId.invalidate({ id: jobId ?? "" });
+      toast.success("Share link removed. The job is no longer public.");
+    },
+    onError: () => {
+      toast.error("Failed to remove shareable link.");
     },
   });
 
@@ -90,7 +104,7 @@ export const ShareDialog = () => {
   return (
     <Dialog open={isOpen} onOpenChange={handleClose}>
       <DialogContent className="sm:max-w-md">
-        <DialogHeader tabIndex={0}>
+        <DialogHeader>
           <DialogTitle>Share public link to job</DialogTitle>
           <DialogDescription>
             Your jobs you add after sharing stay private.
@@ -107,56 +121,82 @@ export const ShareDialog = () => {
             </DialogDescription>
           </div>
         ) : (
-          <div className="flex items-center space-x-2">
-            <div className="flex-1">
-              <Input
-                value={
-                  data?.job.shareToken
-                    ? `${shareUrl}${data.job.shareToken}`
-                    : `${shareUrl}...`
-                }
-                readOnly
-                className={cn(
-                  "w-full",
-                  !data?.job.shareToken && "text-muted-foreground",
-                )}
-              />
-            </div>
+          <>
+            <div className="flex items-center space-x-2">
+              <div className="flex-1">
+                <Input
+                  tabIndex={-1}
+                  value={
+                    data?.job.shareToken
+                      ? `${shareUrl}${data.job.shareToken}`
+                      : `${shareUrl}...`
+                  }
+                  readOnly
+                  className={cn(
+                    "w-full",
+                    !data?.job.shareToken && "text-muted-foreground",
+                  )}
+                />
+              </div>
 
-            {!data?.job.shareToken ? (
-              shareMutation.isPending ? (
-                <Button
-                  disabled
-                  size="sm"
-                  className="flex items-center space-x-2 px-3"
-                >
-                  <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-                  Creating...
-                </Button>
+              {!data?.job.shareToken ? (
+                shareMutation.isPending ? (
+                  <Button
+                    disabled
+                    size="sm"
+                    className="flex items-center space-x-2 px-3"
+                  >
+                    <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                    Creating...
+                  </Button>
+                ) : (
+                  <Button
+                    type="button"
+                    size="sm"
+                    className="flex items-center space-x-2 px-3"
+                    onClick={handleCreateLink}
+                  >
+                    <Link className="mr-2 h-4 w-4" />
+                    Create link
+                  </Button>
+                )
               ) : (
                 <Button
                   type="button"
                   size="sm"
                   className="flex items-center space-x-2 px-3"
-                  onClick={handleCreateLink}
+                  onClick={handleCopyLink}
+                  disabled={isCopied}
                 >
-                  <Link className="mr-2 h-4 w-4" />
-                  Create link
+                  <Copy className="mr-2 h-4 w-4" />
+                  {isCopied ? "Copied" : "Copy Link"}
                 </Button>
-              )
-            ) : (
-              <Button
-                type="button"
-                size="sm"
-                className="flex items-center space-x-2 px-3"
-                onClick={handleCopyLink}
-                disabled={isCopied}
-              >
-                <Copy className="mr-2 h-4 w-4" />
-                {isCopied ? "Copied" : "Copy Link"}
-              </Button>
-            )}
-          </div>
+              )}
+            </div>
+
+            <DialogFooter>
+              {data?.job.shareToken && (
+                <Button
+                  variant="outline"
+                  onClick={() => {
+                    if (jobId) {
+                      updateMutation.mutate({
+                        id: jobId,
+                        shareToken: null,
+                      });
+                    }
+                  }}
+                  disabled={updateMutation.isPending}
+                >
+                  {updateMutation.isPending ? (
+                    <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                  ) : (
+                    "Stop sharing"
+                  )}
+                </Button>
+              )}
+            </DialogFooter>
+          </>
         )}
       </DialogContent>
     </Dialog>

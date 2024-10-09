@@ -14,8 +14,8 @@ import {
   DropdownMenuTrigger,
 } from "@epi/ui/dropdown-menu";
 
-import { ShareDialog } from "~/components/jobs/share-job";
 import { env } from "~/env";
+import { useShareDialogStore } from "~/providers/share-dialog-store-provider";
 import { api } from "~/trpc/react";
 
 export default function JobsList() {
@@ -109,7 +109,7 @@ const JobComponent = ({ job }: { job: Job }) => {
 
 export const OptionsMenu = ({ job }: { job: Job }) => {
   const utils = api.useUtils();
-  const [isShareDialogOpen, setIsShareDialogOpen] = useState(false);
+  const openShareDialog = useShareDialogStore((state) => state.openShareDialog);
 
   // Mutation for deleting the job
   const deleteMutation = api.job.delete.useMutation({
@@ -138,7 +138,7 @@ export const OptionsMenu = ({ job }: { job: Job }) => {
   };
 
   const handleShare = () => {
-    setIsShareDialogOpen(true);
+    openShareDialog(job.id);
   };
 
   return (
@@ -167,11 +167,6 @@ export const OptionsMenu = ({ job }: { job: Job }) => {
           </DropdownMenuItem>
         </DropdownMenuContent>
       </DropdownMenu>
-      <ShareDialog
-        jobId={job.id}
-        open={isShareDialogOpen}
-        onOpenChange={setIsShareDialogOpen}
-      />
     </>
   );
 };

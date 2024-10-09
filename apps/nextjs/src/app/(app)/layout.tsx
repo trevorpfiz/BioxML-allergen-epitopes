@@ -1,6 +1,7 @@
 import { Toaster } from "@epi/ui/sonner";
 
 import Header from "~/components/header";
+import { ShareDialog } from "~/components/jobs/share-job";
 import Sidebar from "~/components/sidebar";
 import { ShareDialogStoreProvider } from "~/providers/share-dialog-store-provider";
 
@@ -32,6 +33,7 @@ export default function AppLayout({ children }: { children: React.ReactNode }) {
           </main>
         </div>
 
+        <ShareDialog />
         <Toaster richColors />
       </div>
     </ShareDialogStoreProvider>

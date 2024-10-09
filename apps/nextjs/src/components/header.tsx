@@ -1,9 +1,8 @@
-// src/components/header.tsx
 "use client";
 
 import type { User } from "@supabase/supabase-js";
 import { useEffect, useState } from "react";
-import { usePathname, useSearchParams } from "next/navigation";
+import { useParams } from "next/navigation";
 import { Upload } from "lucide-react";
 
 import { Button } from "@epi/ui/button";
@@ -22,8 +21,7 @@ import { useShareDialogStore } from "~/providers/share-dialog-store-provider";
 import { createClient } from "~/utils/supabase/client";
 
 export default function Header() {
-  const searchParams = useSearchParams();
-  const pathname = usePathname();
+  const params = useParams<{ jobId?: string }>();
   const supabase = createClient();
   const [user, setUser] = useState<User | null>(null);
 
@@ -40,15 +38,11 @@ export default function Header() {
     void getUser();
   }, [supabase.auth]);
 
-  const isJobPage = /^\/job\/[0-9a-fA-F-]{36}$/.test(pathname);
-
   // Access store actions
-  const { openShareDialog } = useShareDialogStore((state) => ({
-    openShareDialog: state.openShareDialog,
-  }));
+  const openShareDialog = useShareDialogStore((state) => state.openShareDialog);
 
   const handleShareClick = () => {
-    const currentJobId = searchParams.get("jobId");
+    const currentJobId = params.jobId;
     openShareDialog(currentJobId ?? "");
   };
 
@@ -72,7 +66,7 @@ export default function Header() {
       </div>
 
       <div className="flex items-center gap-2 pr-1 leading-[0]">
-        {isJobPage && (
+        {params.jobId && (
           <Button
             variant="outline"
             className="rounded-full"
