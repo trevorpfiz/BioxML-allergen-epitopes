@@ -1,4 +1,8 @@
+"use client";
+
 import type { User } from "@supabase/supabase-js";
+import { useRouter } from "next/navigation";
+import { LogOut, Settings } from "lucide-react";
 
 import { Avatar, AvatarFallback, AvatarImage } from "@epi/ui/avatar";
 import { Button } from "@epi/ui/button";
@@ -15,12 +19,19 @@ import {
 import { getNameFromUser } from "~/lib/utils";
 
 function UserButton({ user }: { user: User | null }) {
+  const router = useRouter();
+
   if (!user) {
     return null;
   }
 
   const name = getNameFromUser(user);
   const displayEmail = user.email ?? "Guest";
+
+  const handleNavigate = (path: string) => {
+    // setIsOpen(false);
+    router.push(path);
+  };
 
   return (
     <DropdownMenu>
@@ -46,13 +57,16 @@ function UserButton({ user }: { user: User | null }) {
         </DropdownMenuLabel>
         <DropdownMenuSeparator />
         <DropdownMenuGroup>
-          <DropdownMenuItem>test</DropdownMenuItem>
-          <DropdownMenuItem>test</DropdownMenuItem>
-          <DropdownMenuItem>test</DropdownMenuItem>
-          <DropdownMenuItem>test</DropdownMenuItem>
+          <DropdownMenuItem onSelect={() => handleNavigate("/settings")}>
+            <Settings className="mr-2 h-4 w-4" />
+            <span>Settings</span>
+          </DropdownMenuItem>
         </DropdownMenuGroup>
         <DropdownMenuSeparator />
-        <DropdownMenuItem>Sign out</DropdownMenuItem>
+        <DropdownMenuItem>
+          <LogOut className="mr-2 h-4 w-4" />
+          <span>Sign out</span>
+        </DropdownMenuItem>
       </DropdownMenuContent>
     </DropdownMenu>
   );

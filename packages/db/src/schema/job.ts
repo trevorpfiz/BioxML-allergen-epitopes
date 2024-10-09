@@ -11,19 +11,18 @@ import { MhcIPrediction } from "./mhc-i-prediction";
 import { MhcIIPrediction } from "./mhc-ii-prediction";
 import { Profile } from "./profile";
 
-export const typeEnum = pgEnum("type", [
+export const predictionTypes = [
   "linear-b",
   "conformational-b",
   "mhc-i",
   "mhc-ii",
-]);
+] as const;
+export type PredictionType = (typeof predictionTypes)[number];
+export const typeEnum = pgEnum("type", predictionTypes);
 
-export const statusEnum = pgEnum("status", [
-  "pending",
-  "running",
-  "completed",
-  "failed",
-]);
+export const jobStatus = ["pending", "running", "completed", "failed"] as const;
+export type JobStatus = (typeof jobStatus)[number];
+export const statusEnum = pgEnum("status", jobStatus);
 
 export const Job = createTable(
   "job",

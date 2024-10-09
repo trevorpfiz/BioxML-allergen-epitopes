@@ -7,7 +7,7 @@ import { Button } from "@epi/ui/button";
 export default function SettingsPage() {
   const { setTheme } = useTheme();
   return (
-    <div>
+    <div className="p-8">
       <h1 className="text-2xl font-semibold">Settings</h1>
       <div className="my-4 space-y-4">
         <div>

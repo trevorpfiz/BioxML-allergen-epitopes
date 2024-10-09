@@ -19,7 +19,7 @@ const Sidebar = () => {
           <div className="flex h-14 items-center justify-between">
             <Button
               asChild
-              className="w-full justify-start bg-muted"
+              className="w-full justify-start border-primary/20 bg-muted shadow-none hover:bg-primary/10"
               variant="outline"
             >
               <Link href="/">

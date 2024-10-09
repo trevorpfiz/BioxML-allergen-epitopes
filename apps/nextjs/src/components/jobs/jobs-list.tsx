@@ -1,11 +1,12 @@
 "use client";
 
-import { useState } from "react";
 import Link from "next/link";
+import { usePathname } from "next/navigation";
 import { format } from "date-fns";
 import { MoreHorizontal, Pencil, Share, Trash2 } from "lucide-react";
 
 import type { Job } from "@epi/db/schema";
+import { cn } from "@epi/ui";
 import { Button } from "@epi/ui/button";
 import {
   DropdownMenu,
@@ -13,6 +14,12 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from "@epi/ui/dropdown-menu";
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipProvider,
+  TooltipTrigger,
+} from "@epi/ui/tooltip";
 
 import { env } from "~/env";
 import { useShareDialogStore } from "~/providers/share-dialog-store-provider";
@@ -90,19 +97,23 @@ export default function JobsList() {
 }
 
 const JobComponent = ({ job }: { job: Job }) => {
-  const [isHovered, setIsHovered] = useState(false);
+  const pathname = usePathname();
+  const isActive = pathname === `/job/${job.id}`;
 
   return (
     <li
-      className="group relative my-2 flex items-center justify-between rounded-md p-2 hover:bg-muted"
-      onMouseEnter={() => setIsHovered(true)}
-      onMouseLeave={() => setIsHovered(false)}
+      className={cn(
+        "group relative flex items-center justify-between rounded-md hover:bg-primary/10",
+        isActive && "bg-primary/10",
+      )}
     >
-      <Link href={`/job/${job.id}`} className="flex-1">
+      <Link href={`/job/${job.id}`} className="flex-1 p-2">
         <div className="text-sm font-medium">{job.name}</div>
         <div className="text-xs text-muted-foreground">{job.type}</div>
       </Link>
-      <div className="flex items-center">{<OptionsMenu job={job} />}</div>
+      <div className={cn("flex items-center", isActive && "opacity-100")}>
+        <OptionsMenu job={job} />
+      </div>
     </li>
   );
 };
@@ -143,30 +154,48 @@ export const OptionsMenu = ({ job }: { job: Job }) => {
 
   return (
     <>
-      <DropdownMenu>
-        <DropdownMenuTrigger asChild>
-          <Button variant="ghost" size="icon" aria-label="Options">
-            <MoreHorizontal className="h-4 w-4" />
-          </Button>
-        </DropdownMenuTrigger>
-        <DropdownMenuContent>
-          <DropdownMenuItem onSelect={handleShare}>
-            <Share className="mr-2 h-4 w-4" />
-            Share
-          </DropdownMenuItem>
-          <DropdownMenuItem onSelect={handleRename}>
-            <Pencil className="mr-2 h-4 w-4" />
-            Rename
-          </DropdownMenuItem>
-          <DropdownMenuItem
-            onSelect={handleDelete}
-            className="text-destructive"
+      <TooltipProvider delayDuration={200}>
+        <DropdownMenu>
+          <span tabIndex={0} className="sr-only" />
+          <Tooltip>
+            <TooltipTrigger asChild tabIndex={-1}>
+              <DropdownMenuTrigger asChild>
+                <Button
+                  variant="ghost"
+                  size="icon"
+                  aria-label="Options"
+                  className="hover:bg-inherit"
+                >
+                  <MoreHorizontal className="h-4 w-4" />
+                </Button>
+              </DropdownMenuTrigger>
+            </TooltipTrigger>
+            <TooltipContent className="bg-black text-white">
+              <p>Options</p>
+            </TooltipContent>
+          </Tooltip>
+          <DropdownMenuContent
+            align="start"
+            onCloseAutoFocus={(e) => e.preventDefault()}
           >
-            <Trash2 className="mr-2 h-4 w-4 text-destructive" />
-            Delete
-          </DropdownMenuItem>
-        </DropdownMenuContent>
-      </DropdownMenu>
+            <DropdownMenuItem onSelect={handleShare}>
+              <Share className="mr-2 h-4 w-4" />
+              Share
+            </DropdownMenuItem>
+            <DropdownMenuItem onSelect={handleRename}>
+              <Pencil className="mr-2 h-4 w-4" />
+              Rename
+            </DropdownMenuItem>
+            <DropdownMenuItem
+              onSelect={handleDelete}
+              className="text-destructive"
+            >
+              <Trash2 className="mr-2 h-4 w-4 text-destructive" />
+              Delete
+            </DropdownMenuItem>
+          </DropdownMenuContent>
+        </DropdownMenu>
+      </TooltipProvider>
     </>
   );
 };
