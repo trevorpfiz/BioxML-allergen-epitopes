@@ -3,7 +3,7 @@
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { format } from "date-fns";
-import { MoreHorizontal, Pencil, Share, Trash2 } from "lucide-react";
+import { MoreHorizontal, Share, Trash2 } from "lucide-react";
 
 import type { Job } from "@epi/db/schema";
 import { cn } from "@epi/ui";
@@ -143,11 +143,6 @@ export const OptionsMenu = ({ job }: { job: Job }) => {
     }
   };
 
-  const handleRename = () => {
-    // Implement rename functionality
-    alert("Rename functionality not implemented yet.");
-  };
-
   const handleShare = () => {
     openShareDialog(job.id);
   };
@@ -182,10 +177,10 @@ export const OptionsMenu = ({ job }: { job: Job }) => {
               <Share className="mr-2 h-4 w-4" />
               Share
             </DropdownMenuItem>
-            <DropdownMenuItem onSelect={handleRename}>
+            {/* <DropdownMenuItem onSelect={handleRename}>
               <Pencil className="mr-2 h-4 w-4" />
               Rename
-            </DropdownMenuItem>
+            </DropdownMenuItem> */}
             <DropdownMenuItem
               onSelect={handleDelete}
               className="text-destructive"

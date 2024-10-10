@@ -1,6 +1,6 @@
 {
-  "id": "3b27fad3-afee-4522-816b-909e167512df",
-  "prevId": "c6048e28-6a4e-4d52-b8ef-eae3785b9e6a",
+  "id": "51ebce20-0929-4f66-b6f2-08b09d0c5c07",
+  "prevId": "887d5e01-f413-4647-816b-1ed6fca276c0",
   "version": "7",
   "dialect": "postgresql",
   "tables": {
@@ -31,29 +31,29 @@
           "notNull": true,
           "default": "gen_random_uuid()"
         },
-        "sequence": {
-          "name": "sequence",
-          "type": "text",
-          "primaryKey": false,
-          "notNull": true
-        },
-        "is_structure_based": {
-          "name": "is_structure_based",
-          "type": "boolean",
-          "primaryKey": false,
-          "notNull": true
-        },
         "pdb_id": {
           "name": "pdb_id",
           "type": "varchar(10)",
           "primaryKey": false,
-          "notNull": false
+          "notNull": true
         },
         "chain": {
           "name": "chain",
           "type": "varchar(10)",
           "primaryKey": false,
-          "notNull": false
+          "notNull": true
+        },
+        "bcr_recognition_probability_method": {
+          "name": "bcr_recognition_probability_method",
+          "type": "varchar(50)",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "surface_accessibility_method": {
+          "name": "surface_accessibility_method",
+          "type": "varchar(50)",
+          "primaryKey": false,
+          "notNull": true
         },
         "result": {
           "name": "result",
@@ -93,9 +93,13 @@
           "name": "epi_conformational_b_prediction_job_id_epi_job_id_fk",
           "tableFrom": "epi_conformational_b_prediction",
           "tableTo": "epi_job",
-          "columnsFrom": ["job_id"],
-          "columnsTo": ["id"],
-          "onDelete": "no action",
+          "columnsFrom": [
+            "job_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "cascade",
           "onUpdate": "no action"
         }
       },
@@ -169,8 +173,12 @@
           "tableFrom": "epi_profile",
           "tableTo": "users",
           "schemaTo": "auth",
-          "columnsFrom": ["id"],
-          "columnsTo": ["id"],
+          "columnsFrom": [
+            "id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
           "onDelete": "cascade",
           "onUpdate": "no action"
         }
@@ -192,6 +200,18 @@
         "sequence": {
           "name": "sequence",
           "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "b_cell_immunogenicity_method": {
+          "name": "b_cell_immunogenicity_method",
+          "type": "varchar(50)",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "bcr_recognition_probability_method": {
+          "name": "bcr_recognition_probability_method",
+          "type": "varchar(50)",
           "primaryKey": false,
           "notNull": true
         },
@@ -233,9 +253,13 @@
           "name": "epi_linear_b_prediction_job_id_epi_job_id_fk",
           "tableFrom": "epi_linear_b_prediction",
           "tableTo": "epi_job",
-          "columnsFrom": ["job_id"],
-          "columnsTo": ["id"],
-          "onDelete": "no action",
+          "columnsFrom": [
+            "job_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "cascade",
           "onUpdate": "no action"
         }
       },
@@ -259,27 +283,28 @@
           "primaryKey": false,
           "notNull": true
         },
-        "prediction_method": {
-          "name": "prediction_method",
+        "alleles": {
+          "name": "alleles",
+          "type": "text[]",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "ARRAY[]::text[]"
+        },
+        "tcr_recognition_probability_method": {
+          "name": "tcr_recognition_probability_method",
           "type": "varchar(50)",
           "primaryKey": false,
           "notNull": true
         },
-        "species": {
-          "name": "species",
+        "mhc_binding_affinity_method": {
+          "name": "mhc_binding_affinity_method",
           "type": "varchar(50)",
           "primaryKey": false,
           "notNull": true
         },
-        "allele": {
-          "name": "allele",
+        "pmhc_stability_method": {
+          "name": "pmhc_stability_method",
           "type": "varchar(50)",
-          "primaryKey": false,
-          "notNull": true
-        },
-        "show_only_frequent_alleles": {
-          "name": "show_only_frequent_alleles",
-          "type": "boolean",
           "primaryKey": false,
           "notNull": true
         },
@@ -321,9 +346,13 @@
           "name": "epi_mhc_i_prediction_job_id_epi_job_id_fk",
           "tableFrom": "epi_mhc_i_prediction",
           "tableTo": "epi_job",
-          "columnsFrom": ["job_id"],
-          "columnsTo": ["id"],
-          "onDelete": "no action",
+          "columnsFrom": [
+            "job_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "cascade",
           "onUpdate": "no action"
         }
       },
@@ -347,33 +376,28 @@
           "primaryKey": false,
           "notNull": true
         },
-        "prediction_method": {
-          "name": "prediction_method",
+        "alleles": {
+          "name": "alleles",
+          "type": "text[]",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "ARRAY[]::text[]"
+        },
+        "tcr_recognition_probability_method": {
+          "name": "tcr_recognition_probability_method",
           "type": "varchar(50)",
           "primaryKey": false,
           "notNull": true
         },
-        "species_locus": {
-          "name": "species_locus",
+        "mhc_binding_affinity_method": {
+          "name": "mhc_binding_affinity_method",
           "type": "varchar(50)",
           "primaryKey": false,
           "notNull": true
         },
-        "allele": {
-          "name": "allele",
+        "pmhc_stability_method": {
+          "name": "pmhc_stability_method",
           "type": "varchar(50)",
-          "primaryKey": false,
-          "notNull": true
-        },
-        "separate_alpha_beta_chains": {
-          "name": "separate_alpha_beta_chains",
-          "type": "boolean",
-          "primaryKey": false,
-          "notNull": true
-        },
-        "peptide_length": {
-          "name": "peptide_length",
-          "type": "integer",
           "primaryKey": false,
           "notNull": true
         },
@@ -415,9 +439,13 @@
           "name": "epi_mhc_ii_prediction_job_id_epi_job_id_fk",
           "tableFrom": "epi_mhc_ii_prediction",
           "tableTo": "epi_job",
-          "columnsFrom": ["job_id"],
-          "columnsTo": ["id"],
-          "onDelete": "no action",
+          "columnsFrom": [
+            "job_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "cascade",
           "onUpdate": "no action"
         }
       },
@@ -519,8 +547,12 @@
           "name": "epi_job_profile_id_epi_profile_id_fk",
           "tableFrom": "epi_job",
           "tableTo": "epi_profile",
-          "columnsFrom": ["profile_id"],
-          "columnsTo": ["id"],
+          "columnsFrom": [
+            "profile_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
           "onDelete": "no action",
           "onUpdate": "no action"
         }
@@ -533,12 +565,22 @@
     "public.status": {
       "name": "status",
       "schema": "public",
-      "values": ["pending", "running", "completed", "failed"]
+      "values": [
+        "pending",
+        "running",
+        "completed",
+        "failed"
+      ]
     },
     "public.type": {
       "name": "type",
       "schema": "public",
-      "values": ["linear-b", "conformational-b", "mhc-i", "mhc-ii"]
+      "values": [
+        "linear-b",
+        "conformational-b",
+        "mhc-i",
+        "mhc-ii"
+      ]
     }
   },
   "schemas": {},

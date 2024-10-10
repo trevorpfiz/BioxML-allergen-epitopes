@@ -9,13 +9,17 @@ import { Job } from "./job";
 export const LinearBPrediction = createTable("linear_b_prediction", (t) => ({
   id: t.uuid().primaryKey().defaultRandom(),
   sequence: t.text().notNull(),
+  bCellImmunogenicityMethod: t.varchar({ length: 50 }).notNull(),
+  bcrRecognitionProbabilityMethod: t.varchar({ length: 50 }).notNull(),
   result: t.jsonb().notNull(),
   csvDownloadUrl: t.varchar({ length: 255 }),
 
   jobId: t
     .uuid()
     .notNull()
-    .references(() => Job.id),
+    .references(() => Job.id, {
+      onDelete: "cascade",
+    }),
 
   createdAt: t.timestamp().defaultNow().notNull(),
   updatedAt: t

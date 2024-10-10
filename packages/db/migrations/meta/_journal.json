@@ -22,6 +22,20 @@
       "when": 1728408358302,
       "tag": "0002_lean_galactus",
       "breakpoints": true
+    },
+    {
+      "idx": 3,
+      "version": "7",
+      "when": 1728585886036,
+      "tag": "0003_wild_the_captain",
+      "breakpoints": true
+    },
+    {
+      "idx": 4,
+      "version": "7",
+      "when": 1728589241631,
+      "tag": "0004_minor_wild_child",
+      "breakpoints": true
     }
   ]
 }

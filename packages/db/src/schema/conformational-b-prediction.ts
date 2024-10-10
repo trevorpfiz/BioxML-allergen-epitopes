@@ -10,17 +10,19 @@ export const ConformationalBPrediction = createTable(
   "conformational_b_prediction",
   (t) => ({
     id: t.uuid().primaryKey().defaultRandom(),
-    sequence: t.text().notNull(),
-    isStructureBased: t.boolean().notNull(),
-    pdbId: t.varchar({ length: 10 }),
-    chain: t.varchar({ length: 10 }),
+    pdbId: t.varchar({ length: 10 }).notNull(),
+    chain: t.varchar({ length: 10 }).notNull(),
+    bcrRecognitionProbabilityMethod: t.varchar({ length: 50 }).notNull(),
+    surfaceAccessibilityMethod: t.varchar({ length: 50 }).notNull(),
     result: t.jsonb().notNull(),
     csvDownloadUrl: t.varchar({ length: 255 }),
 
     jobId: t
       .uuid()
       .notNull()
-      .references(() => Job.id),
+      .references(() => Job.id, {
+        onDelete: "cascade",
+      }),
 
     createdAt: t.timestamp().defaultNow().notNull(),
     updatedAt: t
@@ -53,21 +55,14 @@ export const insertConformationalBPredictionSchema = createInsertSchema(
 export const insertConformationalBPredictionParams =
   insertConformationalBPredictionSchema.extend({}).omit({
     id: true,
-    jobId: true,
   });
 
 export const updateConformationalBPredictionSchema =
   baseConformationalBPredictionSchema;
 export const updateConformationalBPredictionParams =
-  baseConformationalBPredictionSchema
-    .extend({})
-    .omit({
-      jobId: true,
-    })
-    .partial()
-    .extend({
-      id: baseConformationalBPredictionSchema.shape.id,
-    });
+  baseConformationalBPredictionSchema.extend({}).omit({}).partial().extend({
+    id: baseConformationalBPredictionSchema.shape.id,
+  });
 export const conformationalBPredictionIdSchema =
   baseConformationalBPredictionSchema.pick({ id: true });
 

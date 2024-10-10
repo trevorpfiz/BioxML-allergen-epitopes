@@ -1,5 +1,5 @@
 import type { z } from "zod";
-import { relations } from "drizzle-orm";
+import { relations, sql } from "drizzle-orm";
 import { createInsertSchema, createSelectSchema } from "drizzle-zod";
 
 import { timestamps } from "../lib/utils";
@@ -9,17 +9,24 @@ import { Job } from "./job";
 export const MhcIPrediction = createTable("mhc_i_prediction", (t) => ({
   id: t.uuid().primaryKey().defaultRandom(),
   sequence: t.text().notNull(),
-  predictionMethod: t.varchar({ length: 50 }).notNull(),
-  species: t.varchar({ length: 50 }).notNull(),
-  allele: t.varchar({ length: 50 }).notNull(),
-  showOnlyFrequentAlleles: t.boolean().notNull(),
+  alleles: t
+    .text()
+    .array()
+    .notNull()
+    .default(sql`ARRAY[]::text[]`),
+  tcrRecognitionProbabilityMethod: t.varchar({ length: 50 }).notNull(),
+  mhcBindingAffinityMethod: t.varchar({ length: 50 }).notNull(),
+  pmhcStabilityMethod: t.varchar({ length: 50 }).notNull(),
+
   result: t.jsonb().notNull(),
   csvDownloadUrl: t.varchar({ length: 255 }),
 
   jobId: t
     .uuid()
     .notNull()
-    .references(() => Job.id),
+    .references(() => Job.id, {
+      onDelete: "cascade",
+    }),
 
   createdAt: t.timestamp().defaultNow().notNull(),
   updatedAt: t

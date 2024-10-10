@@ -4,6 +4,12 @@ export const LinearBFormSchema = z.object({
   sequence: z.string().min(1, {
     message: "Amino acid sequence is required.",
   }),
+  bCellImmunogenicityMethod: z.string().min(1, {
+    message: "B-cell Immunogenicity method is required.",
+  }),
+  bcrRecognitionProbabilityMethod: z.string().min(1, {
+    message: "BCR Recognition Probability method is required.",
+  }),
 });
 export type LinearBForm = z.infer<typeof LinearBFormSchema>;
 
