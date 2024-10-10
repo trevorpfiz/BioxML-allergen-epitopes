@@ -1,0 +1,24 @@
+{
+    "Linear_B_Cell_Epitope": {
+        "Inputs": {
+            "Protein_Sequence": "MENFVLS",
+            "Prediction_Method_Selection": {
+                "Linear_B_Cell_Immunogenicity": "BepiPred",
+                "Linear_BCR_Recognition": "BepiPred"
+            }
+        },
+        "Outputs": [
+            {
+                "Peptide_Sequence": "EVDPIGHLY",
+                "B_Cell_Immunogenicity": {
+                    "Method": "BepiPred",
+                    "Score": 0.75
+                },
+                "BCR_Recognition_Probability": {
+                    "Method": "BepiPred",
+                    "Score": 0.75
+                }
+            }
+        ]
+    }
+}

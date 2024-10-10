@@ -1,0 +1,2 @@
+Peptide_Sequence,ClassI_TCR_Recognition,ClassI_MHC_Binding_Affinity,ClassI_pMHC_Stability,Best_Binding_Affinity,Best_pMHC_Stability
+EVDPIGHLY,0.63,"HLA-A*02:01=30 nM|HLA-B*07:02=50 nM","HLA-A*02:01=4.5 hrs|HLA-B*07:02=3.2 hrs",HLA-A*02:01=30 nM,HLA-A*02:01=5.0 hrs

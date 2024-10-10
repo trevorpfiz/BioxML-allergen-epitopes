@@ -1,0 +1,45 @@
+{
+    "Class_I_T_Cell_Epitope": {
+        "Inputs": {
+            "Protein_Sequence": "MENFVLS",
+            "Class_I_Alleles": [
+                "HLA-A*02:01",
+                "HLA-B*07:02"
+            ],
+            "Prediction_Method_Selection": {
+                "TCR_Recognition": "MHCFlurry",
+                "MHC_Binding_Affinity": "MHCFlurry",
+                "pMHC_Stability": "ESM3"
+            }
+        },
+        "Outputs": [
+            {
+                "Peptide_Sequence": "EVDPIGHLY",
+                "TCR_Recognition_Probability": {
+                    "Method": "MHCFlurry",
+                    "Score": 0.63
+                },
+                "MHC_Binding_Affinity_By_Allele": {
+                    "Method": "MHCFlurry",
+                    "Allele_Affinity": {
+                        "HLA-A*02:01": "30 nM",
+                        "HLA-B*07:02": "50 nM"
+                    },
+                    "Best_Binding_Affinity": {
+                        "HLA-A*02:01": "30 nM"
+                    }
+                },
+                "pMHC_Stability_By_Allele": {
+                    "Method": "ESM3",
+                    "Allele_Stability": {
+                        "HLA-A*02:01": "4.5 hrs",
+                        "HLA-B*07:02": "3.2 hrs"
+                    },
+                    "Best_pMHC_Stability": {
+                        "HLA-A*02:01": "4.5 hrs"
+                    }
+                }
+            }
+        ]
+    }
+}

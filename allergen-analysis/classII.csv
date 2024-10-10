@@ -1,0 +1,2 @@
+Peptide_Sequence,ClassII_TCR_Recognition,ClassII_MHC_Binding_Affinity,ClassII_pMHC_Stability,Best_Binding_Affinity,Best_pMHC_Stability
+EVDPIGHLY,0.63,"HLA-DRB1*01:01=40 nM|HLA-DQB1*02:01=55 nM","HLA-DRB1*01:01=5.0 hrs|HLA-DQB1*02:01=3.8 hrs",HLA-DRB1*01:01=40 nM,HLA-DRB1*01:01=5.0 hrs

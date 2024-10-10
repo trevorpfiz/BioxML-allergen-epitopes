@@ -1,0 +1,27 @@
+{
+    "Conformational_B_Cell_Epitope": {
+        "Inputs": {
+            "PDB_ID": "1A2B",
+            "Chain": "A",
+            "Prediction_Method_Selection": {
+                "Conformational_BCR_Recognition": "ESM3",
+                "Surface_Accessibility": "NetMHCPan"
+            }
+        },
+        "Outputs": [
+            {
+                "Residue": "23:K:0",
+                "RSA": 0.75,
+                "ASA": 60,
+                "BCR_Recognition_Probability": {
+                    "Method": "ESM3",
+                    "Score": 0.65
+                },
+                "Surface_Accessibility": {
+                    "Method": "NetMHCPan",
+                    "Score": 0.73
+                }
+            }
+        ]
+    }
+}
