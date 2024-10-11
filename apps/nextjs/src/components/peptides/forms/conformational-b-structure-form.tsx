@@ -6,7 +6,7 @@ import { createClient } from "@hey-api/client-fetch";
 import { useMutation } from "@tanstack/react-query";
 
 import type { ConformationalBStructureForm } from "@epi/validators/epitopes";
-import { conformationalBPredictionCreateConformationalBPredictionMutation as createMutation } from "@epi/api/client/react-query";
+import { predictionCreateConformationalBPredictionMutation as createMutation } from "@epi/api/client/react-query";
 import { Button } from "@epi/ui/button";
 import {
   Form,
@@ -110,7 +110,6 @@ const ConformationalBStructureForm: React.FC = () => {
       bcrRecognitionProbabilityMethod: data.bcrRecognitionProbabilityMethod,
       surfaceAccessibilityMethod: data.surfaceAccessibilityMethod,
       jobId: newJob.job?.id ?? "",
-      result: [],
     });
 
     // Step 3: Call the FastAPI to perform the prediction

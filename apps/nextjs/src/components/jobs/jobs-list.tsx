@@ -126,7 +126,6 @@ export const OptionsMenu = ({ job }: { job: Job }) => {
   const deleteMutation = api.job.delete.useMutation({
     onSuccess: () => {
       void utils.job.byUser.invalidate(); // Refresh the job list
-      alert("Job deleted successfully.");
     },
     onError: () => {
       alert("Failed to delete job.");

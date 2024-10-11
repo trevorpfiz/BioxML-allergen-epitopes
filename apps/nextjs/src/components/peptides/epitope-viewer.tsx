@@ -2,26 +2,28 @@
 
 import { useState } from "react";
 
-import type {
-  ConformationalBSequencePrediction,
-  ConformationalBStructurePrediction,
-} from "@epi/validators/epitopes";
+import type { EpitopeDataArray } from "@epi/db/schema";
 import { Button } from "@epi/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@epi/ui/card";
 
 import SequenceVisualization from "~/components/peptides/sequence-visualization";
 
 interface EpitopeViewerProps {
-  prediction:
-    | ConformationalBSequencePrediction
-    | ConformationalBStructurePrediction;
+  prediction: EpitopeDataArray;
 }
 
-export default function EpitopeViewer({ prediction }: EpitopeViewerProps) {
-  const [epitopeData] = useState(prediction.results);
-  const inputSequence = prediction.sequence;
+export default function EpitopeViewer(props: EpitopeViewerProps) {
+  const { prediction } = props;
+
+  const [epitopeData] = useState(prediction);
 
   const handleDownloadCSV = () => {
+    if (epitopeData[0] === undefined) {
+      // Handle the case when there is no data
+      console.warn("No data available for CSV download.");
+      return;
+    }
+
     const headers = Object.keys(epitopeData[0]).join(",");
     const csvContent =
       "data:text/csv;charset=utf-8," +
@@ -38,22 +40,14 @@ export default function EpitopeViewer({ prediction }: EpitopeViewerProps) {
     document.body.removeChild(link);
   };
 
-  const isStructureBased = "PDB_ID" in epitopeData[0];
-
   return (
     <Card className="w-full">
       <CardHeader className="flex flex-row items-center justify-between space-y-0">
-        <CardTitle>
-          Conformational B-cell {isStructureBased ? "structure" : "sequence"}
-          -based prediction
-        </CardTitle>
+        <CardTitle>Conformational B-cell structure-based prediction</CardTitle>
         <Button onClick={handleDownloadCSV}>Download CSV</Button>
       </CardHeader>
       <CardContent>
-        <SequenceVisualization
-          epitopeData={epitopeData}
-          inputSequence={inputSequence}
-        />
+        <SequenceVisualization epitopeData={epitopeData} />
       </CardContent>
     </Card>
   );

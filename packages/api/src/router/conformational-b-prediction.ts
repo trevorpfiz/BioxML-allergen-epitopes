@@ -49,7 +49,6 @@ export const conformationalBPredictionRouter = {
         bcrRecognitionProbabilityMethod,
         surfaceAccessibilityMethod,
         jobId,
-        result,
       } = input;
 
       const [prediction] = await ctx.db
@@ -59,7 +58,6 @@ export const conformationalBPredictionRouter = {
           chain,
           bcrRecognitionProbabilityMethod,
           surfaceAccessibilityMethod,
-          result,
           jobId,
         })
         .returning();

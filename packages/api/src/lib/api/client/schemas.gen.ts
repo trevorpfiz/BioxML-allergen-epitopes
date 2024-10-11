@@ -117,25 +117,6 @@ export const ConformationalBPredictionCreateSchema = {
   title: "ConformationalBPredictionCreate",
 } as const;
 
-export const ConformationalBPredictionUpdateSchema = {
-  properties: {
-    id: {
-      type: "string",
-      title: "Id",
-    },
-    result: {
-      items: {
-        $ref: "#/components/schemas/PredictionResult",
-      },
-      type: "array",
-      title: "Result",
-    },
-  },
-  type: "object",
-  required: ["id", "result"],
-  title: "ConformationalBPredictionUpdate",
-} as const;
-
 export const HTTPValidationErrorSchema = {
   properties: {
     detail: {

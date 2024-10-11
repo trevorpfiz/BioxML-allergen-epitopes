@@ -22,11 +22,6 @@ export type ConformationalBPredictionCreate = {
   result?: Array<PredictionResult>;
 };
 
-export type ConformationalBPredictionUpdate = {
-  id: string;
-  result: Array<PredictionResult>;
-};
-
 export type HTTPValidationError = {
   detail?: Array<ValidationError>;
 };
@@ -147,54 +142,14 @@ export type JobDeleteJobResponse = Job;
 
 export type JobDeleteJobError = unknown | HTTPValidationError;
 
-export type ConformationalBpredictionCreateConformationalBpredictionData = {
+export type PredictionCreateConformationalBpredictionData = {
   body: ConformationalBPredictionCreate;
 };
 
-export type ConformationalBpredictionCreateConformationalBpredictionResponse =
+export type PredictionCreateConformationalBpredictionResponse =
   ConformationalBPrediction;
 
-export type ConformationalBpredictionCreateConformationalBpredictionError =
-  | unknown
-  | HTTPValidationError;
-
-export type ConformationalBpredictionGetConformationalBpredictionData = {
-  path: {
-    id: string;
-  };
-};
-
-export type ConformationalBpredictionGetConformationalBpredictionResponse =
-  ConformationalBPrediction;
-
-export type ConformationalBpredictionGetConformationalBpredictionError =
-  | unknown
-  | HTTPValidationError;
-
-export type ConformationalBpredictionUpdateConformationalBpredictionData = {
-  body: ConformationalBPredictionUpdate;
-  path: {
-    id: string;
-  };
-};
-
-export type ConformationalBpredictionUpdateConformationalBpredictionResponse =
-  ConformationalBPrediction;
-
-export type ConformationalBpredictionUpdateConformationalBpredictionError =
-  | unknown
-  | HTTPValidationError;
-
-export type ConformationalBpredictionDeleteConformationalBpredictionData = {
-  path: {
-    id: string;
-  };
-};
-
-export type ConformationalBpredictionDeleteConformationalBpredictionResponse =
-  ConformationalBPrediction;
-
-export type ConformationalBpredictionDeleteConformationalBpredictionError =
+export type PredictionCreateConformationalBpredictionError =
   | unknown
   | HTTPValidationError;
 
@@ -284,45 +239,11 @@ export const JobDeleteJobResponseTransformer: JobDeleteJobResponseTransformer =
     return data;
   };
 
-export type ConformationalBpredictionCreateConformationalBpredictionResponseTransformer =
-  (
-    data: any,
-  ) => Promise<ConformationalBpredictionCreateConformationalBpredictionResponse>;
+export type PredictionCreateConformationalBpredictionResponseTransformer = (
+  data: any,
+) => Promise<PredictionCreateConformationalBpredictionResponse>;
 
-export const ConformationalBpredictionCreateConformationalBpredictionResponseTransformer: ConformationalBpredictionCreateConformationalBpredictionResponseTransformer =
-  async (data) => {
-    ConformationalBPredictionModelResponseTransformer(data);
-    return data;
-  };
-
-export type ConformationalBpredictionGetConformationalBpredictionResponseTransformer =
-  (
-    data: any,
-  ) => Promise<ConformationalBpredictionGetConformationalBpredictionResponse>;
-
-export const ConformationalBpredictionGetConformationalBpredictionResponseTransformer: ConformationalBpredictionGetConformationalBpredictionResponseTransformer =
-  async (data) => {
-    ConformationalBPredictionModelResponseTransformer(data);
-    return data;
-  };
-
-export type ConformationalBpredictionUpdateConformationalBpredictionResponseTransformer =
-  (
-    data: any,
-  ) => Promise<ConformationalBpredictionUpdateConformationalBpredictionResponse>;
-
-export const ConformationalBpredictionUpdateConformationalBpredictionResponseTransformer: ConformationalBpredictionUpdateConformationalBpredictionResponseTransformer =
-  async (data) => {
-    ConformationalBPredictionModelResponseTransformer(data);
-    return data;
-  };
-
-export type ConformationalBpredictionDeleteConformationalBpredictionResponseTransformer =
-  (
-    data: any,
-  ) => Promise<ConformationalBpredictionDeleteConformationalBpredictionResponse>;
-
-export const ConformationalBpredictionDeleteConformationalBpredictionResponseTransformer: ConformationalBpredictionDeleteConformationalBpredictionResponseTransformer =
+export const PredictionCreateConformationalBpredictionResponseTransformer: PredictionCreateConformationalBpredictionResponseTransformer =
   async (data) => {
     ConformationalBPredictionModelResponseTransformer(data);
     return data;

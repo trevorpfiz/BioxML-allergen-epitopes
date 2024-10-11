@@ -1,6 +1,6 @@
 from fastapi import APIRouter
 
-from app.api.api_v1.endpoints import conformational_b_prediction, health, job
+from app.api.api_v1.endpoints import health, job, prediction
 
 api_router = APIRouter()
 
@@ -20,8 +20,8 @@ api_router.include_router(
 )
 
 api_router.include_router(
-    conformational_b_prediction.router,
-    prefix="/conformationalBPrediction",
-    tags=["conformational_b_prediction"],
+    prediction.router,
+    prefix="/prediction",
+    tags=["prediction"],
     responses={404: {"description": "Not found"}},
 )

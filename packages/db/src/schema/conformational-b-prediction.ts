@@ -6,6 +6,17 @@ import { timestamps } from "../lib/utils";
 import { createTable } from "./_table";
 import { Job } from "./job";
 
+// Prediction Result
+export interface EpitopeData {
+  PDB_ID: string;
+  Chain: string;
+  Residue_position: number;
+  AA: string;
+  Epitope_score: number;
+  N_glyco_label?: number;
+}
+export type EpitopeDataArray = EpitopeData[];
+
 export const ConformationalBPrediction = createTable(
   "conformational_b_prediction",
   (t) => ({
@@ -18,6 +29,7 @@ export const ConformationalBPrediction = createTable(
     result: t
       .jsonb()
       .array()
+      .$type<EpitopeDataArray>()
       .notNull()
       .default(sql`'{}'::jsonb[]`),
     csvDownloadUrl: t.varchar({ length: 255 }),

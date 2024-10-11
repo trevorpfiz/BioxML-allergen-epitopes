@@ -43,6 +43,23 @@ class CRUDJob(CRUDBase[Job, JobCreate, JobUpdate]):
         updated_job = response.data[0]
         return Job(**updated_job)
 
+    async def update_status(self, db: AsyncClient, id: str, status: str) -> Job:
+        """Update the status of a job"""
+        response = (
+            await db.table(self.model.table_name)
+            .update(
+                {
+                    "status": status,
+                    "updated_at": datetime.now(tz=timezone.utc).isoformat(),
+                }
+            )
+            .eq("id", id)
+            .execute()
+        )
+        if not response.data:
+            raise HTTPException(status_code=404, detail="Job not found")
+        return Job(**response.data[0])
+
 
 # Instantiate the CRUDJob object
 crud_job = CRUDJob(Job)
