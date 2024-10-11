@@ -32,7 +32,6 @@ class UpdateBase(BaseModel):
 # Properties shared by models stored in DB
 class InDBBase(BaseModel):
     id: str
-    profile_id: str
     created_at: datetime
     updated_at: datetime
 
@@ -46,3 +45,13 @@ class ResponseBase(InDBBase):
     Config: ClassVar[ConfigDict] = ConfigDict(
         extra="ignore", arbitrary_types_allowed=True
     )
+
+
+# Mixin for models that include profile_id
+class ProfileMixin(BaseModel):
+    profile_id: str
+
+
+# Mixin for models that include job_id
+class JobMixin(BaseModel):
+    job_id: str

@@ -5,11 +5,40 @@ import type { UseMutationOptions } from "@tanstack/react-query";
 import { queryOptions } from "@tanstack/react-query";
 
 import type {
-  HfPredictData,
-  HfPredictError,
-  HfPredictResponse,
+  ConformationalBpredictionCreateConformationalBpredictionData,
+  ConformationalBpredictionCreateConformationalBpredictionError,
+  ConformationalBpredictionCreateConformationalBpredictionResponse,
+  ConformationalBpredictionDeleteConformationalBpredictionData,
+  ConformationalBpredictionDeleteConformationalBpredictionError,
+  ConformationalBpredictionDeleteConformationalBpredictionResponse,
+  ConformationalBpredictionGetConformationalBpredictionData,
+  ConformationalBpredictionUpdateConformationalBpredictionData,
+  ConformationalBpredictionUpdateConformationalBpredictionError,
+  ConformationalBpredictionUpdateConformationalBpredictionResponse,
+  JobCreateJobData,
+  JobCreateJobError,
+  JobCreateJobResponse,
+  JobDeleteJobData,
+  JobDeleteJobError,
+  JobDeleteJobResponse,
+  JobGetJobData,
+  JobUpdateJobData,
+  JobUpdateJobError,
+  JobUpdateJobResponse,
 } from "../types.gen";
-import { client, healthCheck, hfPredict } from "../services.gen";
+import {
+  client,
+  conformationalBPredictionCreateConformationalBPrediction,
+  conformationalBPredictionDeleteConformationalBPrediction,
+  conformationalBPredictionGetConformationalBPrediction,
+  conformationalBPredictionUpdateConformationalBPrediction,
+  healthCheck,
+  jobCreateJob,
+  jobDeleteJob,
+  jobGetJob,
+  jobGetUserJobs,
+  jobUpdateJob,
+} from "../services.gen";
 
 type QueryKey<TOptions extends Options> = [
   Pick<TOptions, "baseUrl" | "body" | "headers" | "path" | "query"> & {
@@ -63,32 +92,50 @@ export const healthCheckOptions = (options?: Options) => {
   });
 };
 
-export const hfPredictQueryKey = (options: Options<HfPredictData>) => [
-  createQueryKey("hfPredict", options),
+export const jobGetUserJobsQueryKey = (options?: Options) => [
+  createQueryKey("jobGetUserJobs", options),
 ];
 
-export const hfPredictOptions = (options: Options<HfPredictData>) => {
+export const jobGetUserJobsOptions = (options?: Options) => {
   return queryOptions({
     queryFn: async ({ queryKey }) => {
-      const { data } = await hfPredict({
+      const { data } = await jobGetUserJobs({
         ...options,
         ...queryKey[0],
         throwOnError: true,
       });
       return data;
     },
-    queryKey: hfPredictQueryKey(options),
+    queryKey: jobGetUserJobsQueryKey(options),
   });
 };
 
-export const hfPredictMutation = () => {
+export const jobCreateJobQueryKey = (options: Options<JobCreateJobData>) => [
+  createQueryKey("jobCreateJob", options),
+];
+
+export const jobCreateJobOptions = (options: Options<JobCreateJobData>) => {
+  return queryOptions({
+    queryFn: async ({ queryKey }) => {
+      const { data } = await jobCreateJob({
+        ...options,
+        ...queryKey[0],
+        throwOnError: true,
+      });
+      return data;
+    },
+    queryKey: jobCreateJobQueryKey(options),
+  });
+};
+
+export const jobCreateJobMutation = () => {
   const mutationOptions: UseMutationOptions<
-    HfPredictResponse,
-    HfPredictError,
-    Options<HfPredictData>
+    JobCreateJobResponse,
+    JobCreateJobError,
+    Options<JobCreateJobData>
   > = {
     mutationFn: async (options) => {
-      const { data } = await hfPredict({
+      const { data } = await jobCreateJob({
         ...options,
         throwOnError: true,
       });
@@ -97,3 +144,167 @@ export const hfPredictMutation = () => {
   };
   return mutationOptions;
 };
+
+export const jobUpdateJobMutation = () => {
+  const mutationOptions: UseMutationOptions<
+    JobUpdateJobResponse,
+    JobUpdateJobError,
+    Options<JobUpdateJobData>
+  > = {
+    mutationFn: async (options) => {
+      const { data } = await jobUpdateJob({
+        ...options,
+        throwOnError: true,
+      });
+      return data;
+    },
+  };
+  return mutationOptions;
+};
+
+export const jobGetJobQueryKey = (options: Options<JobGetJobData>) => [
+  createQueryKey("jobGetJob", options),
+];
+
+export const jobGetJobOptions = (options: Options<JobGetJobData>) => {
+  return queryOptions({
+    queryFn: async ({ queryKey }) => {
+      const { data } = await jobGetJob({
+        ...options,
+        ...queryKey[0],
+        throwOnError: true,
+      });
+      return data;
+    },
+    queryKey: jobGetJobQueryKey(options),
+  });
+};
+
+export const jobDeleteJobMutation = () => {
+  const mutationOptions: UseMutationOptions<
+    JobDeleteJobResponse,
+    JobDeleteJobError,
+    Options<JobDeleteJobData>
+  > = {
+    mutationFn: async (options) => {
+      const { data } = await jobDeleteJob({
+        ...options,
+        throwOnError: true,
+      });
+      return data;
+    },
+  };
+  return mutationOptions;
+};
+
+export const conformationalBPredictionCreateConformationalBPredictionQueryKey =
+  (
+    options: Options<ConformationalBpredictionCreateConformationalBpredictionData>,
+  ) => [
+    createQueryKey(
+      "conformationalBPredictionCreateConformationalBPrediction",
+      options,
+    ),
+  ];
+
+export const conformationalBPredictionCreateConformationalBPredictionOptions = (
+  options: Options<ConformationalBpredictionCreateConformationalBpredictionData>,
+) => {
+  return queryOptions({
+    queryFn: async ({ queryKey }) => {
+      const { data } =
+        await conformationalBPredictionCreateConformationalBPrediction({
+          ...options,
+          ...queryKey[0],
+          throwOnError: true,
+        });
+      return data;
+    },
+    queryKey:
+      conformationalBPredictionCreateConformationalBPredictionQueryKey(options),
+  });
+};
+
+export const conformationalBPredictionCreateConformationalBPredictionMutation =
+  () => {
+    const mutationOptions: UseMutationOptions<
+      ConformationalBpredictionCreateConformationalBpredictionResponse,
+      ConformationalBpredictionCreateConformationalBpredictionError,
+      Options<ConformationalBpredictionCreateConformationalBpredictionData>
+    > = {
+      mutationFn: async (options) => {
+        const { data } =
+          await conformationalBPredictionCreateConformationalBPrediction({
+            ...options,
+            throwOnError: true,
+          });
+        return data;
+      },
+    };
+    return mutationOptions;
+  };
+
+export const conformationalBPredictionGetConformationalBPredictionQueryKey = (
+  options: Options<ConformationalBpredictionGetConformationalBpredictionData>,
+) => [
+  createQueryKey(
+    "conformationalBPredictionGetConformationalBPrediction",
+    options,
+  ),
+];
+
+export const conformationalBPredictionGetConformationalBPredictionOptions = (
+  options: Options<ConformationalBpredictionGetConformationalBpredictionData>,
+) => {
+  return queryOptions({
+    queryFn: async ({ queryKey }) => {
+      const { data } =
+        await conformationalBPredictionGetConformationalBPrediction({
+          ...options,
+          ...queryKey[0],
+          throwOnError: true,
+        });
+      return data;
+    },
+    queryKey:
+      conformationalBPredictionGetConformationalBPredictionQueryKey(options),
+  });
+};
+
+export const conformationalBPredictionUpdateConformationalBPredictionMutation =
+  () => {
+    const mutationOptions: UseMutationOptions<
+      ConformationalBpredictionUpdateConformationalBpredictionResponse,
+      ConformationalBpredictionUpdateConformationalBpredictionError,
+      Options<ConformationalBpredictionUpdateConformationalBpredictionData>
+    > = {
+      mutationFn: async (options) => {
+        const { data } =
+          await conformationalBPredictionUpdateConformationalBPrediction({
+            ...options,
+            throwOnError: true,
+          });
+        return data;
+      },
+    };
+    return mutationOptions;
+  };
+
+export const conformationalBPredictionDeleteConformationalBPredictionMutation =
+  () => {
+    const mutationOptions: UseMutationOptions<
+      ConformationalBpredictionDeleteConformationalBpredictionResponse,
+      ConformationalBpredictionDeleteConformationalBpredictionError,
+      Options<ConformationalBpredictionDeleteConformationalBpredictionData>
+    > = {
+      mutationFn: async (options) => {
+        const { data } =
+          await conformationalBPredictionDeleteConformationalBPrediction({
+            ...options,
+            throwOnError: true,
+          });
+        return data;
+      },
+    };
+    return mutationOptions;
+  };

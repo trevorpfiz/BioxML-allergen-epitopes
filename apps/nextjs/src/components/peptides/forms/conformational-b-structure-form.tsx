@@ -77,7 +77,9 @@ const ConformationalBStructureForm: React.FC = () => {
       result: {},
     });
 
-    // Step 3: Redirect to the newly created Job's page
+    // Step 3: Call the FastAPI to perform the prediction
+
+    // Step 4: Redirect to the newly created Job's page
     router.push(`/job/${newJob.job?.id}`);
   };
 
