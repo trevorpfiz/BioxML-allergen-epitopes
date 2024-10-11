@@ -9,16 +9,6 @@ from app.schemas.job import Job, JobCreate, JobUpdate
 
 
 class CRUDJob(CRUDBase[Job, JobCreate, JobUpdate]):
-    async def get(self, db: AsyncClient, *, id: str) -> Job:
-        """Retrieve a job by its ID"""
-        data, count = (
-            await db.table(self.model.table_name).select("*").eq("id", id).execute()
-        )
-        if not data.data:
-            raise HTTPException(status_code=404, detail="Job not found")
-
-        return self.model(**data.data[0])
-
     async def create(self, db: AsyncClient, *, obj_in: JobCreate, user: UserIn) -> Job:
         """Create a new job linked to the current user"""
         data = obj_in.model_dump()

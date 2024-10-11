@@ -18,7 +18,11 @@ export const MhcIIPrediction = createTable("mhc_ii_prediction", (t) => ({
   mhcBindingAffinityMethod: t.varchar({ length: 50 }).notNull(),
   pmhcStabilityMethod: t.varchar({ length: 50 }).notNull(),
 
-  result: t.jsonb().notNull(),
+  result: t
+    .jsonb()
+    .array()
+    .notNull()
+    .default(sql`'{}'::jsonb[]`),
   csvDownloadUrl: t.varchar({ length: 255 }),
 
   jobId: t

@@ -15,8 +15,9 @@ async def process_conformational_b_prediction(
     Process a conformational B prediction by reading a CSV file and saving results.
     """
     # Define the path to the CSV file
-    csv_filename = f"{pdb_id}_{chain}_epitopes_score.csv"
+    csv_filename = "3ob4_A_epitopes_score.csv"
     csv_path = os.path.join("data", csv_filename)
+    print(csv_path)
 
     if not os.path.exists(csv_path):
         raise HTTPException(

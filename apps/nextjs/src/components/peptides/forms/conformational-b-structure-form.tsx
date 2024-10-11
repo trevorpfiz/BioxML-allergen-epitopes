@@ -1,8 +1,12 @@
 "use client";
 
+import { useMemo } from "react";
 import { useRouter } from "next/navigation";
+import { createClient } from "@hey-api/client-fetch";
+import { useMutation } from "@tanstack/react-query";
 
 import type { ConformationalBStructureForm } from "@epi/validators/epitopes";
+import { conformationalBPredictionCreateConformationalBPredictionMutation as createMutation } from "@epi/api/client/react-query";
 import { Button } from "@epi/ui/button";
 import {
   Form,
@@ -25,11 +29,14 @@ import { Separator } from "@epi/ui/separator";
 import { toast } from "@epi/ui/sonner";
 import { ConformationalBStructureFormSchema } from "@epi/validators/epitopes";
 
+import { env } from "~/env";
 import { api } from "~/trpc/react";
+import { useMySession } from "~/utils/supabase/client";
 
 const ConformationalBStructureForm: React.FC = () => {
   const utils = api.useUtils();
   const router = useRouter();
+  const { session, loading } = useMySession();
 
   const form = useForm({
     schema: ConformationalBStructureFormSchema,
@@ -51,13 +58,42 @@ const ConformationalBStructureForm: React.FC = () => {
   });
   const createPredictionMutation =
     api.conformationalBPrediction.create.useMutation({
-      onSuccess: () => {
-        void utils.conformationalBPrediction.byUser.invalidate();
+      onSuccess: (input) => {
+        void utils.job.byId.invalidate({ id: input.prediction?.jobId });
       },
       onError: (error) => {
         toast.error(error.message);
       },
     });
+
+  const apiUrl =
+    env.NEXT_PUBLIC_USE_LAMBDA_API === "true"
+      ? env.NEXT_PUBLIC_FASTAPI_STAGE_URL
+      : env.NEXT_PUBLIC_FASTAPI_URL;
+
+  // Create a local API client instance
+  const localClient = useMemo(() => {
+    if (!session?.access_token) {
+      return undefined;
+    }
+    return createClient({
+      baseUrl: apiUrl,
+      headers: {
+        Authorization: `Bearer ${session.access_token}`,
+      },
+    });
+  }, [apiUrl, session?.access_token]);
+
+  const predictMutation = useMutation({
+    ...createMutation(),
+    onSuccess: (input) => {
+      void utils.job.byId.invalidate({ id: input.job_id });
+    },
+    onError: (error: { detail: string }) => {
+      console.error("Predict Error:", error);
+      toast.error(error.detail);
+    },
+  });
 
   const onSubmit = async (data: ConformationalBStructureForm) => {
     // Step 1: Create a new Job
@@ -74,10 +110,21 @@ const ConformationalBStructureForm: React.FC = () => {
       bcrRecognitionProbabilityMethod: data.bcrRecognitionProbabilityMethod,
       surfaceAccessibilityMethod: data.surfaceAccessibilityMethod,
       jobId: newJob.job?.id ?? "",
-      result: {},
+      result: [],
     });
 
     // Step 3: Call the FastAPI to perform the prediction
+    predictMutation.mutate({
+      client: localClient,
+      body: {
+        pdb_id: data.pdbId,
+        chain: data.chain,
+        bcr_recognition_probability_method:
+          data.bcrRecognitionProbabilityMethod,
+        surface_accessibility_method: data.surfaceAccessibilityMethod,
+        job_id: newJob.job?.id ?? "",
+      },
+    });
 
     // Step 4: Redirect to the newly created Job's page
     router.push(`/job/${newJob.job?.id}`);
@@ -88,6 +135,10 @@ const ConformationalBStructureForm: React.FC = () => {
     form.setValue("pdbId", "3OB4");
     form.setValue("chain", "A");
   };
+
+  if (loading) {
+    return <div>Loading authentication...</div>;
+  }
 
   return (
     <Form {...form}>

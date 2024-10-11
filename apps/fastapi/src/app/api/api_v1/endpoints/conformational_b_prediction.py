@@ -22,6 +22,7 @@ async def create_conformational_b_prediction(
     db: AsyncClient = Depends(get_db),
 ):
     # Ensure the job exists and belongs to the user
+    print(prediction_in.job_id)
     job = await crud_job.get(db=db, id=prediction_in.job_id)
     if not job:
         raise HTTPException(status_code=404, detail="Job not found")
@@ -29,7 +30,7 @@ async def create_conformational_b_prediction(
         raise HTTPException(
             status_code=403, detail="Not authorized to add prediction to this job"
         )
-
+    print(job.profile_id)
     # Process the prediction (read CSV, save results)
     results = await process_conformational_b_prediction(
         pdb_id=prediction_in.pdb_id,

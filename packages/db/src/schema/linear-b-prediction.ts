@@ -11,7 +11,12 @@ export const LinearBPrediction = createTable("linear_b_prediction", (t) => ({
   sequence: t.text().notNull(),
   bCellImmunogenicityMethod: t.varchar({ length: 50 }).notNull(),
   bcrRecognitionProbabilityMethod: t.varchar({ length: 50 }).notNull(),
-  result: t.jsonb().notNull(),
+
+  result: t
+    .jsonb()
+    .array()
+    .notNull()
+    .default(sql`'{}'::jsonb[]`),
   csvDownloadUrl: t.varchar({ length: 255 }),
 
   jobId: t

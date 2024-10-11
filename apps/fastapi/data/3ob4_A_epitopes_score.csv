@@ -1,4 +1,4 @@
-PDB_ID,Chain,Residue positon,AA,Epitope_score,N_glyco_label
+PDB_ID,Chain,Residue_position,AA,Epitope_score,N_glyco_label
 3ob4,A,1,K,1.162606954574585,0
 3ob4,A,2,I,1.2027978897094727,0
 3ob4,A,3,E,1.2928447723388672,0

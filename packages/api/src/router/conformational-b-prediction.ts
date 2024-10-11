@@ -49,10 +49,8 @@ export const conformationalBPredictionRouter = {
         bcrRecognitionProbabilityMethod,
         surfaceAccessibilityMethod,
         jobId,
+        result,
       } = input;
-
-      // Here you would typically call your prediction service/API
-      const result = await performConformationalBPrediction(input);
 
       const [prediction] = await ctx.db
         .insert(ConformationalBPrediction)

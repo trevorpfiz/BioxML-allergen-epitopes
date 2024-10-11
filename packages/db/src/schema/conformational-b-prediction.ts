@@ -1,5 +1,5 @@
 import type { z } from "zod";
-import { relations } from "drizzle-orm";
+import { relations, sql } from "drizzle-orm";
 import { createInsertSchema, createSelectSchema } from "drizzle-zod";
 
 import { timestamps } from "../lib/utils";
@@ -14,9 +14,13 @@ export const ConformationalBPrediction = createTable(
     chain: t.varchar({ length: 10 }).notNull(),
     bcrRecognitionProbabilityMethod: t.varchar({ length: 50 }).notNull(),
     surfaceAccessibilityMethod: t.varchar({ length: 50 }).notNull(),
-    result: t.jsonb().notNull(),
-    csvDownloadUrl: t.varchar({ length: 255 }),
 
+    result: t
+      .jsonb()
+      .array()
+      .notNull()
+      .default(sql`'{}'::jsonb[]`),
+    csvDownloadUrl: t.varchar({ length: 255 }),
     jobId: t
       .uuid()
       .notNull()
