@@ -13,7 +13,6 @@ router = APIRouter()
     "/",
     response_model=Job,
     status_code=201,
-    tags=["Jobs"],
 )
 async def create_job(
     job_in: JobCreate,
@@ -34,7 +33,6 @@ async def create_job(
 @router.put(
     "/{id}",
     response_model=Job,
-    tags=["Jobs"],
 )
 async def update_job(
     id: str,
@@ -56,7 +54,6 @@ async def update_job(
 @router.get(
     "/{id}",
     response_model=Job,
-    tags=["Jobs"],
 )
 async def get_job(
     id: str,
@@ -78,7 +75,6 @@ async def get_job(
 @router.get(
     "/",
     response_model=list[Job],
-    tags=["Jobs"],
 )
 async def get_user_jobs(
     user: CurrentUser,
@@ -93,7 +89,6 @@ async def get_user_jobs(
 @router.delete(
     "/{id}",
     response_model=Job,
-    tags=["Jobs"],
 )
 async def delete_job(
     id: str,
