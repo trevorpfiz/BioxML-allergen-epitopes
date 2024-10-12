@@ -1,2 +1,2 @@
-Residue,RSA,ASA,Conformational_BCR_Recognition,Surface_Accessibility
-23:K:0,0.75,60,0.65,0.73
+Residue,ASA,RSA,N-Glycosylation,Hydrophilicity,B-Factor,Charge,Conformational_B_Cell_Epitope
+31:R,67.11,0.28,0,3.0,61.24,1,0.74
