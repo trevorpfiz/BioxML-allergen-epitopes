@@ -1,6 +1,6 @@
-import type { z } from "zod";
 import { relations, sql } from "drizzle-orm";
 import { createInsertSchema, createSelectSchema } from "drizzle-zod";
+import { z } from "zod";
 
 import { timestamps } from "../lib/utils";
 import { createTable } from "./_table";
@@ -60,25 +60,25 @@ export const MhcIPredictionRelations = relations(MhcIPrediction, ({ one }) => ({
   }),
 }));
 
-// Schema for MhcIPrediction - used to validate API requests
-const baseMhcIPredictionSchema =
-  createSelectSchema(MhcIPrediction).omit(timestamps);
+// Schema for MhcIPrediction with manual override for `alleles`
+// @link - https://github.com/drizzle-team/drizzle-orm/issues/1110
+const baseMhcIPredictionSchema = createSelectSchema(MhcIPrediction, {
+  alleles: z.array(z.string()),
+}).omit(timestamps);
 
-export const insertMhcIPredictionSchema =
-  createInsertSchema(MhcIPrediction).omit(timestamps);
+export const insertMhcIPredictionSchema = createInsertSchema(MhcIPrediction, {
+  alleles: z.array(z.string()),
+}).omit(timestamps);
 export const insertMhcIPredictionParams = insertMhcIPredictionSchema
   .extend({})
   .omit({
     id: true,
-    jobId: true,
   });
 
 export const updateMhcIPredictionSchema = baseMhcIPredictionSchema;
 export const updateMhcIPredictionParams = baseMhcIPredictionSchema
   .extend({})
-  .omit({
-    jobId: true,
-  })
+  .omit({})
   .partial()
   .extend({
     id: baseMhcIPredictionSchema.shape.id,

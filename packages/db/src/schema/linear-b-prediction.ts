@@ -64,15 +64,12 @@ export const insertLinearBPredictionParams = insertLinearBPredictionSchema
   .extend({})
   .omit({
     id: true,
-    jobId: true,
   });
 
 export const updateLinearBPredictionSchema = baseLinearBPredictionSchema;
 export const updateLinearBPredictionParams = baseLinearBPredictionSchema
   .extend({})
-  .omit({
-    jobId: true,
-  })
+  .omit({})
   .partial()
   .extend({
     id: baseLinearBPredictionSchema.shape.id,

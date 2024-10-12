@@ -94,12 +94,8 @@
           "name": "epi_conformational_b_prediction_job_id_epi_job_id_fk",
           "tableFrom": "epi_conformational_b_prediction",
           "tableTo": "epi_job",
-          "columnsFrom": [
-            "job_id"
-          ],
-          "columnsTo": [
-            "id"
-          ],
+          "columnsFrom": ["job_id"],
+          "columnsTo": ["id"],
           "onDelete": "cascade",
           "onUpdate": "no action"
         }
@@ -174,12 +170,8 @@
           "tableFrom": "epi_profile",
           "tableTo": "users",
           "schemaTo": "auth",
-          "columnsFrom": [
-            "id"
-          ],
-          "columnsTo": [
-            "id"
-          ],
+          "columnsFrom": ["id"],
+          "columnsTo": ["id"],
           "onDelete": "cascade",
           "onUpdate": "no action"
         }
@@ -255,12 +247,8 @@
           "name": "epi_linear_b_prediction_job_id_epi_job_id_fk",
           "tableFrom": "epi_linear_b_prediction",
           "tableTo": "epi_job",
-          "columnsFrom": [
-            "job_id"
-          ],
-          "columnsTo": [
-            "id"
-          ],
+          "columnsFrom": ["job_id"],
+          "columnsTo": ["id"],
           "onDelete": "cascade",
           "onUpdate": "no action"
         }
@@ -349,12 +337,8 @@
           "name": "epi_mhc_i_prediction_job_id_epi_job_id_fk",
           "tableFrom": "epi_mhc_i_prediction",
           "tableTo": "epi_job",
-          "columnsFrom": [
-            "job_id"
-          ],
-          "columnsTo": [
-            "id"
-          ],
+          "columnsFrom": ["job_id"],
+          "columnsTo": ["id"],
           "onDelete": "cascade",
           "onUpdate": "no action"
         }
@@ -443,12 +427,8 @@
           "name": "epi_mhc_ii_prediction_job_id_epi_job_id_fk",
           "tableFrom": "epi_mhc_ii_prediction",
           "tableTo": "epi_job",
-          "columnsFrom": [
-            "job_id"
-          ],
-          "columnsTo": [
-            "id"
-          ],
+          "columnsFrom": ["job_id"],
+          "columnsTo": ["id"],
           "onDelete": "cascade",
           "onUpdate": "no action"
         }
@@ -551,12 +531,8 @@
           "name": "epi_job_profile_id_epi_profile_id_fk",
           "tableFrom": "epi_job",
           "tableTo": "epi_profile",
-          "columnsFrom": [
-            "profile_id"
-          ],
-          "columnsTo": [
-            "id"
-          ],
+          "columnsFrom": ["profile_id"],
+          "columnsTo": ["id"],
           "onDelete": "no action",
           "onUpdate": "no action"
         }
@@ -569,22 +545,12 @@
     "public.status": {
       "name": "status",
       "schema": "public",
-      "values": [
-        "pending",
-        "running",
-        "completed",
-        "failed"
-      ]
+      "values": ["pending", "running", "completed", "failed"]
     },
     "public.type": {
       "name": "type",
       "schema": "public",
-      "values": [
-        "linear-b",
-        "conformational-b",
-        "mhc-i",
-        "mhc-ii"
-      ]
+      "values": ["linear-b", "conformational-b", "mhc-i", "mhc-ii"]
     }
   },
   "schemas": {},

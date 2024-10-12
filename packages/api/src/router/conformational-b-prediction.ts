@@ -2,7 +2,7 @@ import type { TRPCRouterRecord } from "@trpc/server";
 import { TRPCError } from "@trpc/server";
 import { z } from "zod";
 
-import { desc, eq } from "@epi/db";
+import { eq } from "@epi/db";
 import {
   ConformationalBPrediction,
   insertConformationalBPredictionParams,
@@ -10,24 +10,7 @@ import {
 
 import { protectedProcedure, publicProcedure } from "../trpc";
 
-// This function is a placeholder for your actual prediction logic
-async function performConformationalBPrediction(input: any) {
-  // Implement your prediction logic here
-  return {
-    /* prediction results */
-  };
-}
-
 export const conformationalBPredictionRouter = {
-  all: publicProcedure.query(async ({ ctx }) => {
-    const rows = await ctx.db.query.ConformationalBPrediction.findMany({
-      orderBy: desc(ConformationalBPrediction.id),
-      limit: 10,
-    });
-
-    return { predictions: rows };
-  }),
-
   byId: publicProcedure
     .input(z.object({ id: z.string() }))
     .query(async ({ ctx, input }) => {
