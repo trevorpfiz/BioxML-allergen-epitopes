@@ -2,6 +2,7 @@
 
 import { useMemo } from "react";
 
+import type { EpitopeDataArray } from "@epi/db/schema";
 import {
   Tooltip,
   TooltipContent,
@@ -12,15 +13,7 @@ import {
 import { EPITOPE_THRESHOLD } from "~/lib/constants";
 
 interface SequenceVisualizationProps {
-  epitopeData: {
-    AA: string;
-    Epitope_score: number;
-    N_glyco_label: number;
-    Seq_pos?: number;
-    Residue_position?: number;
-    Chain?: string;
-  }[];
-  inputSequence: string;
+  epitopeData: EpitopeDataArray;
 }
 
 const Legend = () => (
@@ -40,7 +33,6 @@ const Legend = () => (
 
 const SequenceVisualization: React.FC<SequenceVisualizationProps> = ({
   epitopeData,
-  inputSequence,
 }) => {
   const { minScore, maxScore } = useMemo(() => {
     const scores = epitopeData.map((d) => d.Epitope_score);
@@ -76,13 +68,6 @@ const SequenceVisualization: React.FC<SequenceVisualizationProps> = ({
 
   return (
     <div className="flex flex-col gap-8">
-      <div>
-        <h3 className="pb-2 text-sm font-semibold">
-          Input amino-acid sequence:
-        </h3>
-        <p className="break-all font-mono text-sm">{inputSequence}</p>
-      </div>
-
       <Legend />
 
       <div>
@@ -125,7 +110,7 @@ const SequenceVisualization: React.FC<SequenceVisualizationProps> = ({
                     PDB Position: {data.Chain}_{data.Residue_position}
                   </p>
                 ) : (
-                  <p>Position: {data.Seq_pos ?? data.Residue_position}</p>
+                  <p>Position: {data.Residue_position}</p>
                 )}
               </TooltipContent>
             </Tooltip>

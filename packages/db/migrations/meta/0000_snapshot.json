@@ -1,5 +1,5 @@
 {
-  "id": "695e58e7-87c8-418d-aee8-6104469b28a6",
+  "id": "748085fd-e879-4595-9ce1-7d4a38cff6c6",
   "prevId": "00000000-0000-0000-0000-000000000000",
   "version": "7",
   "dialect": "postgresql",
@@ -31,33 +31,33 @@
           "notNull": true,
           "default": "gen_random_uuid()"
         },
-        "sequence": {
-          "name": "sequence",
-          "type": "text",
-          "primaryKey": false,
-          "notNull": true
-        },
-        "is_structure_based": {
-          "name": "is_structure_based",
-          "type": "boolean",
-          "primaryKey": false,
-          "notNull": true
-        },
         "pdb_id": {
           "name": "pdb_id",
           "type": "varchar(10)",
           "primaryKey": false,
-          "notNull": false
+          "notNull": true
         },
         "chain": {
           "name": "chain",
           "type": "varchar(10)",
           "primaryKey": false,
-          "notNull": false
+          "notNull": true
+        },
+        "bcr_recognition_probability_method": {
+          "name": "bcr_recognition_probability_method",
+          "type": "varchar(50)",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "surface_accessibility_method": {
+          "name": "surface_accessibility_method",
+          "type": "varchar(50)",
+          "primaryKey": false,
+          "notNull": true
         },
         "result": {
           "name": "result",
-          "type": "jsonb",
+          "type": "jsonb[]",
           "primaryKey": false,
           "notNull": true
         },
@@ -67,11 +67,11 @@
           "primaryKey": false,
           "notNull": false
         },
-        "user_id": {
-          "name": "user_id",
+        "job_id": {
+          "name": "job_id",
           "type": "uuid",
           "primaryKey": false,
-          "notNull": false
+          "notNull": true
         },
         "created_at": {
           "name": "created_at",
@@ -80,8 +80,8 @@
           "notNull": true,
           "default": "now()"
         },
-        "updatedAt": {
-          "name": "updatedAt",
+        "updated_at": {
+          "name": "updated_at",
           "type": "timestamp with time zone",
           "primaryKey": false,
           "notNull": false
@@ -89,13 +89,13 @@
       },
       "indexes": {},
       "foreignKeys": {
-        "epi_conformational_b_prediction_user_id_epi_profile_id_fk": {
-          "name": "epi_conformational_b_prediction_user_id_epi_profile_id_fk",
+        "epi_conformational_b_prediction_job_id_epi_job_id_fk": {
+          "name": "epi_conformational_b_prediction_job_id_epi_job_id_fk",
           "tableFrom": "epi_conformational_b_prediction",
-          "tableTo": "epi_profile",
-          "columnsFrom": ["user_id"],
+          "tableTo": "epi_job",
+          "columnsFrom": ["job_id"],
           "columnsTo": ["id"],
-          "onDelete": "no action",
+          "onDelete": "cascade",
           "onUpdate": "no action"
         }
       },
@@ -132,8 +132,8 @@
         }
       },
       "indexes": {
-        "name_idx": {
-          "name": "name_idx",
+        "epi_profile_name_index": {
+          "name": "epi_profile_name_index",
           "columns": [
             {
               "expression": "name",
@@ -147,8 +147,8 @@
           "method": "btree",
           "with": {}
         },
-        "email_idx": {
-          "name": "email_idx",
+        "epi_profile_email_index": {
+          "name": "epi_profile_email_index",
           "columns": [
             {
               "expression": "email",
@@ -178,64 +178,6 @@
       "compositePrimaryKeys": {},
       "uniqueConstraints": {}
     },
-    "public.epi_report": {
-      "name": "epi_report",
-      "schema": "",
-      "columns": {
-        "id": {
-          "name": "id",
-          "type": "uuid",
-          "primaryKey": true,
-          "notNull": true,
-          "default": "gen_random_uuid()"
-        },
-        "title": {
-          "name": "title",
-          "type": "varchar(256)",
-          "primaryKey": false,
-          "notNull": true
-        },
-        "content": {
-          "name": "content",
-          "type": "text",
-          "primaryKey": false,
-          "notNull": false
-        },
-        "profile_id": {
-          "name": "profile_id",
-          "type": "uuid",
-          "primaryKey": false,
-          "notNull": true
-        },
-        "created_at": {
-          "name": "created_at",
-          "type": "timestamp",
-          "primaryKey": false,
-          "notNull": true,
-          "default": "now()"
-        },
-        "updatedAt": {
-          "name": "updatedAt",
-          "type": "timestamp with time zone",
-          "primaryKey": false,
-          "notNull": false
-        }
-      },
-      "indexes": {},
-      "foreignKeys": {
-        "epi_report_profile_id_epi_profile_id_fk": {
-          "name": "epi_report_profile_id_epi_profile_id_fk",
-          "tableFrom": "epi_report",
-          "tableTo": "epi_profile",
-          "columnsFrom": ["profile_id"],
-          "columnsTo": ["id"],
-          "onDelete": "no action",
-          "onUpdate": "no action"
-        }
-      },
-      "compositePrimaryKeys": {},
-      "uniqueConstraints": {}
-    },
     "public.epi_linear_b_prediction": {
       "name": "epi_linear_b_prediction",
       "schema": "",
@@ -253,9 +195,21 @@
           "primaryKey": false,
           "notNull": true
         },
+        "b_cell_immunogenicity_method": {
+          "name": "b_cell_immunogenicity_method",
+          "type": "varchar(50)",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "bcr_recognition_probability_method": {
+          "name": "bcr_recognition_probability_method",
+          "type": "varchar(50)",
+          "primaryKey": false,
+          "notNull": true
+        },
         "result": {
           "name": "result",
-          "type": "jsonb",
+          "type": "jsonb[]",
           "primaryKey": false,
           "notNull": true
         },
@@ -265,11 +219,11 @@
           "primaryKey": false,
           "notNull": false
         },
-        "user_id": {
-          "name": "user_id",
+        "job_id": {
+          "name": "job_id",
           "type": "uuid",
           "primaryKey": false,
-          "notNull": false
+          "notNull": true
         },
         "created_at": {
           "name": "created_at",
@@ -278,8 +232,8 @@
           "notNull": true,
           "default": "now()"
         },
-        "updatedAt": {
-          "name": "updatedAt",
+        "updated_at": {
+          "name": "updated_at",
           "type": "timestamp with time zone",
           "primaryKey": false,
           "notNull": false
@@ -287,13 +241,13 @@
       },
       "indexes": {},
       "foreignKeys": {
-        "epi_linear_b_prediction_user_id_epi_profile_id_fk": {
-          "name": "epi_linear_b_prediction_user_id_epi_profile_id_fk",
+        "epi_linear_b_prediction_job_id_epi_job_id_fk": {
+          "name": "epi_linear_b_prediction_job_id_epi_job_id_fk",
           "tableFrom": "epi_linear_b_prediction",
-          "tableTo": "epi_profile",
-          "columnsFrom": ["user_id"],
+          "tableTo": "epi_job",
+          "columnsFrom": ["job_id"],
           "columnsTo": ["id"],
-          "onDelete": "no action",
+          "onDelete": "cascade",
           "onUpdate": "no action"
         }
       },
@@ -317,33 +271,34 @@
           "primaryKey": false,
           "notNull": true
         },
-        "prediction_method": {
-          "name": "prediction_method",
+        "alleles": {
+          "name": "alleles",
+          "type": "text[]",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "ARRAY[]::text[]"
+        },
+        "tcr_recognition_probability_method": {
+          "name": "tcr_recognition_probability_method",
           "type": "varchar(50)",
           "primaryKey": false,
           "notNull": true
         },
-        "species": {
-          "name": "species",
+        "mhc_binding_affinity_method": {
+          "name": "mhc_binding_affinity_method",
           "type": "varchar(50)",
           "primaryKey": false,
           "notNull": true
         },
-        "allele": {
-          "name": "allele",
+        "pmhc_stability_method": {
+          "name": "pmhc_stability_method",
           "type": "varchar(50)",
-          "primaryKey": false,
-          "notNull": true
-        },
-        "show_only_frequent_alleles": {
-          "name": "show_only_frequent_alleles",
-          "type": "boolean",
           "primaryKey": false,
           "notNull": true
         },
         "result": {
           "name": "result",
-          "type": "jsonb",
+          "type": "jsonb[]",
           "primaryKey": false,
           "notNull": true
         },
@@ -353,11 +308,11 @@
           "primaryKey": false,
           "notNull": false
         },
-        "user_id": {
-          "name": "user_id",
+        "job_id": {
+          "name": "job_id",
           "type": "uuid",
           "primaryKey": false,
-          "notNull": false
+          "notNull": true
         },
         "created_at": {
           "name": "created_at",
@@ -366,8 +321,8 @@
           "notNull": true,
           "default": "now()"
         },
-        "updatedAt": {
-          "name": "updatedAt",
+        "updated_at": {
+          "name": "updated_at",
           "type": "timestamp with time zone",
           "primaryKey": false,
           "notNull": false
@@ -375,13 +330,13 @@
       },
       "indexes": {},
       "foreignKeys": {
-        "epi_mhc_i_prediction_user_id_epi_profile_id_fk": {
-          "name": "epi_mhc_i_prediction_user_id_epi_profile_id_fk",
+        "epi_mhc_i_prediction_job_id_epi_job_id_fk": {
+          "name": "epi_mhc_i_prediction_job_id_epi_job_id_fk",
           "tableFrom": "epi_mhc_i_prediction",
-          "tableTo": "epi_profile",
-          "columnsFrom": ["user_id"],
+          "tableTo": "epi_job",
+          "columnsFrom": ["job_id"],
           "columnsTo": ["id"],
-          "onDelete": "no action",
+          "onDelete": "cascade",
           "onUpdate": "no action"
         }
       },
@@ -405,39 +360,34 @@
           "primaryKey": false,
           "notNull": true
         },
-        "prediction_method": {
-          "name": "prediction_method",
+        "alleles": {
+          "name": "alleles",
+          "type": "text[]",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "ARRAY[]::text[]"
+        },
+        "tcr_recognition_probability_method": {
+          "name": "tcr_recognition_probability_method",
           "type": "varchar(50)",
           "primaryKey": false,
           "notNull": true
         },
-        "species_locus": {
-          "name": "species_locus",
+        "mhc_binding_affinity_method": {
+          "name": "mhc_binding_affinity_method",
           "type": "varchar(50)",
           "primaryKey": false,
           "notNull": true
         },
-        "allele": {
-          "name": "allele",
+        "pmhc_stability_method": {
+          "name": "pmhc_stability_method",
           "type": "varchar(50)",
-          "primaryKey": false,
-          "notNull": true
-        },
-        "separate_alpha_beta_chains": {
-          "name": "separate_alpha_beta_chains",
-          "type": "boolean",
-          "primaryKey": false,
-          "notNull": true
-        },
-        "peptide_length": {
-          "name": "peptide_length",
-          "type": "integer",
           "primaryKey": false,
           "notNull": true
         },
         "result": {
           "name": "result",
-          "type": "jsonb",
+          "type": "jsonb[]",
           "primaryKey": false,
           "notNull": true
         },
@@ -447,11 +397,11 @@
           "primaryKey": false,
           "notNull": false
         },
-        "user_id": {
-          "name": "user_id",
+        "job_id": {
+          "name": "job_id",
           "type": "uuid",
           "primaryKey": false,
-          "notNull": false
+          "notNull": true
         },
         "created_at": {
           "name": "created_at",
@@ -460,8 +410,8 @@
           "notNull": true,
           "default": "now()"
         },
-        "updatedAt": {
-          "name": "updatedAt",
+        "updated_at": {
+          "name": "updated_at",
           "type": "timestamp with time zone",
           "primaryKey": false,
           "notNull": false
@@ -469,11 +419,115 @@
       },
       "indexes": {},
       "foreignKeys": {
-        "epi_mhc_ii_prediction_user_id_epi_profile_id_fk": {
-          "name": "epi_mhc_ii_prediction_user_id_epi_profile_id_fk",
+        "epi_mhc_ii_prediction_job_id_epi_job_id_fk": {
+          "name": "epi_mhc_ii_prediction_job_id_epi_job_id_fk",
           "tableFrom": "epi_mhc_ii_prediction",
+          "tableTo": "epi_job",
+          "columnsFrom": ["job_id"],
+          "columnsTo": ["id"],
+          "onDelete": "cascade",
+          "onUpdate": "no action"
+        }
+      },
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {}
+    },
+    "public.epi_job": {
+      "name": "epi_job",
+      "schema": "",
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "uuid",
+          "primaryKey": true,
+          "notNull": true,
+          "default": "gen_random_uuid()"
+        },
+        "name": {
+          "name": "name",
+          "type": "varchar(256)",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "type": {
+          "name": "type",
+          "type": "type",
+          "typeSchema": "public",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "status": {
+          "name": "status",
+          "type": "status",
+          "typeSchema": "public",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "'pending'"
+        },
+        "share_token": {
+          "name": "share_token",
+          "type": "uuid",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "profile_id": {
+          "name": "profile_id",
+          "type": "uuid",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "created_at": {
+          "name": "created_at",
+          "type": "timestamp",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "now()"
+        },
+        "updated_at": {
+          "name": "updated_at",
+          "type": "timestamp with time zone",
+          "primaryKey": false,
+          "notNull": false
+        }
+      },
+      "indexes": {
+        "epi_job_type_index": {
+          "name": "epi_job_type_index",
+          "columns": [
+            {
+              "expression": "type",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            }
+          ],
+          "isUnique": false,
+          "concurrently": false,
+          "method": "btree",
+          "with": {}
+        },
+        "epi_job_share_token_index": {
+          "name": "epi_job_share_token_index",
+          "columns": [
+            {
+              "expression": "share_token",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            }
+          ],
+          "isUnique": true,
+          "concurrently": false,
+          "method": "btree",
+          "with": {}
+        }
+      },
+      "foreignKeys": {
+        "epi_job_profile_id_epi_profile_id_fk": {
+          "name": "epi_job_profile_id_epi_profile_id_fk",
+          "tableFrom": "epi_job",
           "tableTo": "epi_profile",
-          "columnsFrom": ["user_id"],
+          "columnsFrom": ["profile_id"],
           "columnsTo": ["id"],
           "onDelete": "no action",
           "onUpdate": "no action"
@@ -483,7 +537,18 @@
       "uniqueConstraints": {}
     }
   },
-  "enums": {},
+  "enums": {
+    "public.status": {
+      "name": "status",
+      "schema": "public",
+      "values": ["pending", "running", "completed", "failed"]
+    },
+    "public.type": {
+      "name": "type",
+      "schema": "public",
+      "values": ["linear-b", "conformational-b", "mhc-i", "mhc-ii"]
+    }
+  },
   "schemas": {},
   "sequences": {},
   "_meta": {

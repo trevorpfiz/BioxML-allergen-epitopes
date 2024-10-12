@@ -9,9 +9,9 @@ export const env = createEnv({
   server: {
     POSTGRES_URL: z.string(),
   },
-  // eslint-disable-next-line no-restricted-properties
+
   runtimeEnv: process.env,
   emptyStringAsUndefined: true,
 });
 
-export const db = drizzle(sql, { schema });
+export const db = drizzle(sql, { schema, casing: "snake_case" });

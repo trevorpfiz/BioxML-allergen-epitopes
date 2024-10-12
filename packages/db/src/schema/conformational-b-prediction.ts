@@ -1,47 +1,52 @@
 import type { z } from "zod";
-import { relations } from "drizzle-orm";
-import {
-  boolean,
-  jsonb,
-  text,
-  timestamp,
-  uuid,
-  varchar,
-} from "drizzle-orm/pg-core";
+import { relations, sql } from "drizzle-orm";
 import { createInsertSchema, createSelectSchema } from "drizzle-zod";
+
+import type { ConformationalBStructureResult } from "@epi/validators/epitopes";
 
 import { timestamps } from "../lib/utils";
 import { createTable } from "./_table";
-import { Profile } from "./profile";
+import { Job } from "./job";
 
 export const ConformationalBPrediction = createTable(
   "conformational_b_prediction",
-  {
-    id: uuid("id").primaryKey().defaultRandom(),
-    sequence: text("sequence").notNull(),
-    isStructureBased: boolean("is_structure_based").notNull(),
-    pdbId: varchar("pdb_id", { length: 10 }),
-    chain: varchar("chain", { length: 10 }),
-    result: jsonb("result").notNull(),
-    csvDownloadUrl: varchar("csv_download_url", { length: 255 }),
-    profileId: uuid("profile_id")
-      .notNull()
-      .references(() => Profile.id),
+  (t) => ({
+    id: t.uuid().primaryKey().defaultRandom(),
+    pdbId: t.varchar({ length: 10 }).notNull(),
+    chain: t.varchar({ length: 10 }).notNull(),
+    bcrRecognitionProbabilityMethod: t.varchar({ length: 50 }).notNull(),
+    surfaceAccessibilityMethod: t.varchar({ length: 50 }).notNull(),
 
-    createdAt: timestamp("created_at").defaultNow().notNull(),
-    updatedAt: timestamp("updated_at", {
-      mode: "date",
-      withTimezone: true,
-    }).$onUpdateFn(() => new Date()),
-  },
+    result: t
+      .jsonb()
+      .array()
+      .$type<ConformationalBStructureResult[]>()
+      .notNull()
+      .default(sql`'{}'::jsonb[]`),
+    csvDownloadUrl: t.varchar({ length: 255 }),
+    jobId: t
+      .uuid()
+      .notNull()
+      .references(() => Job.id, {
+        onDelete: "cascade",
+      }),
+
+    createdAt: t.timestamp().defaultNow().notNull(),
+    updatedAt: t
+      .timestamp({
+        mode: "date",
+        withTimezone: true,
+      })
+      .$onUpdateFn(() => new Date()),
+  }),
 );
 
 export const ConformationalBPredictionRelations = relations(
   ConformationalBPrediction,
   ({ one }) => ({
-    profile: one(Profile, {
-      fields: [ConformationalBPrediction.profileId],
-      references: [Profile.id],
+    job: one(Job, {
+      fields: [ConformationalBPrediction.jobId],
+      references: [Job.id],
     }),
   }),
 );
@@ -57,21 +62,14 @@ export const insertConformationalBPredictionSchema = createInsertSchema(
 export const insertConformationalBPredictionParams =
   insertConformationalBPredictionSchema.extend({}).omit({
     id: true,
-    profileId: true,
   });
 
 export const updateConformationalBPredictionSchema =
   baseConformationalBPredictionSchema;
 export const updateConformationalBPredictionParams =
-  baseConformationalBPredictionSchema
-    .extend({})
-    .omit({
-      profileId: true,
-    })
-    .partial()
-    .extend({
-      id: baseConformationalBPredictionSchema.shape.id,
-    });
+  baseConformationalBPredictionSchema.extend({}).omit({}).partial().extend({
+    id: baseConformationalBPredictionSchema.shape.id,
+  });
 export const conformationalBPredictionIdSchema =
   baseConformationalBPredictionSchema.pick({ id: true });
 

@@ -4,19 +4,18 @@ export const LinearBFormSchema = z.object({
   sequence: z.string().min(1, {
     message: "Amino acid sequence is required.",
   }),
+  bCellImmunogenicityMethod: z.string().min(1, {
+    message: "B-cell Immunogenicity method is required.",
+  }),
+  bcrRecognitionProbabilityMethod: z.string().min(1, {
+    message: "BCR Recognition Probability method is required.",
+  }),
 });
 export type LinearBForm = z.infer<typeof LinearBFormSchema>;
 
 export const LinearBResultSchema = z.object({
-  Seq_pos: z.number().int().positive(),
-  AA: z.string().length(1),
-  Epitope_score: z.number(),
-  N_glyco_label: z.number().int().min(0).max(1),
+  Peptide_Sequence: z.string(),
+  Linear_B_Cell_Immunogenicity: z.number(),
+  Linear_BCR_Recognition: z.number(),
 });
 export type LinearBResult = z.infer<typeof LinearBResultSchema>;
-
-export const LinearBPredictionSchema = z.object({
-  sequence: z.string(),
-  results: z.array(LinearBResultSchema),
-});
-export type LinearBPrediction = z.infer<typeof LinearBPredictionSchema>;

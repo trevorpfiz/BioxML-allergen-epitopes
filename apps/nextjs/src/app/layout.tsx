@@ -14,7 +14,7 @@ import { TRPCReactProvider } from "~/trpc/react";
 export const metadata: Metadata = {
   metadataBase: new URL(
     env.NODE_ENV === "production"
-      ? "https://temp.com"
+      ? env.NEXT_PUBLIC_SITE_URL
       : "http://localhost:3000",
   ),
   title: "Epitope Prediction",
@@ -22,7 +22,7 @@ export const metadata: Metadata = {
   openGraph: {
     title: "Epitope Prediction",
     description: "B-cell and T-cell epitope prediction platform.",
-    url: "https://www.temp.com",
+    url: env.NEXT_PUBLIC_SITE_URL,
     siteName: "Epitope Prediction",
   },
   twitter: {
@@ -44,7 +44,7 @@ export default function RootLayout(props: { children: React.ReactNode }) {
     <html lang="en" suppressHydrationWarning>
       <body
         className={cn(
-          "min-h-screen bg-background font-sans text-foreground antialiased",
+          "h-screen w-full bg-background font-sans text-foreground antialiased",
           GeistSans.variable,
           GeistMono.variable,
         )}

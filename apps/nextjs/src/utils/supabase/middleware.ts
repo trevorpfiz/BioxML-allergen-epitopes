@@ -70,7 +70,7 @@ export async function updateSession(request: NextRequest) {
   // Forward authed user to DEFAULT_LOGIN_REDIRECT if auth route
   const isAuthRoute = authRoutes.includes(request.nextUrl.pathname);
 
-  if (isAuthRoute && user) {
+  if (isAuthRoute && !user?.is_anonymous) {
     const url = new URL(DEFAULT_LOGIN_REDIRECT, request.url);
     return NextResponse.redirect(url);
   }

@@ -1,70 +1,78 @@
-import type { z } from "zod";
-import { relations } from "drizzle-orm";
-import {
-  boolean,
-  integer,
-  jsonb,
-  text,
-  timestamp,
-  uuid,
-  varchar,
-} from "drizzle-orm/pg-core";
+import { relations, sql } from "drizzle-orm";
 import { createInsertSchema, createSelectSchema } from "drizzle-zod";
+import { z } from "zod";
+
+import type { MhcIIResult } from "@epi/validators/epitopes";
 
 import { timestamps } from "../lib/utils";
 import { createTable } from "./_table";
-import { Profile } from "./profile";
+import { Job } from "./job";
 
-export const MhcIIPrediction = createTable("mhc_ii_prediction", {
-  id: uuid("id").primaryKey().defaultRandom(),
-  sequence: text("sequence").notNull(),
-  predictionMethod: varchar("prediction_method", { length: 50 }).notNull(),
-  speciesLocus: varchar("species_locus", { length: 50 }).notNull(),
-  allele: varchar("allele", { length: 50 }).notNull(),
-  separateAlphaBetaChains: boolean("separate_alpha_beta_chains").notNull(),
-  peptideLength: integer("peptide_length").notNull(),
-  result: jsonb("result").notNull(),
-  csvDownloadUrl: varchar("csv_download_url", { length: 255 }),
-  profileId: uuid("profile_id")
+export const MhcIIPrediction = createTable("mhc_ii_prediction", (t) => ({
+  id: t.uuid().primaryKey().defaultRandom(),
+  sequence: t.text().notNull(),
+  alleles: t
+    .text()
+    .array()
     .notNull()
-    .references(() => Profile.id),
+    .default(sql`ARRAY[]::text[]`),
+  tcrRecognitionProbabilityMethod: t.varchar({ length: 50 }).notNull(),
+  mhcBindingAffinityMethod: t.varchar({ length: 50 }).notNull(),
+  pmhcStabilityMethod: t.varchar({ length: 50 }).notNull(),
 
-  createdAt: timestamp("created_at").defaultNow().notNull(),
-  updatedAt: timestamp("updated_at", {
-    mode: "date",
-    withTimezone: true,
-  }).$onUpdateFn(() => new Date()),
-});
+  result: t
+    .jsonb()
+    .array()
+    .$type<MhcIIResult[]>()
+    .notNull()
+    .default(sql`'{}'::jsonb[]`),
+  csvDownloadUrl: t.varchar({ length: 255 }),
+
+  jobId: t
+    .uuid()
+    .notNull()
+    .references(() => Job.id, {
+      onDelete: "cascade",
+    }),
+
+  createdAt: t.timestamp().defaultNow().notNull(),
+  updatedAt: t
+    .timestamp({
+      mode: "date",
+      withTimezone: true,
+    })
+    .$onUpdateFn(() => new Date()),
+}));
 
 export const MhcIIPredictionRelations = relations(
   MhcIIPrediction,
   ({ one }) => ({
-    profile: one(Profile, {
-      fields: [MhcIIPrediction.profileId],
-      references: [Profile.id],
+    job: one(Job, {
+      fields: [MhcIIPrediction.jobId],
+      references: [Job.id],
     }),
   }),
 );
 
-// Schema for MhcIIPrediction - used to validate API requests
-const baseMhcIIPredictionSchema =
-  createSelectSchema(MhcIIPrediction).omit(timestamps);
+// Schema for MhcIIPrediction with manual override for `alleles`
+// @link - https://github.com/drizzle-team/drizzle-orm/issues/1110
+export const baseMhcIIPredictionSchema = createSelectSchema(MhcIIPrediction, {
+  alleles: z.array(z.string()),
+}).omit(timestamps);
 
-export const insertMhcIIPredictionSchema =
-  createInsertSchema(MhcIIPrediction).omit(timestamps);
+export const insertMhcIIPredictionSchema = createInsertSchema(MhcIIPrediction, {
+  alleles: z.array(z.string()),
+}).omit(timestamps);
 export const insertMhcIIPredictionParams = insertMhcIIPredictionSchema
   .extend({})
   .omit({
     id: true,
-    profileId: true,
   });
 
 export const updateMhcIIPredictionSchema = baseMhcIIPredictionSchema;
 export const updateMhcIIPredictionParams = baseMhcIIPredictionSchema
   .extend({})
-  .omit({
-    profileId: true,
-  })
+  .omit({})
   .partial()
   .extend({
     id: baseMhcIIPredictionSchema.shape.id,

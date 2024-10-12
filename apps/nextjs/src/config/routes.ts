@@ -3,7 +3,7 @@
  * Users do not need to be logged in to access these routes.
  * @type {string[]} publicRoutes - The public routes.
  */
-export const publicRoutes = ["/"];
+export const publicRoutes = [];
 
 /**
  * Represents an array of routes that require authentication.
@@ -11,14 +11,12 @@ export const publicRoutes = ["/"];
  * @type {string[]} protectedRoutes - The protected routes.
  */
 export const protectedRoutes = [
+  "/",
   "/onboarding",
   "/dashboard",
   "/settings",
   "/account",
-  "/linear-b",
-  "/conformational-b",
-  "/mhc-i",
-  "/mhc-ii",
+  "/job",
 ];
 
 /**
@@ -37,7 +35,7 @@ export const authRoutes = [
  * The default path to which users are redirected after logging in.
  * @type {string} DEFAULT_LOGIN_REDIRECT - The default login redirect path.
  */
-export const DEFAULT_LOGIN_REDIRECT = "/dashboard";
+export const DEFAULT_LOGIN_REDIRECT = "/";
 
 /**
  * The default path to which users are redirected to authenticate.
