@@ -6,6 +6,14 @@ import { timestamps } from "../lib/utils";
 import { createTable } from "./_table";
 import { Job } from "./job";
 
+// Prediction result
+export interface LBEpitopeData {
+  Peptide_Sequence: string;
+  Linear_B_Cell_Immunogenicity: number;
+  Linear_BCR_Recognition: number;
+}
+export type LBEpitopeDataArray = LBEpitopeData[];
+
 export const LinearBPrediction = createTable("linear_b_prediction", (t) => ({
   id: t.uuid().primaryKey().defaultRandom(),
   sequence: t.text().notNull(),
@@ -15,6 +23,7 @@ export const LinearBPrediction = createTable("linear_b_prediction", (t) => ({
   result: t
     .jsonb()
     .array()
+    .$type<LBEpitopeDataArray>()
     .notNull()
     .default(sql`'{}'::jsonb[]`),
   csvDownloadUrl: t.varchar({ length: 255 }),

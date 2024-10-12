@@ -18,6 +18,15 @@ import type {
   PredictionCreateConformationalBpredictionData,
   PredictionCreateConformationalBpredictionError,
   PredictionCreateConformationalBpredictionResponse,
+  PredictionCreateLinearBpredictionData,
+  PredictionCreateLinearBpredictionError,
+  PredictionCreateLinearBpredictionResponse,
+  PredictionCreateMhcIiPredictionData,
+  PredictionCreateMhcIiPredictionError,
+  PredictionCreateMhcIiPredictionResponse,
+  PredictionCreateMhcIpredictionData,
+  PredictionCreateMhcIpredictionError,
+  PredictionCreateMhcIpredictionResponse,
 } from "../types.gen";
 import {
   client,
@@ -28,6 +37,9 @@ import {
   jobGetUserJobs,
   jobUpdateJob,
   predictionCreateConformationalBPrediction,
+  predictionCreateLinearBPrediction,
+  predictionCreateMhcIiPrediction,
+  predictionCreateMhcIPrediction,
 } from "../services.gen";
 
 type QueryKey<TOptions extends Options> = [
@@ -215,6 +227,117 @@ export const predictionCreateConformationalBPredictionMutation = () => {
   > = {
     mutationFn: async (options) => {
       const { data } = await predictionCreateConformationalBPrediction({
+        ...options,
+        throwOnError: true,
+      });
+      return data;
+    },
+  };
+  return mutationOptions;
+};
+
+export const predictionCreateLinearBPredictionQueryKey = (
+  options: Options<PredictionCreateLinearBpredictionData>,
+) => [createQueryKey("predictionCreateLinearBPrediction", options)];
+
+export const predictionCreateLinearBPredictionOptions = (
+  options: Options<PredictionCreateLinearBpredictionData>,
+) => {
+  return queryOptions({
+    queryFn: async ({ queryKey }) => {
+      const { data } = await predictionCreateLinearBPrediction({
+        ...options,
+        ...queryKey[0],
+        throwOnError: true,
+      });
+      return data;
+    },
+    queryKey: predictionCreateLinearBPredictionQueryKey(options),
+  });
+};
+
+export const predictionCreateLinearBPredictionMutation = () => {
+  const mutationOptions: UseMutationOptions<
+    PredictionCreateLinearBpredictionResponse,
+    PredictionCreateLinearBpredictionError,
+    Options<PredictionCreateLinearBpredictionData>
+  > = {
+    mutationFn: async (options) => {
+      const { data } = await predictionCreateLinearBPrediction({
+        ...options,
+        throwOnError: true,
+      });
+      return data;
+    },
+  };
+  return mutationOptions;
+};
+
+export const predictionCreateMhcIPredictionQueryKey = (
+  options: Options<PredictionCreateMhcIpredictionData>,
+) => [createQueryKey("predictionCreateMhcIPrediction", options)];
+
+export const predictionCreateMhcIPredictionOptions = (
+  options: Options<PredictionCreateMhcIpredictionData>,
+) => {
+  return queryOptions({
+    queryFn: async ({ queryKey }) => {
+      const { data } = await predictionCreateMhcIPrediction({
+        ...options,
+        ...queryKey[0],
+        throwOnError: true,
+      });
+      return data;
+    },
+    queryKey: predictionCreateMhcIPredictionQueryKey(options),
+  });
+};
+
+export const predictionCreateMhcIPredictionMutation = () => {
+  const mutationOptions: UseMutationOptions<
+    PredictionCreateMhcIpredictionResponse,
+    PredictionCreateMhcIpredictionError,
+    Options<PredictionCreateMhcIpredictionData>
+  > = {
+    mutationFn: async (options) => {
+      const { data } = await predictionCreateMhcIPrediction({
+        ...options,
+        throwOnError: true,
+      });
+      return data;
+    },
+  };
+  return mutationOptions;
+};
+
+export const predictionCreateMhcIiPredictionQueryKey = (
+  options: Options<PredictionCreateMhcIiPredictionData>,
+) => [createQueryKey("predictionCreateMhcIiPrediction", options)];
+
+export const predictionCreateMhcIiPredictionOptions = (
+  options: Options<PredictionCreateMhcIiPredictionData>,
+) => {
+  return queryOptions({
+    queryFn: async ({ queryKey }) => {
+      const { data } = await predictionCreateMhcIiPrediction({
+        ...options,
+        ...queryKey[0],
+        throwOnError: true,
+      });
+      return data;
+    },
+    queryKey: predictionCreateMhcIiPredictionQueryKey(options),
+  });
+};
+
+export const predictionCreateMhcIiPredictionMutation = () => {
+  const mutationOptions: UseMutationOptions<
+    PredictionCreateMhcIiPredictionResponse,
+    PredictionCreateMhcIiPredictionError,
+    Options<PredictionCreateMhcIiPredictionData>
+  > = {
+    mutationFn: async (options) => {
+      const { data } = await predictionCreateMhcIiPrediction({
         ...options,
         throwOnError: true,
       });

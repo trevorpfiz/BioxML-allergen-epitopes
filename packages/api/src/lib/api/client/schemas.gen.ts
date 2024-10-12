@@ -296,6 +296,256 @@ export const JobUpdateSchema = {
   title: "JobUpdate",
 } as const;
 
+export const LBPredictionResultSchema = {
+  properties: {
+    Peptide_Sequence: {
+      type: "string",
+      title: "Peptide Sequence",
+    },
+    Linear_B_Cell_Immunogenicity: {
+      type: "number",
+      title: "Linear B Cell Immunogenicity",
+    },
+    Linear_BCR_Recognition: {
+      type: "number",
+      title: "Linear Bcr Recognition",
+    },
+  },
+  type: "object",
+  required: [
+    "Peptide_Sequence",
+    "Linear_B_Cell_Immunogenicity",
+    "Linear_BCR_Recognition",
+  ],
+  title: "LBPredictionResult",
+} as const;
+
+export const LinearBPredictionCreateSchema = {
+  properties: {
+    job_id: {
+      type: "string",
+      title: "Job Id",
+    },
+    sequence: {
+      type: "string",
+      maxLength: 50,
+      title: "Sequence",
+    },
+    b_cell_immunogenicity_method: {
+      type: "string",
+      maxLength: 50,
+      title: "B Cell Immunogenicity Method",
+    },
+    bcr_recognition_probability_method: {
+      type: "string",
+      maxLength: 50,
+      title: "Bcr Recognition Probability Method",
+    },
+    result: {
+      items: {
+        $ref: "#/components/schemas/LBPredictionResult",
+      },
+      type: "array",
+      title: "Result",
+      default: [],
+    },
+  },
+  type: "object",
+  required: [
+    "job_id",
+    "sequence",
+    "b_cell_immunogenicity_method",
+    "bcr_recognition_probability_method",
+  ],
+  title: "LinearBPredictionCreate",
+} as const;
+
+export const MhcIIPredictionCreateSchema = {
+  properties: {
+    job_id: {
+      type: "string",
+      title: "Job Id",
+    },
+    sequence: {
+      type: "string",
+      maxLength: 50,
+      title: "Sequence",
+    },
+    tcr_recognition_probability_method: {
+      type: "string",
+      maxLength: 50,
+      title: "Tcr Recognition Probability Method",
+    },
+    mhc_binding_affinity_method: {
+      type: "string",
+      maxLength: 50,
+      title: "Mhc Binding Affinity Method",
+    },
+    pmhc_stability_method: {
+      type: "string",
+      maxLength: 50,
+      title: "Pmhc Stability Method",
+    },
+    result: {
+      items: {
+        $ref: "#/components/schemas/MhcIIPredictionResult",
+      },
+      type: "array",
+      title: "Result",
+      default: [],
+    },
+  },
+  type: "object",
+  required: [
+    "job_id",
+    "sequence",
+    "tcr_recognition_probability_method",
+    "mhc_binding_affinity_method",
+    "pmhc_stability_method",
+  ],
+  title: "MhcIIPredictionCreate",
+} as const;
+
+export const MhcIIPredictionResultSchema = {
+  properties: {
+    Peptide_Sequence: {
+      type: "string",
+      title: "Peptide Sequence",
+    },
+    ClassII_TCR_Recognition: {
+      type: "number",
+      title: "Classii Tcr Recognition",
+    },
+    ClassII_MHC_Binding_Affinity: {
+      type: "string",
+      title: "Classii Mhc Binding Affinity",
+    },
+    ClassII_pMHC_Stability: {
+      type: "string",
+      title: "Classii Pmhc Stability",
+    },
+    Best_Binding_Affinity: {
+      type: "string",
+      title: "Best Binding Affinity",
+    },
+    Best_pMHC_Stability: {
+      type: "string",
+      title: "Best Pmhc Stability",
+    },
+  },
+  type: "object",
+  required: [
+    "Peptide_Sequence",
+    "ClassII_TCR_Recognition",
+    "ClassII_MHC_Binding_Affinity",
+    "ClassII_pMHC_Stability",
+    "Best_Binding_Affinity",
+    "Best_pMHC_Stability",
+  ],
+  title: "MhcIIPredictionResult",
+} as const;
+
+export const MhcIPredictionCreateSchema = {
+  properties: {
+    job_id: {
+      type: "string",
+      title: "Job Id",
+    },
+    sequence: {
+      type: "string",
+      maxLength: 50,
+      title: "Sequence",
+    },
+    tcr_recognition_probability_method: {
+      type: "string",
+      maxLength: 50,
+      title: "Tcr Recognition Probability Method",
+    },
+    mhc_binding_affinity_method: {
+      type: "string",
+      maxLength: 50,
+      title: "Mhc Binding Affinity Method",
+    },
+    pmhc_stability_method: {
+      type: "string",
+      maxLength: 50,
+      title: "Pmhc Stability Method",
+    },
+    result: {
+      items: {
+        $ref: "#/components/schemas/MhcIPredictionResult",
+      },
+      type: "array",
+      title: "Result",
+      default: [],
+    },
+  },
+  type: "object",
+  required: [
+    "job_id",
+    "sequence",
+    "tcr_recognition_probability_method",
+    "mhc_binding_affinity_method",
+    "pmhc_stability_method",
+  ],
+  title: "MhcIPredictionCreate",
+} as const;
+
+export const MhcIPredictionResultSchema = {
+  properties: {
+    Peptide_Sequence: {
+      type: "string",
+      title: "Peptide Sequence",
+    },
+    ClassI_TCR_Recognition: {
+      type: "number",
+      title: "Classi Tcr Recognition",
+    },
+    ClassI_MHC_Binding_Affinity: {
+      type: "string",
+      title: "Classi Mhc Binding Affinity",
+    },
+    ClassI_pMHC_Stability: {
+      type: "string",
+      title: "Classi Pmhc Stability",
+    },
+    Best_Binding_Affinity: {
+      type: "string",
+      title: "Best Binding Affinity",
+    },
+    Best_pMHC_Stability: {
+      type: "string",
+      title: "Best Pmhc Stability",
+    },
+  },
+  type: "object",
+  required: [
+    "Peptide_Sequence",
+    "ClassI_TCR_Recognition",
+    "ClassI_MHC_Binding_Affinity",
+    "ClassI_pMHC_Stability",
+    "Best_Binding_Affinity",
+    "Best_pMHC_Stability",
+  ],
+  title: "MhcIPredictionResult",
+} as const;
+
+export const PredictionProcessingResponseSchema = {
+  properties: {
+    message: {
+      type: "string",
+      title: "Message",
+    },
+    job_id: {
+      type: "string",
+      title: "Job Id",
+    },
+  },
+  type: "object",
+  required: ["message", "job_id"],
+  title: "PredictionProcessingResponse",
+} as const;
+
 export const PredictionResultSchema = {
   properties: {
     PDB_ID: {

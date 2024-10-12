@@ -76,6 +76,61 @@ export type JobUpdate = {
   share_token?: string | null;
 };
 
+export type LBPredictionResult = {
+  Peptide_Sequence: string;
+  Linear_B_Cell_Immunogenicity: number;
+  Linear_BCR_Recognition: number;
+};
+
+export type LinearBPredictionCreate = {
+  job_id: string;
+  sequence: string;
+  b_cell_immunogenicity_method: string;
+  bcr_recognition_probability_method: string;
+  result?: Array<LBPredictionResult>;
+};
+
+export type MhcIIPredictionCreate = {
+  job_id: string;
+  sequence: string;
+  tcr_recognition_probability_method: string;
+  mhc_binding_affinity_method: string;
+  pmhc_stability_method: string;
+  result?: Array<MhcIIPredictionResult>;
+};
+
+export type MhcIIPredictionResult = {
+  Peptide_Sequence: string;
+  ClassII_TCR_Recognition: number;
+  ClassII_MHC_Binding_Affinity: string;
+  ClassII_pMHC_Stability: string;
+  Best_Binding_Affinity: string;
+  Best_pMHC_Stability: string;
+};
+
+export type MhcIPredictionCreate = {
+  job_id: string;
+  sequence: string;
+  tcr_recognition_probability_method: string;
+  mhc_binding_affinity_method: string;
+  pmhc_stability_method: string;
+  result?: Array<MhcIPredictionResult>;
+};
+
+export type MhcIPredictionResult = {
+  Peptide_Sequence: string;
+  ClassI_TCR_Recognition: number;
+  ClassI_MHC_Binding_Affinity: string;
+  ClassI_pMHC_Stability: string;
+  Best_Binding_Affinity: string;
+  Best_pMHC_Stability: string;
+};
+
+export type PredictionProcessingResponse = {
+  message: string;
+  job_id: string;
+};
+
 export type PredictionResult = {
   PDB_ID: string;
   Chain: string;
@@ -147,9 +202,40 @@ export type PredictionCreateConformationalBpredictionData = {
 };
 
 export type PredictionCreateConformationalBpredictionResponse =
-  ConformationalBPrediction;
+  PredictionProcessingResponse;
 
 export type PredictionCreateConformationalBpredictionError =
+  | unknown
+  | HTTPValidationError;
+
+export type PredictionCreateLinearBpredictionData = {
+  body: LinearBPredictionCreate;
+};
+
+export type PredictionCreateLinearBpredictionResponse =
+  PredictionProcessingResponse;
+
+export type PredictionCreateLinearBpredictionError =
+  | unknown
+  | HTTPValidationError;
+
+export type PredictionCreateMhcIpredictionData = {
+  body: MhcIPredictionCreate;
+};
+
+export type PredictionCreateMhcIpredictionResponse =
+  PredictionProcessingResponse;
+
+export type PredictionCreateMhcIpredictionError = unknown | HTTPValidationError;
+
+export type PredictionCreateMhcIiPredictionData = {
+  body: MhcIIPredictionCreate;
+};
+
+export type PredictionCreateMhcIiPredictionResponse =
+  PredictionProcessingResponse;
+
+export type PredictionCreateMhcIiPredictionError =
   | unknown
   | HTTPValidationError;
 
@@ -236,15 +322,5 @@ export type JobDeleteJobResponseTransformer = (
 export const JobDeleteJobResponseTransformer: JobDeleteJobResponseTransformer =
   async (data) => {
     JobModelResponseTransformer(data);
-    return data;
-  };
-
-export type PredictionCreateConformationalBpredictionResponseTransformer = (
-  data: any,
-) => Promise<PredictionCreateConformationalBpredictionResponse>;
-
-export const PredictionCreateConformationalBpredictionResponseTransformer: PredictionCreateConformationalBpredictionResponseTransformer =
-  async (data) => {
-    ConformationalBPredictionModelResponseTransformer(data);
     return data;
   };

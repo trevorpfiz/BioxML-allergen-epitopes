@@ -76,22 +76,62 @@ export const signInWithGithub = async () => {
 };
 
 export const signInWithGoogle = async () => {
-  const origin = headers().get("origin");
   const supabase = createClient();
+  const { data: anonUserData } = await supabase.auth.getUser();
 
+  const origin = headers().get("origin");
   const redirectUrl = `${origin}/auth/callback?next=${encodeURIComponent(DEFAULT_LOGIN_REDIRECT)}`;
 
-  const res = await supabase.auth.signInWithOAuth({
-    provider: "google",
-    options: { redirectTo: redirectUrl },
-  });
+  // @link - https://github.com/supabase/auth/issues/1525#issuecomment-2318541461
+  // Check if user is currently anonymous
+  if (anonUserData.user?.is_anonymous) {
+    // Attempt to link Google OAuth to the anonymous user
+    const { data, error } = await supabase.auth.linkIdentity({
+      provider: "google",
+    });
 
-  if (res.data.url) {
-    redirect(res.data.url);
-  }
-  if (res.error) {
-    console.error(res.error.message);
-    redirect("/auth/error");
+    console.log("data", data, "error", error);
+
+    if (error && error.status === 422) {
+      // Handle the case where the identity is already linked to another user
+      console.error(
+        "Identity is already linked to another user. Signing in...",
+      );
+
+      // Sign in the user with their Google account (they already have an existing account)
+      const { data: user, error: signInError } =
+        await supabase.auth.signInWithOAuth({
+          provider: "google",
+          options: { redirectTo: redirectUrl },
+        });
+
+      if (signInError) {
+        console.error(
+          "Error signing in with existing Google account:",
+          signInError.message,
+        );
+        redirect("/auth/error");
+      } else if (user.url) {
+        redirect(user.url);
+      }
+    } else if (data.url) {
+      // If successful, redirect to Google OAuth
+      redirect(data.url);
+    }
+  } else {
+    // If not anonymous, proceed with regular Google OAuth sign-in
+    const res = await supabase.auth.signInWithOAuth({
+      provider: "google",
+      options: { redirectTo: redirectUrl },
+    });
+
+    if (res.data.url) {
+      redirect(res.data.url);
+    }
+    if (res.error) {
+      console.error(res.error.message);
+      redirect("/auth/error");
+    }
   }
 };
 

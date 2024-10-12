@@ -31,7 +31,7 @@ function JobPredictions(props: JobPredictionsProps) {
           retry: false,
           refetchInterval: (data) => {
             const status = data.state.data?.job.status;
-            return status === "pending" || status === "running" ? 5000 : false;
+            return status === "pending" || status === "running" ? 3000 : false;
           },
         },
       )

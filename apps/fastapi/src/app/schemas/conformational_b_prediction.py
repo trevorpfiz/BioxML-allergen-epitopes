@@ -43,6 +43,5 @@ class ConformationalBPrediction(ResponseBase, JobMixin):
     surface_accessibility_method: str
     result: List[PredictionResult]
     csv_download_url: Optional[str]
-    job_id: str
 
     table_name: ClassVar[str] = "epi_conformational_b_prediction"

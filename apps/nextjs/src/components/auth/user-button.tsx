@@ -2,7 +2,7 @@
 
 import type { User } from "@supabase/supabase-js";
 import { useRouter } from "next/navigation";
-import { LogOut, Settings, UserPlus } from "lucide-react";
+import { Settings } from "lucide-react";
 
 import { Avatar, AvatarFallback, AvatarImage } from "@epi/ui/avatar";
 import { Button } from "@epi/ui/button";
@@ -16,7 +16,7 @@ import {
   DropdownMenuTrigger,
 } from "@epi/ui/dropdown-menu";
 
-import { signOut } from "~/lib/actions/auth";
+// import { signOut } from "~/lib/actions/auth";
 import { getNameFromUser } from "~/lib/utils";
 
 function UserButton({ user }: { user: User | null }) {
@@ -26,7 +26,7 @@ function UserButton({ user }: { user: User | null }) {
     return null;
   }
 
-  const name = getNameFromUser(user);
+  const name = user.is_anonymous ? getNameFromUser(user) : null;
   const displayEmail = user.email ?? "Guest";
 
   const handleNavigate = (path: string) => {
@@ -34,9 +34,9 @@ function UserButton({ user }: { user: User | null }) {
     router.push(path);
   };
 
-  const handleSignOut = async () => {
-    await signOut();
-  };
+  // const handleSignOut = async () => {
+  //   await signOut();
+  // };
 
   return (
     <DropdownMenu>
@@ -67,7 +67,8 @@ function UserButton({ user }: { user: User | null }) {
             <span>Settings</span>
           </DropdownMenuItem>
         </DropdownMenuGroup>
-        <DropdownMenuSeparator />
+
+        {/* <DropdownMenuSeparator />
         {user.is_anonymous ? (
           <DropdownMenuItem onSelect={() => handleNavigate("/signup")}>
             <UserPlus className="mr-2 h-4 w-4" />
@@ -78,7 +79,7 @@ function UserButton({ user }: { user: User | null }) {
             <LogOut className="mr-2 h-4 w-4" />
             <span>Sign out</span>
           </DropdownMenuItem>
-        )}
+        )} */}
       </DropdownMenuContent>
     </DropdownMenu>
   );

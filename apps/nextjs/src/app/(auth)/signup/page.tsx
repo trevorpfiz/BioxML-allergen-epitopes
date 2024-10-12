@@ -10,7 +10,7 @@ export default function SignUpPage() {
         backButtonLinkLabel="Sign in"
         backButtonHref="/signin"
         showSocial
-        showCredentials
+        // showCredentials
       >
         <SignUpForm />
       </CardWrapper>

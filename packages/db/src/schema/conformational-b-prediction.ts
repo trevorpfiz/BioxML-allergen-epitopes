@@ -6,7 +6,7 @@ import { timestamps } from "../lib/utils";
 import { createTable } from "./_table";
 import { Job } from "./job";
 
-// Prediction Result
+// Prediction result
 export interface EpitopeData {
   PDB_ID: string;
   Chain: string;

@@ -17,11 +17,6 @@ export const protectedRoutes = [
   "/settings",
   "/account",
   "/job",
-
-  "/linear-b",
-  "/conformational-b",
-  "/mhc-i",
-  "/mhc-ii",
 ];
 
 /**
