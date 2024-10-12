@@ -14,15 +14,8 @@ export const LinearBFormSchema = z.object({
 export type LinearBForm = z.infer<typeof LinearBFormSchema>;
 
 export const LinearBResultSchema = z.object({
-  Seq_pos: z.number().int().positive(),
-  AA: z.string().length(1),
-  Epitope_score: z.number(),
-  N_glyco_label: z.number().int().min(0).max(1),
+  Peptide_Sequence: z.string(),
+  Linear_B_Cell_Immunogenicity: z.number(),
+  Linear_BCR_Recognition: z.number(),
 });
 export type LinearBResult = z.infer<typeof LinearBResultSchema>;
-
-export const LinearBPredictionSchema = z.object({
-  sequence: z.string(),
-  results: z.array(LinearBResultSchema),
-});
-export type LinearBPrediction = z.infer<typeof LinearBPredictionSchema>;

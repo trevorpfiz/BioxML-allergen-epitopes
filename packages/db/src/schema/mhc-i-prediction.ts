@@ -2,20 +2,11 @@ import { relations, sql } from "drizzle-orm";
 import { createInsertSchema, createSelectSchema } from "drizzle-zod";
 import { z } from "zod";
 
+import type { MhcIResult } from "@epi/validators/epitopes";
+
 import { timestamps } from "../lib/utils";
 import { createTable } from "./_table";
 import { Job } from "./job";
-
-// Prediction result
-export interface MhcIEpitopeData {
-  Peptide_Sequence: string;
-  ClassI_TCR_Recognition: number; // TCR recognition score as a number
-  ClassI_MHC_Binding_Affinity: string; // HLA types with corresponding binding affinity values
-  ClassI_pMHC_Stability: string; // HLA types with corresponding stability values
-  Best_Binding_Affinity: string; // Best binding affinity with HLA type
-  Best_pMHC_Stability: string; // Best pMHC stability with HLA type
-}
-export type MhcIEpitopeDataArray = MhcIEpitopeData[];
 
 export const MhcIPrediction = createTable("mhc_i_prediction", (t) => ({
   id: t.uuid().primaryKey().defaultRandom(),
@@ -32,7 +23,7 @@ export const MhcIPrediction = createTable("mhc_i_prediction", (t) => ({
   result: t
     .jsonb()
     .array()
-    .$type<MhcIEpitopeDataArray>()
+    .$type<MhcIResult[]>()
     .notNull()
     .default(sql`'{}'::jsonb[]`),
   csvDownloadUrl: t.varchar({ length: 255 }),

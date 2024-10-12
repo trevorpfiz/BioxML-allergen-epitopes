@@ -286,6 +286,9 @@ importers:
 
   packages/db:
     dependencies:
+      '@epi/validators':
+        specifier: workspace:*
+        version: link:../validators
       '@t3-oss/env-core':
         specifier: ^0.11.1
         version: 0.11.1(typescript@5.6.2)(zod@3.23.8)
@@ -468,7 +471,7 @@ importers:
         version: 7.37.1(eslint@9.12.0(jiti@2.3.3))
       eslint-plugin-react-hooks:
         specifier: rc
-        version: 5.1.0-rc-70fb1363-20241010(eslint@9.12.0(jiti@2.3.3))
+        version: 5.1.0-rc-09111202-20241011(eslint@9.12.0(jiti@2.3.3))
       eslint-plugin-testing-library:
         specifier: ^6.3.0
         version: 6.3.0(eslint@9.12.0(jiti@2.3.3))(typescript@5.6.2)
@@ -3016,8 +3019,8 @@ packages:
     peerDependencies:
       eslint: ^3 || ^4 || ^5 || ^6 || ^7 || ^8 || ^9
 
-  eslint-plugin-react-hooks@5.1.0-rc-70fb1363-20241010:
-    resolution: {integrity: sha512-ACpE3p5orWvc0bh5qsH65ujmM1xrPTSTmB73EGR9fn5QTqNmoHNEA5kC9f4Z9FP9rm0E9tvrFgRw2/UfoqdxIQ==}
+  eslint-plugin-react-hooks@5.1.0-rc-09111202-20241011:
+    resolution: {integrity: sha512-HLdP3Qpr9KUckSEhxwWHqpXGJYKlZV+P9gqdOwPa45Ka3qhY1kuflvtwRMMA9dd7p8AL/lRLU3UUfNcDVh5DGw==}
     engines: {node: '>=10'}
     peerDependencies:
       eslint: ^3.0.0 || ^4.0.0 || ^5.0.0 || ^6.0.0 || ^7.0.0 || ^8.0.0-0 || ^9.0.0
@@ -7520,7 +7523,7 @@ snapshots:
       safe-regex-test: 1.0.3
       string.prototype.includes: 2.0.0
 
-  eslint-plugin-react-hooks@5.1.0-rc-70fb1363-20241010(eslint@9.12.0(jiti@2.3.3)):
+  eslint-plugin-react-hooks@5.1.0-rc-09111202-20241011(eslint@9.12.0(jiti@2.3.3)):
     dependencies:
       eslint: 9.12.0(jiti@2.3.3)
 

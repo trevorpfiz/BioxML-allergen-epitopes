@@ -18,3 +18,13 @@ export const MhcIFormSchema = z.object({
   }),
 });
 export type MhcIForm = z.infer<typeof MhcIFormSchema>;
+
+export const MhcIResultSchema = z.object({
+  Peptide_Sequence: z.string(),
+  ClassI_TCR_Recognition: z.number(),
+  ClassI_MHC_Binding_Affinity: z.string(), // HLA types with corresponding binding affinity values
+  ClassI_pMHC_Stability: z.string(), // HLA types with corresponding stability values
+  Best_Binding_Affinity: z.string(), // Best binding affinity with HLA type
+  Best_pMHC_Stability: z.string(), // Best pMHC stability with HLA type
+});
+export type MhcIResult = z.infer<typeof MhcIResultSchema>;

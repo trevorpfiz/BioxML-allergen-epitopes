@@ -2,17 +2,11 @@ import type { z } from "zod";
 import { relations, sql } from "drizzle-orm";
 import { createInsertSchema, createSelectSchema } from "drizzle-zod";
 
+import type { LinearBResult } from "@epi/validators/epitopes";
+
 import { timestamps } from "../lib/utils";
 import { createTable } from "./_table";
 import { Job } from "./job";
-
-// Prediction result
-export interface LBEpitopeData {
-  Peptide_Sequence: string;
-  Linear_B_Cell_Immunogenicity: number;
-  Linear_BCR_Recognition: number;
-}
-export type LBEpitopeDataArray = LBEpitopeData[];
 
 export const LinearBPrediction = createTable("linear_b_prediction", (t) => ({
   id: t.uuid().primaryKey().defaultRandom(),
@@ -23,7 +17,7 @@ export const LinearBPrediction = createTable("linear_b_prediction", (t) => ({
   result: t
     .jsonb()
     .array()
-    .$type<LBEpitopeDataArray>()
+    .$type<LinearBResult[]>()
     .notNull()
     .default(sql`'{}'::jsonb[]`),
   csvDownloadUrl: t.varchar({ length: 255 }),

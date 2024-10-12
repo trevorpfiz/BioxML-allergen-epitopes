@@ -33,6 +33,7 @@
     "with-env": "dotenv -e ../../.env --"
   },
   "dependencies": {
+    "@epi/validators": "workspace:*",
     "@t3-oss/env-core": "^0.11.1",
     "@vercel/postgres": "^0.10.0",
     "drizzle-orm": "^0.34.1",

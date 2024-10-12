@@ -31,14 +31,3 @@ export const ConformationalBStructureResultSchema = z.object({
 export type ConformationalBStructureResult = z.infer<
   typeof ConformationalBStructureResultSchema
 >;
-
-export const ConformationalBStructurePredictionSchema = z.object({
-  pdbId: z.string(),
-  chain: z.string(),
-  results: z.array(ConformationalBStructureResultSchema),
-  bcrRecognitionProbabilityMethod: z.string(),
-  surfaceAccessibilityMethod: z.string(),
-});
-export type ConformationalBStructurePrediction = z.infer<
-  typeof ConformationalBStructurePredictionSchema
->;

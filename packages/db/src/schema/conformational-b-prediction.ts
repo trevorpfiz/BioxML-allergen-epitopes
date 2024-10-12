@@ -2,20 +2,11 @@ import type { z } from "zod";
 import { relations, sql } from "drizzle-orm";
 import { createInsertSchema, createSelectSchema } from "drizzle-zod";
 
+import type { ConformationalBStructureResult } from "@epi/validators/epitopes";
+
 import { timestamps } from "../lib/utils";
 import { createTable } from "./_table";
 import { Job } from "./job";
-
-// Prediction result
-export interface EpitopeData {
-  PDB_ID: string;
-  Chain: string;
-  Residue_position: number;
-  AA: string;
-  Epitope_score: number;
-  N_glyco_label?: number;
-}
-export type EpitopeDataArray = EpitopeData[];
 
 export const ConformationalBPrediction = createTable(
   "conformational_b_prediction",
@@ -29,7 +20,7 @@ export const ConformationalBPrediction = createTable(
     result: t
       .jsonb()
       .array()
-      .$type<EpitopeDataArray>()
+      .$type<ConformationalBStructureResult[]>()
       .notNull()
       .default(sql`'{}'::jsonb[]`),
     csvDownloadUrl: t.varchar({ length: 255 }),
