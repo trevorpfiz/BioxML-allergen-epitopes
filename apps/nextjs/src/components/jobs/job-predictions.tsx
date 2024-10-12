@@ -21,7 +21,6 @@ const ConformationalViewer = dynamic(
 
 function JobPredictions(props: JobPredictionsProps) {
   const { jobId, shareToken } = props;
-
   const router = useRouter();
 
   const jobQuery = jobId
@@ -63,31 +62,61 @@ function JobPredictions(props: JobPredictionsProps) {
     return <p>Prediction failed. Please try again.</p>;
   }
 
-  const conformationalBPredictions = data.job.conformationalBPredictions;
-
-  return (
-    <div className="flex flex-col items-center justify-between gap-4 py-4">
-      <h1 className="text-2xl font-bold">{job.name}</h1>
-
-      {/* Render the predictions */}
-      {conformationalBPredictions.length > 0 ? (
-        <div className="mx-auto flex w-full max-w-3xl flex-col gap-8 pb-16">
-          <EpitopeViewer
-            prediction={job.conformationalBPredictions[0]?.result ?? []}
-          />
-
+  // Check the prediction type and render the appropriate components
+  const renderPrediction = () => {
+    if (job.conformationalBPredictions.length > 0) {
+      const prediction = job.conformationalBPredictions[0];
+      return (
+        <>
+          <EpitopeViewer prediction={prediction?.result} />
           <div className="flex flex-col gap-4">
             <h3 className="text-sm font-semibold">3D Visualization</h3>
             <div className="w-full border shadow">
-              <ConformationalViewer
-                epitopeData={job.conformationalBPredictions[0]?.result ?? []}
-              />
+              <ConformationalViewer epitopeData={prediction?.result ?? []} />
             </div>
           </div>
-        </div>
-      ) : (
-        <p>No predictions available for this job.</p>
-      )}
+        </>
+      );
+    } else if (job.linearBPredictions.length > 0) {
+      const prediction = job.linearBPredictions[0];
+      return (
+        <>
+          <div>
+            <h3 className="text-sm font-semibold">Linear B Prediction</h3>
+            <p>{prediction?.id}</p>
+          </div>
+        </>
+      );
+    } else if (job.mhcIPredictions.length > 0) {
+      const prediction = job.mhcIPredictions[0];
+      return (
+        <>
+          <div>
+            <h3 className="text-sm font-semibold">MHC-I Prediction</h3>
+            <p>{prediction?.id}</p>
+          </div>
+        </>
+      );
+    } else if (job.mhcIIPredictions.length > 0) {
+      const prediction = job.mhcIIPredictions[0];
+      return (
+        <>
+          <div>
+            <h3 className="text-sm font-semibold">MHC-II Prediction</h3>
+            <p>{prediction?.id}</p>
+          </div>
+        </>
+      );
+    } else {
+      return <p>No predictions available for this job.</p>;
+    }
+  };
+
+  return (
+    <div className="flex flex-col items-center justify-between gap-4 py-4">
+      <div className="mx-auto flex w-full max-w-3xl flex-col gap-8 pb-16">
+        {renderPrediction()}
+      </div>
     </div>
   );
 }

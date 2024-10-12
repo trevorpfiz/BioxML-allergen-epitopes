@@ -49,7 +49,7 @@ async def process_linear_b_prediction(sequence: str) -> List[LBPredictionResult]
     Process a Linear B prediction by reading a CSV file and saving results.
     """
     # Define the path to the CSV file
-    csv_filename = f"{sequence}_linear_b_epitopes.csv"
+    csv_filename = "lbc.csv"
     csv_path = os.path.join("data", csv_filename)
 
     if not os.path.exists(csv_path):
@@ -79,7 +79,7 @@ async def process_mhc_i_prediction(sequence: str) -> List[MhcIPredictionResult]:
     Process an MHC-I prediction by reading a CSV file and saving results.
     """
     # Define the path to the CSV file
-    csv_filename = f"{sequence}_mhc_i_epitopes.csv"
+    csv_filename = "class_I.csv"
     csv_path = os.path.join("data", csv_filename)
 
     if not os.path.exists(csv_path):
@@ -109,7 +109,7 @@ async def process_mhc_ii_prediction(sequence: str) -> List[MhcIIPredictionResult
     Process an MHC-II prediction by reading a CSV file and saving results.
     """
     # Define the path to the CSV file
-    csv_filename = f"{sequence}_mhc_ii_epitopes.csv"
+    csv_filename = "class_II.csv"
     csv_path = os.path.join("data", csv_filename)
 
     if not os.path.exists(csv_path):

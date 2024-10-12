@@ -13,7 +13,7 @@ class LBPredictionResult(BaseModel):
 
 
 class LinearBPredictionCreate(CreateBase, JobMixin):
-    sequence: str = Field(..., max_length=50)
+    sequence: str = Field(...)
     b_cell_immunogenicity_method: str = Field(..., max_length=50)
     bcr_recognition_probability_method: str = Field(..., max_length=50)
     result: List[LBPredictionResult] = []

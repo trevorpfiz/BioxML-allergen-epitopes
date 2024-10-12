@@ -5,8 +5,8 @@ import { useRouter } from "next/navigation";
 import { createClient } from "@hey-api/client-fetch";
 import { useMutation } from "@tanstack/react-query";
 
-import type { ConformationalBStructureForm } from "@epi/validators/epitopes";
-import { predictionCreateConformationalBPredictionMutation as createMutation } from "@epi/api/client/react-query";
+import type { LinearBForm } from "@epi/validators/epitopes";
+import { predictionCreateLinearBPredictionMutation as createMutation } from "@epi/api/client/react-query";
 import { Button } from "@epi/ui/button";
 import {
   Form,
@@ -17,7 +17,6 @@ import {
   FormMessage,
   useForm,
 } from "@epi/ui/form";
-import { Input } from "@epi/ui/input";
 import {
   Select,
   SelectContent,
@@ -27,25 +26,25 @@ import {
 } from "@epi/ui/select";
 import { Separator } from "@epi/ui/separator";
 import { toast } from "@epi/ui/sonner";
-import { ConformationalBStructureFormSchema } from "@epi/validators/epitopes";
+import { Textarea } from "@epi/ui/textarea";
+import { LinearBFormSchema } from "@epi/validators/epitopes";
 
 import Loading from "~/app/(app)/loading";
 import { env } from "~/env";
 import { api } from "~/trpc/react";
 import { useMySession } from "~/utils/supabase/client";
 
-const ConformationalBStructureForm: React.FC = () => {
+const LinearBForm: React.FC = () => {
   const utils = api.useUtils();
   const router = useRouter();
   const { session, loading } = useMySession();
 
   const form = useForm({
-    schema: ConformationalBStructureFormSchema,
+    schema: LinearBFormSchema,
     defaultValues: {
-      pdbId: "",
-      chain: "",
+      sequence: "",
+      bCellImmunogenicityMethod: "",
       bcrRecognitionProbabilityMethod: "",
-      surfaceAccessibilityMethod: "",
     },
   });
 
@@ -58,15 +57,14 @@ const ConformationalBStructureForm: React.FC = () => {
     },
   });
 
-  const createPredictionMutation =
-    api.conformationalBPrediction.create.useMutation({
-      onSuccess: (input) => {
-        void utils.job.byId.invalidate({ id: input.prediction?.jobId });
-      },
-      onError: (error) => {
-        toast.error(error.message);
-      },
-    });
+  const createPredictionMutation = api.linearBPrediction.create.useMutation({
+    onSuccess: (input) => {
+      void utils.job.byId.invalidate({ id: input.prediction?.jobId });
+    },
+    onError: (error) => {
+      toast.error(error.message);
+    },
+  });
 
   const apiUrl =
     env.NEXT_PUBLIC_USE_LAMBDA_API === "true"
@@ -97,20 +95,18 @@ const ConformationalBStructureForm: React.FC = () => {
     },
   });
 
-  const onSubmit = async (data: ConformationalBStructureForm) => {
+  const onSubmit = async (data: LinearBForm) => {
     // Step 1: Create a new Job
-    const jobName = `PDB ${data.pdbId} Chain ${data.chain}`;
     const newJob = await createJobMutation.mutateAsync({
-      name: jobName,
-      type: "conformational-b",
+      name: `Linear B Prediction for ${data.sequence}`,
+      type: "linear-b",
     });
 
-    // Step 2: Create a new ConformationalBPrediction associated with the Job
+    // Step 2: Create a new Linear B Prediction associated with the Job
     await createPredictionMutation.mutateAsync({
-      pdbId: data.pdbId,
-      chain: data.chain,
+      sequence: data.sequence,
+      bCellImmunogenicityMethod: data.bCellImmunogenicityMethod,
       bcrRecognitionProbabilityMethod: data.bcrRecognitionProbabilityMethod,
-      surfaceAccessibilityMethod: data.surfaceAccessibilityMethod,
       jobId: newJob.job?.id ?? "",
     });
 
@@ -118,11 +114,10 @@ const ConformationalBStructureForm: React.FC = () => {
     predictMutation.mutate({
       client: localClient,
       body: {
-        pdb_id: data.pdbId,
-        chain: data.chain,
+        sequence: data.sequence,
+        b_cell_immunogenicity_method: data.bCellImmunogenicityMethod,
         bcr_recognition_probability_method:
           data.bcrRecognitionProbabilityMethod,
-        surface_accessibility_method: data.surfaceAccessibilityMethod,
         job_id: newJob.job?.id ?? "",
       },
     });
@@ -131,10 +126,12 @@ const ConformationalBStructureForm: React.FC = () => {
     router.push(`/job/${newJob.job?.id}`);
   };
 
-  // ara-h-2/AAK96887
+  // Ara h 2.0101 - AAK96887
   const fillExampleValues = () => {
-    form.setValue("pdbId", "3OB4");
-    form.setValue("chain", "A");
+    form.setValue(
+      "sequence",
+      "MAKLTILVALALFLLAAHASARQQWELQGDRRCQSQLERANLRPCEQHLMQKIQRDEDSYERDPYSPSQDPYSPSPYDRRGAGSSQHQERCCNELNEFENNQRCMCEALQQIMENQSDRLQGRQQEQQFKRELRNLPQQCGLRAPQRCDLDVESGG",
+    );
   };
 
   if (loading) {
@@ -148,37 +145,53 @@ const ConformationalBStructureForm: React.FC = () => {
         className="flex flex-col gap-8"
       >
         <div className="flex flex-col gap-4">
-          {/* PDB ID Field */}
+          {/* Sequence Field */}
           <FormField
             control={form.control}
-            name="pdbId"
+            name="sequence"
             render={({ field }) => (
               <FormItem>
-                <FormLabel>PDB ID</FormLabel>
+                <FormLabel>Sequence</FormLabel>
                 <FormControl>
-                  <Input placeholder="Enter PDB ID" {...field} />
+                  <Textarea
+                    placeholder="Enter sequence"
+                    //   className="resize-none"
+                    {...field}
+                  />
                 </FormControl>
                 <FormMessage />
               </FormItem>
             )}
           />
 
-          {/* Chain Field */}
+          {/* B-cell Immunogenicity Method Field */}
           <FormField
             control={form.control}
-            name="chain"
+            name="bCellImmunogenicityMethod"
             render={({ field }) => (
               <FormItem>
-                <FormLabel>Chain (optional)</FormLabel>
-                <FormControl>
-                  <Input placeholder="Enter chain" {...field} />
-                </FormControl>
+                <FormLabel>B-cell Immunogenicity Method</FormLabel>
+                <Select
+                  onValueChange={field.onChange}
+                  defaultValue={field.value}
+                >
+                  <FormControl>
+                    <SelectTrigger>
+                      <SelectValue placeholder="Select a method" />
+                    </SelectTrigger>
+                  </FormControl>
+                  <SelectContent>
+                    <SelectItem value="method-1">Method 1</SelectItem>
+                    <SelectItem value="method-2">Method 2</SelectItem>
+                    <SelectItem value="method-3">Method 3</SelectItem>
+                  </SelectContent>
+                </Select>
                 <FormMessage />
               </FormItem>
             )}
           />
 
-          {/* BCR Recognition Probability Method */}
+          {/* BCR Recognition Probability Method Field */}
           <FormField
             control={form.control}
             name="bcrRecognitionProbabilityMethod"
@@ -204,40 +217,13 @@ const ConformationalBStructureForm: React.FC = () => {
               </FormItem>
             )}
           />
-
-          {/* Surface Accessibility Method */}
-          <FormField
-            control={form.control}
-            name="surfaceAccessibilityMethod"
-            render={({ field }) => (
-              <FormItem>
-                <FormLabel>Surface Accessibility Method</FormLabel>
-                <Select
-                  onValueChange={field.onChange}
-                  defaultValue={field.value}
-                >
-                  <FormControl>
-                    <SelectTrigger>
-                      <SelectValue placeholder="Select a method" />
-                    </SelectTrigger>
-                  </FormControl>
-                  <SelectContent>
-                    <SelectItem value="method-a">Method A</SelectItem>
-                    <SelectItem value="method-b">Method B</SelectItem>
-                    <SelectItem value="method-c">Method C</SelectItem>
-                  </SelectContent>
-                </Select>
-                <FormMessage />
-              </FormItem>
-            )}
-          />
         </div>
 
         <Separator />
 
         <div className="flex items-center justify-between">
           <Button type="button" variant="outline" onClick={fillExampleValues}>
-            Try PDB ID and Chain example
+            Try Sequence example
           </Button>
           <Button
             type="submit"
@@ -255,4 +241,4 @@ const ConformationalBStructureForm: React.FC = () => {
   );
 };
 
-export { ConformationalBStructureForm };
+export { LinearBForm };

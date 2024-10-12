@@ -93,6 +93,7 @@ export type LinearBPredictionCreate = {
 export type MhcIIPredictionCreate = {
   job_id: string;
   sequence: string;
+  alleles: Array<string>;
   tcr_recognition_probability_method: string;
   mhc_binding_affinity_method: string;
   pmhc_stability_method: string;
@@ -111,6 +112,7 @@ export type MhcIIPredictionResult = {
 export type MhcIPredictionCreate = {
   job_id: string;
   sequence: string;
+  alleles: Array<string>;
   tcr_recognition_probability_method: string;
   mhc_binding_affinity_method: string;
   pmhc_stability_method: string;

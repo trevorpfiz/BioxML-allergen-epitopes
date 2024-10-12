@@ -16,7 +16,8 @@ class MhcIIPredictionResult(BaseModel):
 
 
 class MhcIIPredictionCreate(CreateBase, JobMixin):
-    sequence: str = Field(..., max_length=50)
+    sequence: str = Field(...)
+    alleles: List[str]
     tcr_recognition_probability_method: str = Field(..., max_length=50)
     mhc_binding_affinity_method: str = Field(..., max_length=50)
     pmhc_stability_method: str = Field(..., max_length=50)
@@ -29,6 +30,7 @@ class MhcIIPredictionUpdate(UpdateBase):
 
 class MhcIIPredictionInDBBase(InDBBase, JobMixin):
     sequence: str
+    alleles: List[str]
     tcr_recognition_probability_method: str
     mhc_binding_affinity_method: str
     pmhc_stability_method: str
@@ -38,6 +40,7 @@ class MhcIIPredictionInDBBase(InDBBase, JobMixin):
 
 class MhcIIPrediction(ResponseBase, JobMixin):
     sequence: str
+    alleles: List[str]
     tcr_recognition_probability_method: str
     mhc_binding_affinity_method: str
     pmhc_stability_method: str

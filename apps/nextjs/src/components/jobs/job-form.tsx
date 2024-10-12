@@ -1,6 +1,9 @@
 "use client";
 
 import { ConformationalBStructureForm } from "~/components/peptides/forms/conformational-b-structure-form";
+import { LinearBForm } from "~/components/peptides/forms/linear-b-form";
+import { MhcIForm } from "~/components/peptides/forms/mhc-i-form";
+import { MhcIIForm } from "~/components/peptides/forms/mhc-ii-form";
 import { usePredictionTypeStore } from "~/providers/prediction-type-store-provider";
 
 export default function JobForm() {
@@ -11,11 +14,11 @@ export default function JobForm() {
       case "conformational-b":
         return <ConformationalBStructureForm />;
       case "linear-b":
-        return <p>linear b form</p>;
+        return <LinearBForm />;
       case "mhc-i":
-        return <p>mhc i form</p>;
+        return <MhcIForm />;
       case "mhc-ii":
-        return <p>mhc ii form</p>;
+        return <MhcIIForm />;
       default:
         return null;
     }

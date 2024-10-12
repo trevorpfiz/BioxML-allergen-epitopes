@@ -108,7 +108,9 @@ const JobComponent = ({ job }: { job: Job }) => {
       )}
     >
       <Link href={`/job/${job.id}`} className="flex-1 p-2">
-        <div className="text-sm font-medium">{job.name}</div>
+        <div className="max-w-44 overflow-hidden text-ellipsis whitespace-nowrap text-sm font-medium">
+          {job.name}
+        </div>
         <div className="text-xs text-muted-foreground">{job.type}</div>
       </Link>
       <div className={cn("flex items-center", isActive && "opacity-100")}>

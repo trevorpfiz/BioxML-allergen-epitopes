@@ -371,6 +371,13 @@ export const MhcIIPredictionCreateSchema = {
       maxLength: 50,
       title: "Sequence",
     },
+    alleles: {
+      items: {
+        type: "string",
+      },
+      type: "array",
+      title: "Alleles",
+    },
     tcr_recognition_probability_method: {
       type: "string",
       maxLength: 50,
@@ -399,6 +406,7 @@ export const MhcIIPredictionCreateSchema = {
   required: [
     "job_id",
     "sequence",
+    "alleles",
     "tcr_recognition_probability_method",
     "mhc_binding_affinity_method",
     "pmhc_stability_method",
@@ -456,6 +464,13 @@ export const MhcIPredictionCreateSchema = {
       maxLength: 50,
       title: "Sequence",
     },
+    alleles: {
+      items: {
+        type: "string",
+      },
+      type: "array",
+      title: "Alleles",
+    },
     tcr_recognition_probability_method: {
       type: "string",
       maxLength: 50,
@@ -484,6 +499,7 @@ export const MhcIPredictionCreateSchema = {
   required: [
     "job_id",
     "sequence",
+    "alleles",
     "tcr_recognition_probability_method",
     "mhc_binding_affinity_method",
     "pmhc_stability_method",
