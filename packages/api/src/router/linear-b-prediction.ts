@@ -31,6 +31,7 @@ export const linearBPredictionRouter = {
         bCellImmunogenicityMethod,
         bcrRecognitionProbabilityMethod,
         jobId,
+        csvDownloadUrl,
       } = input;
 
       const [prediction] = await ctx.db
@@ -40,6 +41,7 @@ export const linearBPredictionRouter = {
           bCellImmunogenicityMethod,
           bcrRecognitionProbabilityMethod,
           jobId,
+          csvDownloadUrl,
         })
         .returning();
 

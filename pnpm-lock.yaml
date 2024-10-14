@@ -155,6 +155,9 @@ importers:
       geist:
         specifier: ^1.3.1
         version: 1.3.1(next@14.2.15(@opentelemetry/api@1.9.0)(react-dom@18.3.1(react@18.3.1))(react@18.3.1))
+      json-2-csv:
+        specifier: ^5.5.6
+        version: 5.5.6
       lucide-react:
         specifier: ^0.451.0
         version: 0.451.0(react@18.3.1)
@@ -477,7 +480,7 @@ importers:
         version: 7.37.1(eslint@9.12.0(jiti@2.3.3))
       eslint-plugin-react-hooks:
         specifier: rc
-        version: 5.1.0-rc-09111202-20241011(eslint@9.12.0(jiti@2.3.3))
+        version: 5.1.0-rc-6cf85185-20241014(eslint@9.12.0(jiti@2.3.3))
       eslint-plugin-testing-library:
         specifier: ^6.3.0
         version: 6.3.0(eslint@9.12.0(jiti@2.3.3))(typescript@5.6.2)
@@ -2746,6 +2749,10 @@ packages:
       supports-color:
         optional: true
 
+  deeks@3.1.0:
+    resolution: {integrity: sha512-e7oWH1LzIdv/prMQ7pmlDlaVoL64glqzvNgkgQNgyec9ORPHrT2jaOqMtRyqJuwWjtfb6v+2rk9pmaHj+F137A==}
+    engines: {node: '>= 16'}
+
   deep-equal@2.2.3:
     resolution: {integrity: sha512-ZIwpnevOurS8bpT4192sqAowWM76JDKSHYzMLty3BZGSswgq6pBaH3DhCSW5xVAZICZyKdOBPjwww5wfgT/6PA==}
     engines: {node: '>= 0.4'}
@@ -2801,6 +2808,10 @@ packages:
 
   dlv@1.1.3:
     resolution: {integrity: sha512-+HlytyjlPKnIG8XuRG8WvmBP8xs8P71y+SKKS6ZXWoEgLuePxtDoUEiH7WkdePWrQ5JBpE6aoVqfZfJUQkjXwA==}
+
+  doc-path@4.1.1:
+    resolution: {integrity: sha512-h1ErTglQAVv2gCnOpD3sFS6uolDbOKHDU1BZq+Kl3npPqroU3dYL42lUgMfd5UimlwtRgp7C9dLGwqQ5D2HYgQ==}
+    engines: {node: '>=16'}
 
   doctrine@2.1.0:
     resolution: {integrity: sha512-35mSku4ZXK0vfCuHEDAwt55dg2jNajHZ1odvF+8SSr82EsZY4QmXfuWso8oEd8zRhVObSN18aM0CjSdoBX7zIw==}
@@ -3051,8 +3062,8 @@ packages:
     peerDependencies:
       eslint: ^3 || ^4 || ^5 || ^6 || ^7 || ^8 || ^9
 
-  eslint-plugin-react-hooks@5.1.0-rc-09111202-20241011:
-    resolution: {integrity: sha512-HLdP3Qpr9KUckSEhxwWHqpXGJYKlZV+P9gqdOwPa45Ka3qhY1kuflvtwRMMA9dd7p8AL/lRLU3UUfNcDVh5DGw==}
+  eslint-plugin-react-hooks@5.1.0-rc-6cf85185-20241014:
+    resolution: {integrity: sha512-BeEXOFhXkde3ltdeI6TaiNm/2Fq7wevwjf6c+nPG57QewYiVRD5W910pEnsJikneK1QWrX5OgZS1vpCpUxzfYw==}
     engines: {node: '>=10'}
     peerDependencies:
       eslint: ^3.0.0 || ^4.0.0 || ^5.0.0 || ^6.0.0 || ^7.0.0 || ^8.0.0-0 || ^9.0.0
@@ -3629,6 +3640,10 @@ packages:
     resolution: {integrity: sha512-OYu7XEzjkCQ3C5Ps3QIZsQfNpqoJyZZA99wd9aWd05NCtC5pWOkShK2mkL6HXQR6/Cy2lbNdPlZBpuQHXE63gA==}
     engines: {node: '>=4'}
     hasBin: true
+
+  json-2-csv@5.5.6:
+    resolution: {integrity: sha512-N673XbJgHwUq9JreKpk530jSywPF/rEAQ08dV99QQpkluP/4HTwshpoP9hmDz26iSFqu7eNAPgyJfu/77HvPGA==}
+    engines: {node: '>= 16'}
 
   json-buffer@3.0.1:
     resolution: {integrity: sha512-4bV5BfR2mqfQTJm+V5tPPdf+ZpuhiIvTuAB5g8kcrXOZpTT/QwwVRWBywX1ozr6lEuPdbHxwaJlm9G6mI2sfSQ==}
@@ -7185,6 +7200,8 @@ snapshots:
     dependencies:
       ms: 2.1.3
 
+  deeks@3.1.0: {}
+
   deep-equal@2.2.3:
     dependencies:
       array-buffer-byte-length: 1.0.1
@@ -7260,6 +7277,8 @@ snapshots:
       path-type: 4.0.0
 
   dlv@1.1.3: {}
+
+  doc-path@4.1.1: {}
 
   doctrine@2.1.0:
     dependencies:
@@ -7586,7 +7605,7 @@ snapshots:
       safe-regex-test: 1.0.3
       string.prototype.includes: 2.0.0
 
-  eslint-plugin-react-hooks@5.1.0-rc-09111202-20241011(eslint@9.12.0(jiti@2.3.3)):
+  eslint-plugin-react-hooks@5.1.0-rc-6cf85185-20241014(eslint@9.12.0(jiti@2.3.3)):
     dependencies:
       eslint: 9.12.0(jiti@2.3.3)
 
@@ -8257,6 +8276,11 @@ snapshots:
   jsbn@1.1.0: {}
 
   jsesc@2.5.2: {}
+
+  json-2-csv@5.5.6:
+    dependencies:
+      deeks: 3.1.0
+      doc-path: 4.1.1
 
   json-buffer@3.0.1: {}
 

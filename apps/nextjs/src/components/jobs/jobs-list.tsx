@@ -21,47 +21,13 @@ import {
   TooltipTrigger,
 } from "@epi/ui/tooltip";
 
-import { env } from "~/env";
 import { useShareDialogStore } from "~/providers/share-dialog-store-provider";
 import { api } from "~/trpc/react";
 
 export default function JobsList() {
-  const utils = api.useUtils();
   const [{ jobs }] = api.job.byUser.useSuspenseQuery();
-  const createJobMutation = api.job.create.useMutation({
-    onSuccess: () => {
-      void utils.job.byUser.invalidate();
-    },
-    onError: (error) => {
-      console.error("Error:", error);
-    },
-  });
 
-  const handleMockJobCreation = async () => {
-    for (let i = 0; i < 10; i++) {
-      await createJobMutation.mutateAsync({
-        name: `Mock Job ${i + 1}`,
-        type: "linear-b",
-      });
-    }
-    alert("10 mock jobs created!");
-  };
-
-  if (jobs.length === 0 && env.NODE_ENV === "development") {
-    return (
-      <div className="text-center">
-        <h3 className="mt-2 text-sm font-semibold text-secondary-foreground">
-          No jobs
-        </h3>
-        <p className="mx-auto mt-1 max-w-40 text-sm text-muted-foreground">
-          There are no jobs available. Create mock jobs for testing.
-        </p>
-        <Button onClick={handleMockJobCreation}>Generate 10 Mock Jobs</Button>
-      </div>
-    );
-  }
-
-  if (jobs.length === 0 && env.NODE_ENV !== "development") {
+  if (jobs.length === 0) {
     return <EmptyState />;
   }
 

@@ -1,34 +1,62 @@
+import csv
 import logging
 import re
-from io import BytesIO
+from io import StringIO
+from typing import List, Type, TypeVar
 
 import boto3
-import pandas as pd
+from pydantic import BaseModel, ValidationError
 
 from app.core.config import settings
 
+# Create a TypeVar to represent the schema type
+T = TypeVar("T", bound=BaseModel)
 
-def read_s3_csv(bucket, s3_key):
+
+def read_s3_csv(
+    bucket: str, s3_key: str, schema: Type[T], validate_rows: bool = True
+) -> List[T]:
     """
-    Download from S3
+    Download CSV from S3, optionally validate rows with Pydantic schema, and return a list of rows.
+    :param bucket: S3 bucket name.
+    :param s3_key: S3 object key.
+    :param schema: Pydantic model to validate the rows.
+    :param validate_rows: Whether to validate the rows or not.
+    :return: List of validated rows or raw rows.
     """
     try:
         s3_client = boto3.client("s3")
         obj = s3_client.get_object(Bucket=bucket, Key=s3_key)
-        df = pd.read_csv(BytesIO(obj["Body"].read()))
-    except FileNotFoundError as e:
-        logging.error(f"file not found at {bucket}/{s3_key} {e}")
-        return pd.DataFrame()
+        csv_content = obj["Body"].read().decode("utf-8")
+
+        # Parse the CSV
+        csvfile = StringIO(csv_content)
+        reader = csv.DictReader(csvfile)
+
+        rows = []
+        for row in reader:
+            if validate_rows:
+                try:
+                    # Validate using the provided schema
+                    validated_row = schema.model_validate(row)
+                    rows.append(validated_row)
+                except (ValidationError, ValueError) as e:
+                    logging.error(f"Validation error in row {row}: {e}")
+                    continue
+            else:
+                rows.append(row)
+
     except Exception as e:
-        logging.error(f"error for {bucket}/{s3_key} {e}")
-        return pd.DataFrame()
-    return df
+        logging.error(f"Error reading CSV from S3: {bucket}/{s3_key} {e}")
+        return []
+
+    return rows
 
 
 # CRUD Sagemaker Endpoints
 def get_endpoints(endpoint_name_filter, sagemaker_client=None):
     if sagemaker_client is None:
-        sagemaker_client = boto3.client("sagemaker", region_name="us-west-2")
+        sagemaker_client = boto3.client("sagemaker", region_name=settings.REGION)
     # Retrieve all endpoints for filtered name
     response = sagemaker_client.list_endpoints(
         SortBy="Name", NameContains=endpoint_name_filter, MaxResults=100
@@ -53,7 +81,7 @@ def get_endpoints(endpoint_name_filter, sagemaker_client=None):
 
 def get_endpoint(endpoint_name_filter, sagemaker_client=None):
     if sagemaker_client is None:
-        sagemaker_client = boto3.client("sagemaker", region_name="us-west-2")
+        sagemaker_client = boto3.client("sagemaker", region_name=settings.REGION)
     endpoints = get_endpoints(endpoint_name_filter, sagemaker_client=sagemaker_client)
     if len(endpoints) == 0:
         return None

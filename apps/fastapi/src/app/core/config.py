@@ -23,6 +23,7 @@ load_dotenv()
 
 class Settings(BaseSettings):
     ENV: str = Field(default="", env="ENV")
+    REGION: str = Field(default="us-east-1", env="REGION")
     BACKEND_CORS_ORIGINS: Union[List[AnyHttpUrl], List[str]] = Field(
         default=["http://localhost:3000"], env="BACKEND_CORS_ORIGINS"
     )
@@ -42,6 +43,7 @@ class Settings(BaseSettings):
     SUPERUSER_EMAIL: str = Field(..., env="SUPERUSER_EMAIL")
     SUPERUSER_PASSWORD: str = Field(..., env="SUPERUSER_PASSWORD")
     JWT_SECRET: str = Field(..., env="JWT_SECRET")
+    S3_BUCKET_NAME: str = Field(default="fastapi-csv", env="S3_BUCKET_NAME")
 
     # Optional
     HUGGINGFACE_ACCESS_TOKEN: str = Field(None, env="HUGGINGFACE_ACCESS_TOKEN")

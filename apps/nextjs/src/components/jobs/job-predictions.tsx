@@ -5,6 +5,10 @@ import { useRouter } from "next/navigation";
 
 import Loading from "~/app/(app)/loading";
 import EpitopeViewer from "~/components/peptides/epitope-viewer";
+import { linearBColumns } from "~/components/predictions/tables/linear-b-columns";
+import { mhcIColumns } from "~/components/predictions/tables/mhc-i-columns";
+import { mhcIIColumns } from "~/components/predictions/tables/mhc-ii-columns";
+import { PredictionDataTable } from "~/components/predictions/tables/prediction-data-table";
 import { api } from "~/trpc/react";
 
 interface JobPredictionsProps {
@@ -82,8 +86,13 @@ function JobPredictions(props: JobPredictionsProps) {
       return (
         <>
           <div>
-            <h3 className="text-sm font-semibold">Linear B Prediction</h3>
-            <p>{prediction?.id}</p>
+            <div className="flex flex-col gap-4">
+              <h2 className="text-2xl font-semibold">Prediction Table</h2>
+              <PredictionDataTable
+                columns={linearBColumns}
+                data={prediction?.result ?? []}
+              />
+            </div>
           </div>
         </>
       );
@@ -92,8 +101,13 @@ function JobPredictions(props: JobPredictionsProps) {
       return (
         <>
           <div>
-            <h3 className="text-sm font-semibold">MHC-I Prediction</h3>
-            <p>{prediction?.id}</p>
+            <div className="flex flex-col gap-4">
+              <h2 className="text-2xl font-semibold">Prediction Table</h2>
+              <PredictionDataTable
+                columns={mhcIColumns}
+                data={prediction?.result ?? []}
+              />
+            </div>
           </div>
         </>
       );
@@ -102,8 +116,13 @@ function JobPredictions(props: JobPredictionsProps) {
       return (
         <>
           <div>
-            <h3 className="text-sm font-semibold">MHC-II Prediction</h3>
-            <p>{prediction?.id}</p>
+            <div className="flex flex-col gap-4">
+              <h2 className="text-2xl font-semibold">Prediction Table</h2>
+              <PredictionDataTable
+                columns={mhcIIColumns}
+                data={prediction?.result ?? []}
+              />
+            </div>
           </div>
         </>
       );
