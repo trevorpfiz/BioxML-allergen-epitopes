@@ -1,3 +1,4 @@
+import logging
 from typing import List, Optional
 
 from fastapi import HTTPException
@@ -8,6 +9,8 @@ from app.schemas.conformational_b_prediction import PredictionResult
 from app.schemas.linear_b_prediction import LBPredictionResult
 from app.schemas.mhc_i_prediction import MhcIPredictionResult
 from app.schemas.mhc_ii_prediction import MhcIIPredictionResult
+
+logger = logging.getLogger(__name__)
 
 
 async def process_conformational_b_prediction(

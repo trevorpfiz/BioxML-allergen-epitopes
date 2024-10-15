@@ -2,12 +2,16 @@ import csv
 import logging
 import re
 from io import StringIO
-from typing import List, Type, TypeVar
+from typing import List, Optional, Type, TypeVar
 
 import boto3
+import httpx
+from fastapi import HTTPException
 from pydantic import BaseModel, ValidationError
 
 from app.core.config import settings
+
+logger = logging.getLogger(__name__)
 
 # Create a TypeVar to represent the schema type
 T = TypeVar("T", bound=BaseModel)
@@ -41,13 +45,13 @@ def read_s3_csv(
                     validated_row = schema.model_validate(row)
                     rows.append(validated_row)
                 except (ValidationError, ValueError) as e:
-                    logging.error(f"Validation error in row {row}: {e}")
+                    logger.error(f"Validation error in row {row}: {e}")
                     continue
             else:
                 rows.append(row)
 
     except Exception as e:
-        logging.error(f"Error reading CSV from S3: {bucket}/{s3_key} {e}")
+        logger.error(f"Error reading CSV from S3: {bucket}/{s3_key} {e}")
         return []
 
     return rows
@@ -75,7 +79,7 @@ def get_endpoints(endpoint_name_filter, sagemaker_client=None):
     for i in sagemaker_endpoints_for_service:
         endpoints.append(i["EndpointName"])
     if len(endpoints) == 0:
-        print(f"No Endpoints found for filter: {endpoint_name_filter}")
+        logger.warning(f"No Endpoints found for filter: {endpoint_name_filter}")
     return endpoints
 
 
@@ -99,7 +103,7 @@ def get_models_on_endpoint(model_data_prefix):
         ]
         return models_on_endpoint
     except Exception as e:
-        logging.error(f" --- Failed to get models on endpoint ---- {e}")
+        logger.error(f"Failed to get models on endpoint: {e}")
         models_on_endpoint = []
         return models_on_endpoint
 
@@ -127,3 +131,41 @@ def clean_string(s):
         return re.sub(r"[\W_]+", "", s)
     else:
         return s
+
+
+async def fetch_pdb_data(pdb_id: str, chain: Optional[str] = None) -> dict:
+    """
+    Fetches polymer entity instance data from the RCSB PDB REST API.
+
+    Args:
+        pdb_id (str): The PDB ID.
+        chain (Optional[str]): The chain ID.
+
+    Returns:
+        dict: Parsed JSON response from the API.
+
+    Raises:
+        HTTPException: If the PDB entry or chain is not found or other errors occur.
+    """
+    if chain:
+        url = f"https://data.rcsb.org/rest/v1/core/polymer_entity_instance/{pdb_id}/{chain}"
+    else:
+        url = f"https://data.rcsb.org/rest/v1/core/entry/{pdb_id}"
+    headers = {"Accept": "application/json"}
+
+    async with httpx.AsyncClient() as client:
+        response = await client.get(url, headers=headers)
+        if response.status_code == 200:
+            return response.json()
+        elif response.status_code == 404:
+            detail = (
+                f"PDB entry {pdb_id} with chain {chain} not found."
+                if chain
+                else f"PDB entry {pdb_id} not found."
+            )
+            raise HTTPException(status_code=404, detail=detail)
+        else:
+            raise HTTPException(
+                status_code=response.status_code,
+                detail=f"Error fetching PDB data: {response.status_code}",
+            )

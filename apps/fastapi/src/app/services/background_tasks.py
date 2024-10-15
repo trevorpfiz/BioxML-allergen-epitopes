@@ -1,3 +1,4 @@
+import logging
 from typing import Optional
 
 from fastapi import HTTPException
@@ -14,6 +15,8 @@ from app.services.postprocess import (
     process_mhc_i_prediction,
     process_mhc_ii_prediction,
 )
+
+logger = logging.getLogger(__name__)
 
 
 async def process_and_update_prediction(
@@ -66,7 +69,7 @@ async def process_and_update_prediction(
         await crud_job.update_status(db=db, id=job_id, status="completed")
     except Exception as e:
         # Log the error (consider using a logger)
-        print(f"Error processing prediction {job_id}: {e}")
+        logger.error(f"Error processing prediction {job_id}: {e}")
 
         # Update job status to 'failed'
         await crud_job.update_status(db=db, id=job_id, status="failed")
