@@ -1,4 +1,5 @@
-export const EPITOPE_THRESHOLD = 0.51;
+export const SEQUENCE_EPITOPE_THRESHOLD = 0.361;
+export const STRUCTURE_EPITOPE_THRESHOLD = 0.51;
 
 // Define RGB colors for different epitope score ranges
 export const EPITOPE_COLORS_LIGHT = {

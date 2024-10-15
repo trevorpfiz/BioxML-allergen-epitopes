@@ -1,4 +1,4 @@
-from typing import List
+from typing import List, Optional
 
 from fastapi import HTTPException
 
@@ -11,24 +11,43 @@ from app.schemas.mhc_ii_prediction import MhcIIPredictionResult
 
 
 async def process_conformational_b_prediction(
-    pdb_id: str, chain: str
+    pdb_id: Optional[str] = None,
+    chain: Optional[str] = None,
+    sequence: Optional[str] = None,
 ) -> List[PredictionResult]:
     """
     Process a conformational B prediction by reading a CSV file from S3 and validating results.
     """
-    csv_filename = "3ob4_A_epitopes_score.csv"
-    s3_key = f"data/{csv_filename}"  # The S3 key for the file
+    if pdb_id:
+        csv_filename = "3ob4_A_epitopes_score.csv"
+        s3_key = f"data/{csv_filename}"  # The S3 key for the file
 
-    # Use the utility function to read the CSV and validate rows
-    results = read_s3_csv(settings.S3_BUCKET_NAME, s3_key, PredictionResult)
+        # Use the utility function to read the CSV and validate rows
+        results = read_s3_csv(settings.S3_BUCKET_NAME, s3_key, PredictionResult)
 
-    if not results:
-        raise HTTPException(
-            status_code=404,
-            detail=f"CSV file not found in S3 for {pdb_id} and {chain}.",
-        )
+        if not results:
+            raise HTTPException(
+                status_code=404,
+                detail=f"CSV file not found in S3 for {pdb_id} and {chain}.",
+            )
 
-    return results
+        return results
+    elif sequence:
+        csv_filename = "AAK96887-1d.csv"
+        s3_key = f"data/{csv_filename}"  # The S3 key for the file
+
+        # Use the utility function to read the CSV and validate rows
+        results = read_s3_csv(settings.S3_BUCKET_NAME, s3_key, PredictionResult)
+
+        if not results:
+            raise HTTPException(
+                status_code=404,
+                detail=f"CSV file not found in S3 for sequence {sequence}.",
+            )
+
+        return results
+    else:
+        raise HTTPException(status_code=400, detail="No sequence or PDB ID provided.")
 
 
 async def process_linear_b_prediction(sequence: str) -> List[LBPredictionResult]:

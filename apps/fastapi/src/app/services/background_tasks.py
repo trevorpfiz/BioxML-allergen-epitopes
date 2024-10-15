@@ -1,3 +1,5 @@
+from typing import Optional
+
 from fastapi import HTTPException
 from supabase._async.client import AsyncClient
 
@@ -18,9 +20,10 @@ async def process_and_update_prediction(
     job_id: str,
     prediction_type: str,
     db: AsyncClient,
-    sequence: str = None,  # Only needed for Linear B, MHC-I, and MHC-II
-    pdb_id: str = None,  # Only needed for Conformational B
-    chain: str = None,  # Only needed for Conformational B
+    sequence: Optional[str] = None,
+    pdb_id: Optional[str] = None,  # Only needed for Conformational B
+    chain: Optional[str] = None,  # Only needed for Conformational B
+    is_structure_based: Optional[bool] = False,  # Only needed for Conformational B
 ):
     """
     Background task to process a prediction based on its type and update the database.
@@ -31,9 +34,13 @@ async def process_and_update_prediction(
 
         # Process the prediction based on its type
         if prediction_type == "conformational-b":
-            results = await process_conformational_b_prediction(
-                pdb_id=pdb_id, chain=chain
-            )
+            if is_structure_based:
+                results = await process_conformational_b_prediction(
+                    pdb_id=pdb_id, chain=chain
+                )
+            else:
+                results = await process_conformational_b_prediction(sequence=sequence)
+
             await crud_conformational_b_prediction.update_result(
                 db=db, job_id=job_id, result=results
             )

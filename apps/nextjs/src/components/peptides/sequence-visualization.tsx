@@ -2,7 +2,7 @@
 
 import { useMemo } from "react";
 
-import type { ConformationalBStructureResult } from "@epi/validators/epitopes";
+import type { ConformationalBResult } from "@epi/validators/epitopes";
 import {
   Tooltip,
   TooltipContent,
@@ -10,20 +10,24 @@ import {
   TooltipTrigger,
 } from "@epi/ui/tooltip";
 
-import { EPITOPE_THRESHOLD } from "~/lib/constants";
+import {
+  SEQUENCE_EPITOPE_THRESHOLD,
+  STRUCTURE_EPITOPE_THRESHOLD,
+} from "~/lib/constants";
 
 interface SequenceVisualizationProps {
-  epitopeData: ConformationalBStructureResult[];
+  epitopeData: ConformationalBResult[];
+  isStructureBased: boolean;
 }
 
-const Legend = () => (
+const Legend = ({ threshold }: { threshold: number }) => (
   <div className="flex flex-col gap-2">
     <h4 className="text-sm font-semibold">Epitope Score</h4>
     <div className="flex items-center">
       <div className="from-epitope-low via-epitope-mid to-epitope-high w-full rounded bg-gradient-to-r px-2 py-2">
         <div className="flex w-full justify-between text-xs">
           <span>Low</span>
-          <span className="text-center">({EPITOPE_THRESHOLD})</span>
+          <span className="text-center">({threshold})</span>
           <span>High</span>
         </div>
       </div>
@@ -33,7 +37,12 @@ const Legend = () => (
 
 const SequenceVisualization: React.FC<SequenceVisualizationProps> = ({
   epitopeData,
+  isStructureBased,
 }) => {
+  const EPITOPE_THRESHOLD = isStructureBased
+    ? STRUCTURE_EPITOPE_THRESHOLD
+    : SEQUENCE_EPITOPE_THRESHOLD;
+
   const { minScore, maxScore } = useMemo(() => {
     const scores = epitopeData.map((d) => d.Epitope_score);
     return {
@@ -68,7 +77,7 @@ const SequenceVisualization: React.FC<SequenceVisualizationProps> = ({
 
   return (
     <div className="flex flex-col gap-8">
-      <Legend />
+      <Legend threshold={EPITOPE_THRESHOLD} />
 
       <div>
         <p className="text-sm">

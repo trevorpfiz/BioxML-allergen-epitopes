@@ -1,31 +1,43 @@
 import { z } from "zod";
 
-// Structure-based prediction
+// Sequence-based and Structure-based prediction
 
-export const ConformationalBStructureFormSchema = z.object({
-  pdbId: z.string().min(1, {
-    message: "PDB ID is required.",
-  }),
-  chain: z.string().min(1, {
-    message: "Chain is required.",
-  }),
-  bcrRecognitionProbabilityMethod: z.string().min(1, {
-    message: "BCR Recognition Probability method is required.",
-  }),
-  surfaceAccessibilityMethod: z.string().optional(),
-});
-export type ConformationalBStructureForm = z.infer<
-  typeof ConformationalBStructureFormSchema
->;
+export const ConformationalBFormSchema = z
+  .object({
+    sequence: z.string().optional(),
+    pdbId: z.string().optional(),
+    chain: z.string().optional(),
+    bcrRecognitionProbabilityMethod: z
+      .string()
+      .min(1, { message: "BCR Recognition Probability method is required." }),
+    surfaceAccessibilityMethod: z.string().optional(),
+  })
+  .refine(
+    (data) => {
+      const hasSequence = Boolean(data.sequence);
+      const hasPDB = Boolean(data.pdbId);
+      return (hasSequence && !hasPDB) || (!hasSequence && hasPDB);
+    },
+    {
+      message: "Provide either a sequence OR a PDB ID",
+      path: ["sequence"], // Display error on the sequence field
+    },
+  );
 
-export const ConformationalBStructureResultSchema = z.object({
-  PDB_ID: z.string(),
-  Chain: z.string().length(1),
+export type ConformationalBForm = z.infer<typeof ConformationalBFormSchema>;
+
+export const ConformationalBResultSchema = z.object({
+  PDB_ID: z.string().optional(),
+  Chain: z.string().optional(),
   Residue_position: z.number().int().positive(),
   AA: z.string().length(1),
   Epitope_score: z.number(),
   N_glyco_label: z.number().int().min(0).max(1),
+  Hydrophilicity: z.number().optional(), // fix
+  Charge: z.number().optional(), // fix
+  // 3D-specific fields
+  ASA: z.number().optional(),
+  RSA: z.number().optional(),
+  B_Factor: z.number().optional(),
 });
-export type ConformationalBStructureResult = z.infer<
-  typeof ConformationalBStructureResultSchema
->;
+export type ConformationalBResult = z.infer<typeof ConformationalBResultSchema>;

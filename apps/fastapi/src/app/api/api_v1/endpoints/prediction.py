@@ -39,8 +39,10 @@ async def create_conformational_b_prediction(
     background_tasks.add_task(
         process_and_update_prediction,
         job_id=job.id,
+        sequence=prediction_in.sequence,
         pdb_id=prediction_in.pdb_id,
         chain=prediction_in.chain,
+        is_structure_based=prediction_in.is_structure_based,
         prediction_type="conformational-b",
         db=db,
     )

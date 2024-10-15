@@ -15,6 +15,13 @@
       "when": 1728679891800,
       "tag": "0001_stale_puppet_master",
       "breakpoints": true
+    },
+    {
+      "idx": 2,
+      "version": "7",
+      "when": 1729006103354,
+      "tag": "0002_uneven_thunderbird",
+      "breakpoints": true
     }
   ]
 }

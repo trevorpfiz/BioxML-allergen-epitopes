@@ -5,7 +5,10 @@ import { useRouter } from "next/navigation";
 
 import Loading from "~/app/(app)/loading";
 import EpitopeViewer from "~/components/peptides/epitope-viewer";
-import { conformationalBColumns } from "~/components/predictions/tables/conformational-b-columns";
+import {
+  conformationalBSequenceColumns,
+  conformationalBStructureColumns,
+} from "~/components/predictions/tables/conformational-b-columns";
 import { linearBColumns } from "~/components/predictions/tables/linear-b-columns";
 import { mhcIColumns } from "~/components/predictions/tables/mhc-i-columns";
 import { mhcIIColumns } from "~/components/predictions/tables/mhc-ii-columns";
@@ -75,17 +78,27 @@ function JobPredictions(props: JobPredictionsProps) {
         <>
           <div className="flex flex-col gap-4">
             <PredictionDataTable
-              columns={conformationalBColumns}
+              columns={
+                prediction?.isStructureBased
+                  ? conformationalBStructureColumns
+                  : conformationalBSequenceColumns
+              }
               data={prediction?.result ?? []}
             />
           </div>
-          <EpitopeViewer prediction={prediction?.result ?? []} />
-          <div className="flex flex-col gap-4">
-            <h3 className="text-sm font-semibold">3D Visualization</h3>
-            <div className="w-full border shadow">
-              <ConformationalViewer epitopeData={prediction?.result ?? []} />
+          <EpitopeViewer
+            prediction={prediction?.result ?? []}
+            isStructureBased={prediction?.isStructureBased ?? false}
+          />
+
+          {prediction?.isStructureBased && (
+            <div className="flex flex-col gap-4">
+              <h3 className="text-sm font-semibold">3D Visualization</h3>
+              <div className="w-full border shadow">
+                <ConformationalViewer epitopeData={prediction.result} />
+              </div>
             </div>
-          </div>
+          )}
         </>
       );
     } else if (job.linearBPredictions.length > 0) {

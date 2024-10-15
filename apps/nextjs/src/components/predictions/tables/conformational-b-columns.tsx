@@ -2,11 +2,11 @@
 
 import type { ColumnDef } from "@tanstack/react-table";
 
-import type { ConformationalBStructureResult } from "@epi/validators/epitopes";
+import type { ConformationalBResult } from "@epi/validators/epitopes";
 
 import { DataTableColumnHeader } from "~/components/predictions/tables/prediction-column-header";
 
-export const conformationalBColumns: ColumnDef<ConformationalBStructureResult>[] =
+export const conformationalBStructureColumns: ColumnDef<ConformationalBResult>[] =
   [
     {
       accessorKey: "PDB_ID",
@@ -22,6 +22,39 @@ export const conformationalBColumns: ColumnDef<ConformationalBStructureResult>[]
         <DataTableColumnHeader column={column} title="Chain" />
       ),
     },
+    {
+      accessorKey: "Residue_position",
+      meta: "Residue Position",
+      header: ({ column }) => (
+        <DataTableColumnHeader column={column} title="Residue Position" />
+      ),
+    },
+    {
+      accessorKey: "AA",
+      meta: "Amino Acid",
+      header: ({ column }) => (
+        <DataTableColumnHeader column={column} title="Amino Acid" />
+      ),
+    },
+    {
+      accessorKey: "Epitope_score",
+      meta: "Epitope Score",
+      header: ({ column }) => (
+        <DataTableColumnHeader column={column} title="Epitope Score" />
+      ),
+    },
+    {
+      accessorKey: "N_glyco_label",
+      meta: "N-glycosylation",
+      header: ({ column }) => (
+        <DataTableColumnHeader column={column} title="N-glycosylation" />
+      ),
+    },
+  ];
+
+// Columns for sequence-based predictions
+export const conformationalBSequenceColumns: ColumnDef<ConformationalBResult>[] =
+  [
     {
       accessorKey: "Residue_position",
       meta: "Residue Position",

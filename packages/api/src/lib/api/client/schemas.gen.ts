@@ -20,20 +20,56 @@ export const ConformationalBPredictionSchema = {
       format: "date-time",
       title: "Updated At",
     },
+    sequence: {
+      anyOf: [
+        {
+          type: "string",
+        },
+        {
+          type: "null",
+        },
+      ],
+      title: "Sequence",
+    },
     pdb_id: {
-      type: "string",
+      anyOf: [
+        {
+          type: "string",
+        },
+        {
+          type: "null",
+        },
+      ],
       title: "Pdb Id",
     },
     chain: {
-      type: "string",
+      anyOf: [
+        {
+          type: "string",
+        },
+        {
+          type: "null",
+        },
+      ],
       title: "Chain",
+    },
+    is_structure_based: {
+      type: "boolean",
+      title: "Is Structure Based",
     },
     bcr_recognition_probability_method: {
       type: "string",
       title: "Bcr Recognition Probability Method",
     },
     surface_accessibility_method: {
-      type: "string",
+      anyOf: [
+        {
+          type: "string",
+        },
+        {
+          type: "null",
+        },
+      ],
       title: "Surface Accessibility Method",
     },
     result: {
@@ -61,8 +97,7 @@ export const ConformationalBPredictionSchema = {
     "id",
     "created_at",
     "updated_at",
-    "pdb_id",
-    "chain",
+    "is_structure_based",
     "bcr_recognition_probability_method",
     "surface_accessibility_method",
     "result",
@@ -77,15 +112,45 @@ export const ConformationalBPredictionCreateSchema = {
       type: "string",
       title: "Job Id",
     },
+    sequence: {
+      anyOf: [
+        {
+          type: "string",
+        },
+        {
+          type: "null",
+        },
+      ],
+      title: "Sequence",
+    },
     pdb_id: {
-      type: "string",
-      maxLength: 10,
+      anyOf: [
+        {
+          type: "string",
+          maxLength: 20,
+        },
+        {
+          type: "null",
+        },
+      ],
       title: "Pdb Id",
     },
     chain: {
-      type: "string",
-      maxLength: 10,
+      anyOf: [
+        {
+          type: "string",
+          maxLength: 50,
+        },
+        {
+          type: "null",
+        },
+      ],
       title: "Chain",
+    },
+    is_structure_based: {
+      type: "boolean",
+      title: "Is Structure Based",
+      default: false,
     },
     bcr_recognition_probability_method: {
       type: "string",
@@ -93,8 +158,15 @@ export const ConformationalBPredictionCreateSchema = {
       title: "Bcr Recognition Probability Method",
     },
     surface_accessibility_method: {
-      type: "string",
-      maxLength: 50,
+      anyOf: [
+        {
+          type: "string",
+          maxLength: 50,
+        },
+        {
+          type: "null",
+        },
+      ],
       title: "Surface Accessibility Method",
     },
     result: {
@@ -107,13 +179,7 @@ export const ConformationalBPredictionCreateSchema = {
     },
   },
   type: "object",
-  required: [
-    "job_id",
-    "pdb_id",
-    "chain",
-    "bcr_recognition_probability_method",
-    "surface_accessibility_method",
-  ],
+  required: ["job_id", "bcr_recognition_probability_method"],
   title: "ConformationalBPredictionCreate",
 } as const;
 
@@ -303,7 +369,14 @@ export const LBPredictionResultSchema = {
       title: "Peptide Sequence",
     },
     Linear_B_Cell_Immunogenicity: {
-      type: "number",
+      anyOf: [
+        {
+          type: "number",
+        },
+        {
+          type: "null",
+        },
+      ],
       title: "Linear B Cell Immunogenicity",
     },
     Linear_BCR_Recognition: {
@@ -328,12 +401,18 @@ export const LinearBPredictionCreateSchema = {
     },
     sequence: {
       type: "string",
-      maxLength: 50,
       title: "Sequence",
     },
     b_cell_immunogenicity_method: {
-      type: "string",
-      maxLength: 50,
+      anyOf: [
+        {
+          type: "string",
+          maxLength: 50,
+        },
+        {
+          type: "null",
+        },
+      ],
       title: "B Cell Immunogenicity Method",
     },
     bcr_recognition_probability_method: {
@@ -351,12 +430,7 @@ export const LinearBPredictionCreateSchema = {
     },
   },
   type: "object",
-  required: [
-    "job_id",
-    "sequence",
-    "b_cell_immunogenicity_method",
-    "bcr_recognition_probability_method",
-  ],
+  required: ["job_id", "sequence", "bcr_recognition_probability_method"],
   title: "LinearBPredictionCreate",
 } as const;
 
@@ -368,7 +442,6 @@ export const MhcIIPredictionCreateSchema = {
     },
     sequence: {
       type: "string",
-      maxLength: 50,
       title: "Sequence",
     },
     alleles: {
@@ -461,7 +534,6 @@ export const MhcIPredictionCreateSchema = {
     },
     sequence: {
       type: "string",
-      maxLength: 50,
       title: "Sequence",
     },
     alleles: {
@@ -565,11 +637,25 @@ export const PredictionProcessingResponseSchema = {
 export const PredictionResultSchema = {
   properties: {
     PDB_ID: {
-      type: "string",
+      anyOf: [
+        {
+          type: "string",
+        },
+        {
+          type: "null",
+        },
+      ],
       title: "Pdb Id",
     },
     Chain: {
-      type: "string",
+      anyOf: [
+        {
+          type: "string",
+        },
+        {
+          type: "null",
+        },
+      ],
       title: "Chain",
     },
     Residue_position: {
@@ -588,6 +674,47 @@ export const PredictionResultSchema = {
       type: "integer",
       title: "N Glyco Label",
     },
+    Hydrophilicity: {
+      type: "number",
+      title: "Hydrophilicity",
+    },
+    Charge: {
+      type: "integer",
+      title: "Charge",
+    },
+    ASA: {
+      anyOf: [
+        {
+          type: "number",
+        },
+        {
+          type: "null",
+        },
+      ],
+      title: "Asa",
+    },
+    RSA: {
+      anyOf: [
+        {
+          type: "number",
+        },
+        {
+          type: "null",
+        },
+      ],
+      title: "Rsa",
+    },
+    B_Factor: {
+      anyOf: [
+        {
+          type: "number",
+        },
+        {
+          type: "null",
+        },
+      ],
+      title: "B Factor",
+    },
   },
   type: "object",
   required: [
@@ -597,6 +724,8 @@ export const PredictionResultSchema = {
     "AA",
     "Epitope_score",
     "N_glyco_label",
+    "Hydrophilicity",
+    "Charge",
   ],
   title: "PredictionResult",
 } as const;

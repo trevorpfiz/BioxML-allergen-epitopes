@@ -1,7 +1,7 @@
 import type { User } from "@supabase/supabase-js";
 
 import type { EpitopeColors } from "~/lib/constants";
-import { EPITOPE_THRESHOLD } from "~/lib/constants";
+import { STRUCTURE_EPITOPE_THRESHOLD as EPITOPE_THRESHOLD } from "~/lib/constants";
 
 export function getNameFromUser(user: User) {
   const meta = user.user_metadata;

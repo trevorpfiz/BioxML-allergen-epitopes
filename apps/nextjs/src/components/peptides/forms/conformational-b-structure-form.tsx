@@ -1,11 +1,11 @@
 "use client";
 
-import { useMemo } from "react";
+import { useEffect, useMemo } from "react";
 import { useRouter } from "next/navigation";
 import { createClient } from "@hey-api/client-fetch";
 import { useMutation } from "@tanstack/react-query";
 
-import type { ConformationalBStructureForm } from "@epi/validators/epitopes";
+import type { ConformationalBForm } from "@epi/validators/epitopes";
 import { predictionCreateConformationalBPredictionMutation as createMutation } from "@epi/api/client/react-query";
 import { Button } from "@epi/ui/button";
 import {
@@ -27,27 +27,49 @@ import {
 } from "@epi/ui/select";
 import { Separator } from "@epi/ui/separator";
 import { toast } from "@epi/ui/sonner";
-import { ConformationalBStructureFormSchema } from "@epi/validators/epitopes";
+import { Textarea } from "@epi/ui/textarea";
+import { ConformationalBFormSchema } from "@epi/validators/epitopes";
 
 import Loading from "~/app/(app)/loading";
 import { env } from "~/env";
 import { api } from "~/trpc/react";
 import { useMySession } from "~/utils/supabase/client";
 
-const ConformationalBStructureForm: React.FC = () => {
+const ConformationalBForm: React.FC = () => {
   const utils = api.useUtils();
   const router = useRouter();
   const { session, loading } = useMySession();
 
   const form = useForm({
-    schema: ConformationalBStructureFormSchema,
+    schema: ConformationalBFormSchema,
     defaultValues: {
+      sequence: "",
       pdbId: "",
       chain: "",
       bcrRecognitionProbabilityMethod: "",
-      surfaceAccessibilityMethod: undefined,
+      surfaceAccessibilityMethod: "",
     },
   });
+  const { watch, setValue } = form;
+  // Watch sequence and PDB ID + Chain to control conditional disabling
+  const sequence = watch("sequence");
+  const pdbId = watch("pdbId");
+  const chain = watch("chain");
+  // Reset mutually exclusive fields
+  useEffect(() => {
+    const sequenceValue = form.getValues("sequence");
+    const pdbIdValue = form.getValues("pdbId");
+    const chainValue = form.getValues("chain");
+
+    if (sequenceValue) {
+      setValue("pdbId", "");
+      setValue("chain", "");
+    }
+
+    if (pdbIdValue || chainValue) {
+      setValue("sequence", "");
+    }
+  }, [sequence, pdbId, chain, setValue, form]);
 
   const createJobMutation = api.job.create.useMutation({
     onSuccess: () => {
@@ -97,9 +119,28 @@ const ConformationalBStructureForm: React.FC = () => {
     },
   });
 
-  const onSubmit = async (data: ConformationalBStructureForm) => {
+  const onSubmit = async (data: ConformationalBForm) => {
+    // Normalize empty strings to undefined
+    const normalizedData = {
+      ...data,
+      sequence: data.sequence?.trim() === "" ? undefined : data.sequence,
+      pdbId: data.pdbId?.trim() === "" ? undefined : data.pdbId,
+      chain: data.chain?.trim() === "" ? undefined : data.chain,
+      bcrRecognitionProbabilityMethod:
+        data.bcrRecognitionProbabilityMethod.trim(),
+      surfaceAccessibilityMethod:
+        data.surfaceAccessibilityMethod?.trim() === ""
+          ? undefined
+          : data.surfaceAccessibilityMethod,
+    };
+
+    const isStructureBased = !!normalizedData.pdbId;
+
     // Step 1: Create a new Job
-    const jobName = `PDB ${data.pdbId} Chain ${data.chain}`;
+    const jobName = isStructureBased
+      ? `Structure-based: PDB ${normalizedData.pdbId}, Chain ${normalizedData.chain ?? "N/A"}`
+      : `Sequence-based: ${normalizedData.sequence?.substring(0, 10)}...`;
+
     const newJob = await createJobMutation.mutateAsync({
       name: jobName,
       type: "conformational-b",
@@ -107,10 +148,13 @@ const ConformationalBStructureForm: React.FC = () => {
 
     // Step 2: Create a new ConformationalBPrediction associated with the Job
     await createPredictionMutation.mutateAsync({
-      pdbId: data.pdbId,
-      chain: data.chain,
-      bcrRecognitionProbabilityMethod: data.bcrRecognitionProbabilityMethod,
-      surfaceAccessibilityMethod: data.surfaceAccessibilityMethod,
+      sequence: normalizedData.sequence,
+      pdbId: normalizedData.pdbId,
+      chain: normalizedData.chain,
+      isStructureBased,
+      bcrRecognitionProbabilityMethod:
+        normalizedData.bcrRecognitionProbabilityMethod,
+      surfaceAccessibilityMethod: normalizedData.surfaceAccessibilityMethod,
       jobId: newJob.job?.id ?? "",
     });
 
@@ -118,11 +162,13 @@ const ConformationalBStructureForm: React.FC = () => {
     predictMutation.mutate({
       client: localClient,
       body: {
-        pdb_id: data.pdbId,
-        chain: data.chain,
+        sequence: normalizedData.sequence,
+        pdb_id: normalizedData.pdbId,
+        chain: normalizedData.chain,
+        is_structure_based: isStructureBased,
         bcr_recognition_probability_method:
-          data.bcrRecognitionProbabilityMethod,
-        surface_accessibility_method: data.surfaceAccessibilityMethod,
+          normalizedData.bcrRecognitionProbabilityMethod,
+        surface_accessibility_method: normalizedData.surfaceAccessibilityMethod,
         job_id: newJob.job?.id ?? "",
       },
     });
@@ -131,10 +177,31 @@ const ConformationalBStructureForm: React.FC = () => {
     router.push(`/job/${newJob.job?.id}`);
   };
 
+  // Ara h 2.0101 - AAK96887
+  const fillSequenceExample = () => {
+    // Clear PDB ID and Chain first
+    form.setValue("pdbId", "");
+    form.setValue("chain", "");
+
+    // Delay setting the sequence until the fields have been cleared
+    setTimeout(() => {
+      form.setValue(
+        "sequence",
+        "MAKLTILVALALFLLAAHASARQQWELQGDRRCQSQLERANLRPCEQHLMQKIQRDEDSYERDPYSPSQDPYSPSPYDRRGAGSSQHQERCCNELNEFENNQRCMCEALQQIMENQSDRLQGRQQEQQFKRELRNLPQQCGLRAPQRCDLDVESGG",
+      );
+    }, 0);
+  };
+
   // ara-h-2/AAK96887
-  const fillExampleValues = () => {
-    form.setValue("pdbId", "3OB4");
-    form.setValue("chain", "A");
+  const fillStructureExample = () => {
+    // Clear Sequence first
+    form.setValue("sequence", "");
+
+    // Delay setting PDB ID and Chain until sequence has been cleared
+    setTimeout(() => {
+      form.setValue("pdbId", "3OB4");
+      form.setValue("chain", "A");
+    }, 0);
   };
 
   if (loading) {
@@ -148,6 +215,26 @@ const ConformationalBStructureForm: React.FC = () => {
         className="flex flex-col gap-8"
       >
         <div className="flex flex-col gap-4">
+          {/* Sequence Field */}
+          <FormField
+            control={form.control}
+            name="sequence"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>Sequence</FormLabel>
+                <FormControl>
+                  <Textarea
+                    placeholder="MAKLTILVALALFLLAAHA..."
+                    disabled={!!pdbId || !!chain}
+                    //   className="resize-none"
+                    {...field}
+                  />
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+
           {/* PDB ID Field */}
           <FormField
             control={form.control}
@@ -156,7 +243,7 @@ const ConformationalBStructureForm: React.FC = () => {
               <FormItem>
                 <FormLabel>PDB ID</FormLabel>
                 <FormControl>
-                  <Input placeholder="3OB4" {...field} />
+                  <Input placeholder="3OB4" disabled={!!sequence} {...field} />
                 </FormControl>
                 <FormMessage />
               </FormItem>
@@ -171,7 +258,7 @@ const ConformationalBStructureForm: React.FC = () => {
               <FormItem>
                 <FormLabel>Chain (optional)</FormLabel>
                 <FormControl>
-                  <Input placeholder="A, E" {...field} />
+                  <Input placeholder="A, E" disabled={!!sequence} {...field} />
                 </FormControl>
                 <FormMessage />
               </FormItem>
@@ -236,9 +323,22 @@ const ConformationalBStructureForm: React.FC = () => {
         <Separator />
 
         <div className="flex items-center justify-between">
-          <Button type="button" variant="outline" onClick={fillExampleValues}>
-            Try PDB ID and Chain example
-          </Button>
+          <div className="flex gap-2">
+            <Button
+              type="button"
+              variant="outline"
+              onClick={fillSequenceExample}
+            >
+              Try Sequence example
+            </Button>
+            <Button
+              type="button"
+              variant="outline"
+              onClick={fillStructureExample}
+            >
+              Try PDB ID and Chain example
+            </Button>
+          </div>
           <Button
             type="submit"
             disabled={
@@ -255,4 +355,4 @@ const ConformationalBStructureForm: React.FC = () => {
   );
 };
 
-export { ConformationalBStructureForm };
+export { ConformationalBForm };

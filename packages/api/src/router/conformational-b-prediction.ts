@@ -27,8 +27,10 @@ export const conformationalBPredictionRouter = {
     .input(insertConformationalBPredictionParams)
     .mutation(async ({ ctx, input }) => {
       const {
+        sequence,
         pdbId,
         chain,
+        isStructureBased,
         bcrRecognitionProbabilityMethod,
         surfaceAccessibilityMethod,
         jobId,
@@ -37,8 +39,10 @@ export const conformationalBPredictionRouter = {
       const [prediction] = await ctx.db
         .insert(ConformationalBPrediction)
         .values({
+          sequence,
           pdbId,
           chain,
+          isStructureBased,
           bcrRecognitionProbabilityMethod,
           surfaceAccessibilityMethod,
           jobId,

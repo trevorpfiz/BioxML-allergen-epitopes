@@ -5,20 +5,24 @@ export type ConformationalBPrediction = {
   id: string;
   created_at: Date;
   updated_at: Date;
-  pdb_id: string;
-  chain: string;
+  sequence?: string | null;
+  pdb_id?: string | null;
+  chain?: string | null;
+  is_structure_based: boolean;
   bcr_recognition_probability_method: string;
-  surface_accessibility_method: string;
+  surface_accessibility_method: string | null;
   result: Array<PredictionResult>;
   csv_download_url: string | null;
 };
 
 export type ConformationalBPredictionCreate = {
   job_id: string;
-  pdb_id: string;
-  chain: string;
+  sequence?: string | null;
+  pdb_id?: string | null;
+  chain?: string | null;
+  is_structure_based?: boolean;
   bcr_recognition_probability_method: string;
-  surface_accessibility_method: string;
+  surface_accessibility_method?: string | null;
   result?: Array<PredictionResult>;
 };
 
@@ -78,14 +82,14 @@ export type JobUpdate = {
 
 export type LBPredictionResult = {
   Peptide_Sequence: string;
-  Linear_B_Cell_Immunogenicity: number;
+  Linear_B_Cell_Immunogenicity: number | null;
   Linear_BCR_Recognition: number;
 };
 
 export type LinearBPredictionCreate = {
   job_id: string;
   sequence: string;
-  b_cell_immunogenicity_method: string;
+  b_cell_immunogenicity_method?: string | null;
   bcr_recognition_probability_method: string;
   result?: Array<LBPredictionResult>;
 };
@@ -134,12 +138,17 @@ export type PredictionProcessingResponse = {
 };
 
 export type PredictionResult = {
-  PDB_ID: string;
-  Chain: string;
+  PDB_ID: string | null;
+  Chain: string | null;
   Residue_position: number;
   AA: string;
   Epitope_score: number;
   N_glyco_label: number;
+  Hydrophilicity: number;
+  Charge: number;
+  ASA?: number | null;
+  RSA?: number | null;
+  B_Factor?: number | null;
 };
 
 export type UnauthorizedErrorResponse = {

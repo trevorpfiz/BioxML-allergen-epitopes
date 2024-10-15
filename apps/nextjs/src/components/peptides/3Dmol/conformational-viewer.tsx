@@ -4,14 +4,14 @@ import { useEffect, useRef } from "react";
 import * as $3Dmol from "3dmol";
 import { useTheme } from "next-themes";
 
-import type { ConformationalBStructureResult } from "@epi/validators/epitopes";
+import type { ConformationalBResult } from "@epi/validators/epitopes";
 
 import type { EpitopeColors } from "~/lib/constants";
 import { EPITOPE_COLORS_DARK, EPITOPE_COLORS_LIGHT } from "~/lib/constants";
 import { getColorFromScore } from "~/lib/utils";
 
 interface ConformationalViewerProps {
-  epitopeData: ConformationalBStructureResult[];
+  epitopeData: ConformationalBResult[];
 }
 
 /**

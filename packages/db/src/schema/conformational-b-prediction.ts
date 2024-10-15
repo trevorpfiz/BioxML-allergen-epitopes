@@ -2,7 +2,7 @@ import type { z } from "zod";
 import { relations, sql } from "drizzle-orm";
 import { createInsertSchema, createSelectSchema } from "drizzle-zod";
 
-import type { ConformationalBStructureResult } from "@epi/validators/epitopes";
+import type { ConformationalBResult } from "@epi/validators/epitopes";
 
 import { timestamps } from "../lib/utils";
 import { createTable } from "./_table";
@@ -12,15 +12,17 @@ export const ConformationalBPrediction = createTable(
   "conformational_b_prediction",
   (t) => ({
     id: t.uuid().primaryKey().defaultRandom(),
-    pdbId: t.varchar({ length: 10 }).notNull(),
-    chain: t.varchar({ length: 10 }).notNull(),
+    sequence: t.text(),
+    pdbId: t.varchar({ length: 20 }),
+    chain: t.varchar({ length: 50 }),
+    isStructureBased: t.boolean().notNull().default(false),
     bcrRecognitionProbabilityMethod: t.varchar({ length: 50 }).notNull(),
     surfaceAccessibilityMethod: t.varchar({ length: 50 }),
 
     result: t
       .jsonb()
       .array()
-      .$type<ConformationalBStructureResult[]>()
+      .$type<ConformationalBResult[]>()
       .notNull()
       .default(sql`'{}'::jsonb[]`),
     csvDownloadUrl: t.varchar({ length: 255 }),

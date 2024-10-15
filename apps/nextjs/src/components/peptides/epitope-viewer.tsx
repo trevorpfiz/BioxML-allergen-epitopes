@@ -2,27 +2,37 @@
 
 import { useState } from "react";
 
-import type { ConformationalBStructureResult } from "@epi/validators/epitopes";
+import type { ConformationalBResult } from "@epi/validators/epitopes";
 import { Card, CardContent, CardHeader, CardTitle } from "@epi/ui/card";
 
 import SequenceVisualization from "~/components/peptides/sequence-visualization";
 
 interface EpitopeViewerProps {
-  prediction: ConformationalBStructureResult[];
+  prediction: ConformationalBResult[];
+  isStructureBased: boolean;
 }
 
 export default function EpitopeViewer(props: EpitopeViewerProps) {
-  const { prediction } = props;
+  const { prediction, isStructureBased } = props;
 
   const [epitopeData] = useState(prediction);
 
   return (
     <Card className="w-full">
       <CardHeader className="flex flex-row items-center justify-between space-y-0">
-        <CardTitle>Conformational B-cell structure-based prediction</CardTitle>
+        {isStructureBased ? (
+          <CardTitle>
+            Conformational B-cell structure-based prediction
+          </CardTitle>
+        ) : (
+          <CardTitle>Conformational B-cell sequence-based prediction</CardTitle>
+        )}
       </CardHeader>
       <CardContent>
-        <SequenceVisualization epitopeData={epitopeData} />
+        <SequenceVisualization
+          epitopeData={epitopeData}
+          isStructureBased={isStructureBased}
+        />
       </CardContent>
     </Card>
   );
