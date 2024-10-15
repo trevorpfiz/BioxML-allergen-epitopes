@@ -43,7 +43,7 @@ const LinearBForm: React.FC = () => {
     schema: LinearBFormSchema,
     defaultValues: {
       sequence: "",
-      bCellImmunogenicityMethod: "",
+      bCellImmunogenicityMethod: undefined,
       bcrRecognitionProbabilityMethod: "",
     },
   });
@@ -98,7 +98,7 @@ const LinearBForm: React.FC = () => {
   const onSubmit = async (data: LinearBForm) => {
     // Step 1: Create a new Job
     const newJob = await createJobMutation.mutateAsync({
-      name: `Linear B Prediction for ${data.sequence}`,
+      name: `${data.sequence}`,
       type: "linear-b",
     });
 
@@ -154,7 +154,7 @@ const LinearBForm: React.FC = () => {
                 <FormLabel>Sequence</FormLabel>
                 <FormControl>
                   <Textarea
-                    placeholder="Enter sequence"
+                    placeholder="MAKLTILVALALFLLAAHA..."
                     //   className="resize-none"
                     {...field}
                   />
@@ -170,7 +170,7 @@ const LinearBForm: React.FC = () => {
             name="bCellImmunogenicityMethod"
             render={({ field }) => (
               <FormItem>
-                <FormLabel>B-cell Immunogenicity Method</FormLabel>
+                <FormLabel>B-cell Immunogenicity</FormLabel>
                 <Select
                   onValueChange={field.onChange}
                   defaultValue={field.value}
@@ -197,7 +197,7 @@ const LinearBForm: React.FC = () => {
             name="bcrRecognitionProbabilityMethod"
             render={({ field }) => (
               <FormItem>
-                <FormLabel>BCR Recognition Probability Method</FormLabel>
+                <FormLabel>BCR Recognition Probability</FormLabel>
                 <Select
                   onValueChange={field.onChange}
                   defaultValue={field.value}

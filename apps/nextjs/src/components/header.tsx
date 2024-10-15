@@ -88,20 +88,24 @@ export default function Header() {
   return (
     <header className="sticky top-0 z-10 mb-1.5 flex h-14 items-center justify-between bg-background p-3 font-semibold">
       <div className="flex items-center gap-0">
-        <Select value={selectedType} onValueChange={handleTypeChange}>
-          <SelectTrigger className="w-[180px]">
-            <SelectValue placeholder="Select Type" />
-          </SelectTrigger>
-          <SelectContent>
-            <SelectGroup>
-              <SelectLabel>Epitope Predictions</SelectLabel>
-              <SelectItem value="conformational-b">Conformational B</SelectItem>
-              <SelectItem value="linear-b">Linear B</SelectItem>
-              <SelectItem value="mhc-i">MHC I</SelectItem>
-              <SelectItem value="mhc-ii">MHC II</SelectItem>
-            </SelectGroup>
-          </SelectContent>
-        </Select>
+        {pathname === "/" && (
+          <Select value={selectedType} onValueChange={handleTypeChange}>
+            <SelectTrigger className="w-[180px]">
+              <SelectValue placeholder="Select Type" />
+            </SelectTrigger>
+            <SelectContent>
+              <SelectGroup>
+                <SelectLabel>Epitope Predictions</SelectLabel>
+                <SelectItem value="conformational-b">
+                  Conformational B
+                </SelectItem>
+                <SelectItem value="linear-b">Linear B</SelectItem>
+                <SelectItem value="mhc-i">MHC I</SelectItem>
+                <SelectItem value="mhc-ii">MHC II</SelectItem>
+              </SelectGroup>
+            </SelectContent>
+          </Select>
+        )}
       </div>
 
       <div className="flex items-center gap-2 pr-1 leading-[0]">

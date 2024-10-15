@@ -11,7 +11,7 @@ import { Job } from "./job";
 export const LinearBPrediction = createTable("linear_b_prediction", (t) => ({
   id: t.uuid().primaryKey().defaultRandom(),
   sequence: t.text().notNull(),
-  bCellImmunogenicityMethod: t.varchar({ length: 50 }).notNull(),
+  bCellImmunogenicityMethod: t.varchar({ length: 50 }),
   bcrRecognitionProbabilityMethod: t.varchar({ length: 50 }).notNull(),
 
   result: t

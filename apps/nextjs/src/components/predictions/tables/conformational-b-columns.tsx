@@ -10,36 +10,42 @@ export const conformationalBColumns: ColumnDef<ConformationalBStructureResult>[]
   [
     {
       accessorKey: "PDB_ID",
+      meta: "PDB ID",
       header: ({ column }) => (
         <DataTableColumnHeader column={column} title="PDB ID" />
       ),
     },
     {
       accessorKey: "Chain",
+      meta: "Chain",
       header: ({ column }) => (
         <DataTableColumnHeader column={column} title="Chain" />
       ),
     },
     {
       accessorKey: "Residue_position",
+      meta: "Residue Position",
       header: ({ column }) => (
         <DataTableColumnHeader column={column} title="Residue Position" />
       ),
     },
     {
       accessorKey: "AA",
+      meta: "Amino Acid",
       header: ({ column }) => (
         <DataTableColumnHeader column={column} title="Amino Acid" />
       ),
     },
     {
       accessorKey: "Epitope_score",
+      meta: "Epitope Score",
       header: ({ column }) => (
         <DataTableColumnHeader column={column} title="Epitope Score" />
       ),
     },
     {
       accessorKey: "N_glyco_label",
+      meta: "N-glycosylation",
       header: ({ column }) => (
         <DataTableColumnHeader column={column} title="N-glycosylation" />
       ),

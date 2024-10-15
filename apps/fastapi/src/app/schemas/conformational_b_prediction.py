@@ -19,7 +19,7 @@ class ConformationalBPredictionCreate(CreateBase, JobMixin):
     pdb_id: str = Field(..., max_length=10)
     chain: str = Field(..., max_length=10)
     bcr_recognition_probability_method: str = Field(..., max_length=50)
-    surface_accessibility_method: str = Field(..., max_length=50)
+    surface_accessibility_method: Optional[str] = Field(None, max_length=50)
     result: List[PredictionResult] = []
 
 
@@ -31,7 +31,7 @@ class ConformationalBPredictionInDBBase(InDBBase, JobMixin):
     pdb_id: str
     chain: str
     bcr_recognition_probability_method: str
-    surface_accessibility_method: str
+    surface_accessibility_method: Optional[str]
     result: List[PredictionResult]
     csv_download_url: Optional[str]
 
@@ -40,7 +40,7 @@ class ConformationalBPrediction(ResponseBase, JobMixin):
     pdb_id: str
     chain: str
     bcr_recognition_probability_method: str
-    surface_accessibility_method: str
+    surface_accessibility_method: Optional[str]
     result: List[PredictionResult]
     csv_download_url: Optional[str]
 

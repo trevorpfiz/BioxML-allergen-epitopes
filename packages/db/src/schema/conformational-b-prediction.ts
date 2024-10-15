@@ -15,7 +15,7 @@ export const ConformationalBPrediction = createTable(
     pdbId: t.varchar({ length: 10 }).notNull(),
     chain: t.varchar({ length: 10 }).notNull(),
     bcrRecognitionProbabilityMethod: t.varchar({ length: 50 }).notNull(),
-    surfaceAccessibilityMethod: t.varchar({ length: 50 }).notNull(),
+    surfaceAccessibilityMethod: t.varchar({ length: 50 }),
 
     result: t
       .jsonb()

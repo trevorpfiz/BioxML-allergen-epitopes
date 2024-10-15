@@ -45,7 +45,7 @@ const ConformationalBStructureForm: React.FC = () => {
       pdbId: "",
       chain: "",
       bcrRecognitionProbabilityMethod: "",
-      surfaceAccessibilityMethod: "",
+      surfaceAccessibilityMethod: undefined,
     },
   });
 
@@ -156,7 +156,7 @@ const ConformationalBStructureForm: React.FC = () => {
               <FormItem>
                 <FormLabel>PDB ID</FormLabel>
                 <FormControl>
-                  <Input placeholder="Enter PDB ID" {...field} />
+                  <Input placeholder="3OB4" {...field} />
                 </FormControl>
                 <FormMessage />
               </FormItem>
@@ -171,7 +171,7 @@ const ConformationalBStructureForm: React.FC = () => {
               <FormItem>
                 <FormLabel>Chain (optional)</FormLabel>
                 <FormControl>
-                  <Input placeholder="Enter chain" {...field} />
+                  <Input placeholder="A, E" {...field} />
                 </FormControl>
                 <FormMessage />
               </FormItem>
@@ -184,7 +184,7 @@ const ConformationalBStructureForm: React.FC = () => {
             name="bcrRecognitionProbabilityMethod"
             render={({ field }) => (
               <FormItem>
-                <FormLabel>BCR Recognition Probability Method</FormLabel>
+                <FormLabel>BCR Recognition Probability</FormLabel>
                 <Select
                   onValueChange={field.onChange}
                   defaultValue={field.value}
@@ -211,7 +211,7 @@ const ConformationalBStructureForm: React.FC = () => {
             name="surfaceAccessibilityMethod"
             render={({ field }) => (
               <FormItem>
-                <FormLabel>Surface Accessibility Method</FormLabel>
+                <FormLabel>Surface Accessibility</FormLabel>
                 <Select
                   onValueChange={field.onChange}
                   defaultValue={field.value}

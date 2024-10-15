@@ -106,9 +106,7 @@ export const ShareDialog = () => {
       <DialogContent className="sm:max-w-md">
         <DialogHeader>
           <DialogTitle>Share public link to job</DialogTitle>
-          <DialogDescription>
-            Your jobs you add after sharing stay private.
-          </DialogDescription>
+          <DialogDescription>Other jobs stay private.</DialogDescription>
         </DialogHeader>
 
         {isLoading ? (

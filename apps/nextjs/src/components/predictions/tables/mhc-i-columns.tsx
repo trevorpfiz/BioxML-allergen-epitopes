@@ -11,6 +11,7 @@ import { DataTableColumnHeader } from "~/components/predictions/tables/predictio
 export const mhcIColumns: ColumnDef<BaseMhcIResult>[] = [
   {
     accessorKey: "Peptide_Sequence",
+    meta: "Peptide Sequence",
     header: ({ column }) => (
       <DataTableColumnHeader column={column} title="Peptide Sequence" />
     ),
@@ -26,18 +27,21 @@ export const mhcIColumns: ColumnDef<BaseMhcIResult>[] = [
   },
   {
     accessorKey: "ClassI_TCR_Recognition",
+    meta: "TCR Recognition",
     header: ({ column }) => (
       <DataTableColumnHeader column={column} title="TCR Recognition" />
     ),
   },
   {
     accessorKey: "Best_Binding_Affinity",
+    meta: "Best Binding Affinity",
     header: ({ column }) => (
       <DataTableColumnHeader column={column} title="Best Binding Affinity" />
     ),
   },
   {
     accessorKey: "Best_pMHC_Stability",
+    meta: "Best pMHC Stability",
     header: ({ column }) => (
       <DataTableColumnHeader column={column} title="Best pMHC Stability" />
     ),

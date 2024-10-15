@@ -32,7 +32,7 @@ import { MhcIFormSchema } from "@epi/validators/epitopes";
 
 import Loading from "~/app/(app)/loading";
 import { env } from "~/env";
-import { MHC_I_ALLELES } from "~/lib/constants";
+import { HLA_A_ALLELES, HLA_B_ALLELES, HLA_C_ALLELES } from "~/lib/constants";
 import { api } from "~/trpc/react";
 import { useMySession } from "~/utils/supabase/client";
 
@@ -102,7 +102,7 @@ const MhcIForm: React.FC = () => {
   const onSubmit = async (data: MhcIForm) => {
     // Step 1: Create a new Job
     const newJob = await createJobMutation.mutateAsync({
-      name: `MHC-I Prediction for ${data.sequence}`,
+      name: `${data.sequence}`,
       type: "mhc-i",
     });
 
@@ -142,6 +142,26 @@ const MhcIForm: React.FC = () => {
     );
   };
 
+  const toggleGroup = (
+    groupAlleles: string[],
+    checked: string | boolean,
+    currentValues: string[],
+    onChange: (value: string[]) => void,
+  ) => {
+    if (checked) {
+      // Add all group alleles to the selected values
+      onChange([
+        ...currentValues,
+        ...groupAlleles.filter((allele) => !currentValues.includes(allele)),
+      ]);
+    } else {
+      // Remove all group alleles from the selected values
+      onChange(
+        currentValues.filter((allele) => !groupAlleles.includes(allele)),
+      );
+    }
+  };
+
   if (loading) {
     return <Loading />;
   }
@@ -161,7 +181,7 @@ const MhcIForm: React.FC = () => {
                 <FormLabel>Sequence</FormLabel>
                 <FormControl>
                   <Textarea
-                    placeholder="Enter sequence"
+                    placeholder="MAKLTILVALALFLLAAHA..."
                     //   className="resize-none"
                     {...field}
                   />
@@ -174,16 +194,42 @@ const MhcIForm: React.FC = () => {
           <FormField
             control={form.control}
             name="alleles"
-            render={() => (
-              <FormItem>
-                <FormLabel>Select Alleles</FormLabel>
-                {MHC_I_ALLELES.map((allele) => (
-                  <FormField
-                    key={allele}
-                    control={form.control}
-                    name="alleles"
-                    render={({ field }) => (
-                      <FormItem className="flex flex-row items-start space-x-3">
+            render={({ field }) => {
+              const isHlaASelected = HLA_A_ALLELES.every((allele) =>
+                field.value.includes(allele),
+              );
+              const isHlaAIndeterminate =
+                HLA_A_ALLELES.some((allele) => field.value.includes(allele)) &&
+                !isHlaASelected;
+
+              return (
+                <FormItem>
+                  <FormLabel>Class I Alleles</FormLabel>
+
+                  {/* HLA-A Group */}
+                  <FormItem className="flex flex-row items-center space-x-2 space-y-0 py-2">
+                    <FormControl>
+                      <Checkbox
+                        checked={isHlaASelected || isHlaAIndeterminate}
+                        onCheckedChange={(checked) =>
+                          toggleGroup(
+                            HLA_A_ALLELES,
+                            checked,
+                            field.value,
+                            field.onChange,
+                          )
+                        }
+                      />
+                    </FormControl>
+                    <FormLabel>HLA-A</FormLabel>
+                  </FormItem>
+
+                  <div className="ml-4 grid grid-cols-4 gap-4">
+                    {HLA_A_ALLELES.map((allele) => (
+                      <FormItem
+                        key={allele}
+                        className="flex flex-row items-center space-x-2 space-y-0"
+                      >
                         <FormControl>
                           <Checkbox
                             checked={field.value.includes(allele)}
@@ -198,14 +244,111 @@ const MhcIForm: React.FC = () => {
                             }
                           />
                         </FormControl>
-                        <FormLabel>{allele}</FormLabel>
+                        <FormLabel className="max-w-32 break-all">
+                          {allele}
+                        </FormLabel>
                       </FormItem>
-                    )}
-                  />
-                ))}
-                <FormMessage />
-              </FormItem>
-            )}
+                    ))}
+                  </div>
+
+                  {/* HLA-B Group */}
+                  <FormItem className="flex flex-row items-center space-x-2 space-y-0 py-2">
+                    <FormControl>
+                      <Checkbox
+                        checked={HLA_B_ALLELES.every((allele) =>
+                          field.value.includes(allele),
+                        )}
+                        onCheckedChange={(checked) =>
+                          toggleGroup(
+                            HLA_B_ALLELES,
+                            checked,
+                            field.value,
+                            field.onChange,
+                          )
+                        }
+                      />
+                    </FormControl>
+                    <FormLabel>HLA-B</FormLabel>
+                  </FormItem>
+
+                  <div className="ml-4 grid grid-cols-4 gap-4">
+                    {HLA_B_ALLELES.map((allele) => (
+                      <FormItem
+                        key={allele}
+                        className="flex flex-row items-center space-x-2 space-y-0"
+                      >
+                        <FormControl>
+                          <Checkbox
+                            checked={field.value.includes(allele)}
+                            onCheckedChange={(checked) =>
+                              checked
+                                ? field.onChange([...field.value, allele])
+                                : field.onChange(
+                                    field.value.filter(
+                                      (value) => value !== allele,
+                                    ),
+                                  )
+                            }
+                          />
+                        </FormControl>
+                        <FormLabel className="max-w-32 break-all">
+                          {allele}
+                        </FormLabel>
+                      </FormItem>
+                    ))}
+                  </div>
+
+                  {/* HLA-C Group */}
+                  <FormItem className="flex flex-row items-center space-x-2 space-y-0 py-2">
+                    <FormControl>
+                      <Checkbox
+                        checked={HLA_C_ALLELES.every((allele) =>
+                          field.value.includes(allele),
+                        )}
+                        onCheckedChange={(checked) =>
+                          toggleGroup(
+                            HLA_C_ALLELES,
+                            checked,
+                            field.value,
+                            field.onChange,
+                          )
+                        }
+                      />
+                    </FormControl>
+                    <FormLabel>HLA-C</FormLabel>
+                  </FormItem>
+
+                  <div className="ml-4 grid grid-cols-4 gap-4">
+                    {HLA_C_ALLELES.map((allele) => (
+                      <FormItem
+                        key={allele}
+                        className="flex flex-row items-center space-x-2 space-y-0"
+                      >
+                        <FormControl>
+                          <Checkbox
+                            checked={field.value.includes(allele)}
+                            onCheckedChange={(checked) =>
+                              checked
+                                ? field.onChange([...field.value, allele])
+                                : field.onChange(
+                                    field.value.filter(
+                                      (value) => value !== allele,
+                                    ),
+                                  )
+                            }
+                          />
+                        </FormControl>
+                        <FormLabel className="max-w-32 break-all">
+                          {allele}
+                        </FormLabel>
+                      </FormItem>
+                    ))}
+                  </div>
+
+                  <FormMessage />
+                </FormItem>
+              );
+            }}
           />
 
           {/* TCR Recognition Probability Method Field */}
@@ -214,7 +357,7 @@ const MhcIForm: React.FC = () => {
             name="tcrRecognitionProbabilityMethod"
             render={({ field }) => (
               <FormItem>
-                <FormLabel>TCR Recognition Probability Method</FormLabel>
+                <FormLabel>TCR Recognition Probability</FormLabel>
                 <Select
                   onValueChange={field.onChange}
                   defaultValue={field.value}
@@ -241,7 +384,7 @@ const MhcIForm: React.FC = () => {
             name="mhcBindingAffinityMethod"
             render={({ field }) => (
               <FormItem>
-                <FormLabel>MHC Binding Affinity Method</FormLabel>
+                <FormLabel>MHC Binding Affinity</FormLabel>
                 <Select
                   onValueChange={field.onChange}
                   defaultValue={field.value}
@@ -262,13 +405,13 @@ const MhcIForm: React.FC = () => {
             )}
           />
 
-          {/* PMHC Stability Method Field */}
+          {/* pMHC Stability Method Field */}
           <FormField
             control={form.control}
             name="pmhcStabilityMethod"
             render={({ field }) => (
               <FormItem>
-                <FormLabel>PMHC Stability Method</FormLabel>
+                <FormLabel>pMHC Stability</FormLabel>
                 <Select
                   onValueChange={field.onChange}
                   defaultValue={field.value}

@@ -14,7 +14,7 @@ export const MhcIIFormSchema = z.object({
     message: "MHC Binding Affinity method is required.",
   }),
   pmhcStabilityMethod: z.string().min(1, {
-    message: "PMHC Stability method is required.",
+    message: "pMHC Stability method is required.",
   }),
 });
 export type MhcIIForm = z.infer<typeof MhcIIFormSchema>;

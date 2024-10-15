@@ -12,13 +12,35 @@ export default function JobForm() {
   const renderForm = () => {
     switch (selectedType) {
       case "conformational-b":
-        return <ConformationalBStructureForm />;
+        return (
+          <>
+            <h1 className="text-2xl font-bold">
+              Conformational B-cell Prediction
+            </h1>
+            <ConformationalBStructureForm />
+          </>
+        );
       case "linear-b":
-        return <LinearBForm />;
+        return (
+          <>
+            <h1 className="text-2xl font-bold">Linear B-cell Prediction</h1>
+            <LinearBForm />
+          </>
+        );
       case "mhc-i":
-        return <MhcIForm />;
+        return (
+          <>
+            <h1 className="text-2xl font-bold">MHC-I Prediction</h1>
+            <MhcIForm />
+          </>
+        );
       case "mhc-ii":
-        return <MhcIIForm />;
+        return (
+          <>
+            <h1 className="text-2xl font-bold">MHC-II Prediction</h1>
+            <MhcIIForm />
+          </>
+        );
       default:
         return null;
     }

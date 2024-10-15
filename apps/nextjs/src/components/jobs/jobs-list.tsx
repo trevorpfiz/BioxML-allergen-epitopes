@@ -1,5 +1,6 @@
 "use client";
 
+import { useState } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { format } from "date-fns";
@@ -89,6 +90,7 @@ const JobComponent = ({ job }: { job: Job }) => {
 export const OptionsMenu = ({ job }: { job: Job }) => {
   const utils = api.useUtils();
   const openShareDialog = useShareDialogStore((state) => state.openShareDialog);
+  const [open, setOpen] = useState(false);
 
   // Mutation for deleting the job
   const deleteMutation = api.job.delete.useMutation({
@@ -111,13 +113,14 @@ export const OptionsMenu = ({ job }: { job: Job }) => {
   };
 
   const handleShare = () => {
+    setOpen(false);
     openShareDialog(job.id);
   };
 
   return (
     <>
       <TooltipProvider delayDuration={200}>
-        <DropdownMenu>
+        <DropdownMenu open={open} onOpenChange={setOpen}>
           <span tabIndex={0} className="sr-only" />
           <Tooltip>
             <TooltipTrigger asChild tabIndex={-1}>
