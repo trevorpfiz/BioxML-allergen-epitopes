@@ -17,13 +17,13 @@ export const metadata: Metadata = {
       ? env.NEXT_PUBLIC_SITE_URL
       : "http://localhost:3000",
   ),
-  title: "Epitope Prediction",
+  title: "BioxML Epitope Prediction",
   description: "B-cell and T-cell epitope prediction platform.",
   openGraph: {
-    title: "Epitope Prediction",
+    title: "BioxML Epitope Prediction",
     description: "B-cell and T-cell epitope prediction platform.",
     url: env.NEXT_PUBLIC_SITE_URL,
-    siteName: "Epitope Prediction",
+    siteName: "BioxML Epitope Prediction",
   },
   twitter: {
     card: "summary_large_image",
