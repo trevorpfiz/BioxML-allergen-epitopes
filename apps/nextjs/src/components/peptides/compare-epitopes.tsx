@@ -3,8 +3,9 @@
 import React, { useMemo } from "react";
 import dynamic from "next/dynamic";
 
+import type { ConformationalBStructureResult } from "@epi/validators/epitopes";
+
 import type { SimilarityData } from "~/components/peptides/tables/similarity-columns";
-import type { EpitopeData } from "~/types";
 
 const ComparisonViewer = dynamic(
   () => import("~/components/peptides/3Dmol/comparison-viewer"),
@@ -17,8 +18,8 @@ interface CompareEpitopesProps {
   pdbId1: string;
   pdbId2: string;
   similarityData: SimilarityData[];
-  epitopeData1: EpitopeData[];
-  epitopeData2: EpitopeData[];
+  epitopeData1: ConformationalBStructureResult[];
+  epitopeData2: ConformationalBStructureResult[];
 }
 
 /**

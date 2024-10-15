@@ -124,6 +124,6 @@ def get_model_on_endpoint(model_data_prefix, model_substring="", latest=None):
 
 def clean_string(s):
     if isinstance(s, str):
-        return re.sub("[\W_]+", "", s)
+        return re.sub(r"[\W_]+", "", s)
     else:
         return s

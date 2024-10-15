@@ -1,6 +1,8 @@
 #!/bin/bash
 trap "exit" INT
 
+export AWS_PROFILE="mfa"
+
 # Color reference: https://stackoverflow.com/a/28938235/9723036
 ColorOff='\033[0m'       # Text Reset
 # Regular Colors

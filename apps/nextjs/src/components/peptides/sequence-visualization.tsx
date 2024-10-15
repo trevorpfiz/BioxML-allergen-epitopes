@@ -2,7 +2,7 @@
 
 import { useMemo } from "react";
 
-import type { EpitopeDataArray } from "@epi/db/schema";
+import type { ConformationalBStructureResult } from "@epi/validators/epitopes";
 import {
   Tooltip,
   TooltipContent,
@@ -13,7 +13,7 @@ import {
 import { EPITOPE_THRESHOLD } from "~/lib/constants";
 
 interface SequenceVisualizationProps {
-  epitopeData: EpitopeDataArray;
+  epitopeData: ConformationalBStructureResult[];
 }
 
 const Legend = () => (

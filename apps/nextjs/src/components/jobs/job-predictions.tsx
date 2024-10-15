@@ -5,6 +5,7 @@ import { useRouter } from "next/navigation";
 
 import Loading from "~/app/(app)/loading";
 import EpitopeViewer from "~/components/peptides/epitope-viewer";
+import { conformationalBColumns } from "~/components/predictions/tables/conformational-b-columns";
 import { linearBColumns } from "~/components/predictions/tables/linear-b-columns";
 import { mhcIColumns } from "~/components/predictions/tables/mhc-i-columns";
 import { mhcIIColumns } from "~/components/predictions/tables/mhc-ii-columns";
@@ -72,7 +73,13 @@ function JobPredictions(props: JobPredictionsProps) {
       const prediction = job.conformationalBPredictions[0];
       return (
         <>
-          <EpitopeViewer prediction={prediction?.result} />
+          <div className="flex flex-col gap-4">
+            <PredictionDataTable
+              columns={conformationalBColumns}
+              data={prediction?.result ?? []}
+            />
+          </div>
+          <EpitopeViewer prediction={prediction?.result ?? []} />
           <div className="flex flex-col gap-4">
             <h3 className="text-sm font-semibold">3D Visualization</h3>
             <div className="w-full border shadow">
@@ -87,7 +94,6 @@ function JobPredictions(props: JobPredictionsProps) {
         <>
           <div>
             <div className="flex flex-col gap-4">
-              <h2 className="text-2xl font-semibold">Prediction Table</h2>
               <PredictionDataTable
                 columns={linearBColumns}
                 data={prediction?.result ?? []}
@@ -102,7 +108,6 @@ function JobPredictions(props: JobPredictionsProps) {
         <>
           <div>
             <div className="flex flex-col gap-4">
-              <h2 className="text-2xl font-semibold">Prediction Table</h2>
               <PredictionDataTable
                 columns={mhcIColumns}
                 data={prediction?.result ?? []}
@@ -117,7 +122,6 @@ function JobPredictions(props: JobPredictionsProps) {
         <>
           <div>
             <div className="flex flex-col gap-4">
-              <h2 className="text-2xl font-semibold">Prediction Table</h2>
               <PredictionDataTable
                 columns={mhcIIColumns}
                 data={prediction?.result ?? []}

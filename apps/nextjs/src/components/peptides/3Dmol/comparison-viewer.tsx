@@ -4,11 +4,11 @@ import React, { useEffect, useRef } from "react";
 import * as $3Dmol from "3dmol";
 import { useTheme } from "next-themes";
 
-import type { EpitopeData } from "~/types";
+import type { ConformationalBStructureResult } from "@epi/validators/epitopes";
 
 interface ComparisonViewerProps {
   pdbId: string;
-  epitopeData: EpitopeData[];
+  epitopeData: ConformationalBStructureResult[];
   residueColorMap: Record<string, string>; // Mapping of "Chain_Pos" to color
   height?: string;
 }
