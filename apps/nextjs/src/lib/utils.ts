@@ -82,3 +82,33 @@ export const getColorFromScore = (
     return rgbToHex(interpolatedColor);
   }
 };
+
+export function parseAlleleData(
+  bindingAffinity: string,
+  stability: string,
+): {
+  HLA_Allele: string;
+  MHC_Binding_Affinity: string;
+  pMHC_Stability: string;
+}[] {
+  const bindingAffinityEntries = bindingAffinity.split("|").map((entry) => {
+    const [allele, value] = entry.split("=");
+    return { HLA_Allele: allele ?? "", MHC_Binding_Affinity: value ?? "" };
+  });
+
+  const stabilityEntries = stability.split("|").map((entry) => {
+    const [allele, value] = entry.split("=");
+    return { HLA_Allele: allele, pMHC_Stability: value };
+  });
+
+  // Merge by allele
+  return bindingAffinityEntries.map((bindingEntry) => {
+    const matchingStability = stabilityEntries.find(
+      (stabilityEntry) => stabilityEntry.HLA_Allele === bindingEntry.HLA_Allele,
+    );
+    return {
+      ...bindingEntry,
+      pMHC_Stability: matchingStability?.pMHC_Stability ?? "N/A",
+    };
+  });
+}

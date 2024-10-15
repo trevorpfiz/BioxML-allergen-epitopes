@@ -2,19 +2,30 @@
 
 import type { ColumnDef } from "@tanstack/react-table";
 
-import type { MhcIIResult } from "@epi/validators/epitopes";
+import type { MhcIIResult as BaseMhcIIResult } from "@epi/validators/epitopes";
 
+import type { MhcIIResult } from "~/components/predictions/tables/mhc-peptide-dialog-cell";
+import { MhcPeptideDialogCell } from "~/components/predictions/tables/mhc-peptide-dialog-cell";
 import { DataTableColumnHeader } from "~/components/predictions/tables/prediction-column-header";
 
-export const mhcIIColumns: ColumnDef<MhcIIResult>[] = [
+export const mhcIIColumns: ColumnDef<BaseMhcIIResult>[] = [
   {
     accessorKey: "Peptide_Sequence",
     header: ({ column }) => (
       <DataTableColumnHeader column={column} title="Peptide Sequence" />
     ),
+    cell: ({ row }) => {
+      const rowData = row.original;
+      // add type to rowData
+      const rowDataWithType: MhcIIResult = {
+        ...rowData,
+        type: "MHC-II",
+      };
+      return <MhcPeptideDialogCell rowData={rowDataWithType} />;
+    },
   },
   {
-    accessorKey: "ClassI_TCR_Recognition",
+    accessorKey: "ClassII_TCR_Recognition",
     header: ({ column }) => (
       <DataTableColumnHeader column={column} title="TCR Recognition" />
     ),
