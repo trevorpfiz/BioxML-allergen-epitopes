@@ -4,11 +4,13 @@ from typing import Optional
 from fastapi import HTTPException
 from supabase._async.client import AsyncClient
 
+from app.core.config import settings
 from app.crud.crud_conformational_b_prediction import crud_conformational_b_prediction
 from app.crud.crud_job import crud_job
 from app.crud.crud_linear_b_prediction import crud_linear_b_prediction
 from app.crud.crud_mhc_i_prediction import crud_mhc_i_prediction
 from app.crud.crud_mhc_ii_prediction import crud_mhc_ii_prediction
+from app.services.pipeline import run
 from app.services.postprocess import (
     process_conformational_b_prediction,
     process_linear_b_prediction,
@@ -34,6 +36,19 @@ async def process_and_update_prediction(
     try:
         # Update job status to 'running'
         await crud_job.update_status(db=db, id=job_id, status="running")
+
+        # Sample input
+        glp_1_receptor = "MAGAPGPLRLALLLLGMVGRAGPRPQGATVSLWETVQKWREYRRQCQRSLTEDPPPATDLFCNRTFDEYACWPDGEPGSFVNVSCPWYLPWASSVPQGHVYRFCTAEGLWLQKDNSSLPWRDLSECEESKRGERSSPEEQLLFLYIIYTVGYALSFSALVIASAILLGFRHLHCTRNYIHLNLFASFILRALSVFIKDAALKWMYSTAAQQHQWDGLLSYQDSLSCRLVFLLMQYCVAANYYWLLVEGVYLYTLLAFSVLSEQWIFRLYVSIGWGVPLLFVVPWGIVKYLYEDEGCWTRNSNMNYWLIIRLPILFAIGVNFLIFVRVICIVVSKLKANLMCKTDIKCRLAKSTLTLIPLLGTHEVIFAFVMDEHARGTLRFIKLFTELSFTSFQGLMVAILYCFVNNEVQLEFRKSWERWRLEHLHIQRDSSMKPLKCPTSSLSSGATAGSSMYTATCQASCS"
+        sample = {"inputs": glp_1_receptor}
+
+        # Run prediction pipeline
+        predictions = run(
+            input_objects=[sample],
+            endpoint_name=settings.SAGEMAKER_ENDPOINT_NAME,
+            model_type="single",
+        )
+
+        logger.info(predictions)
 
         # Process the prediction based on its type
         if prediction_type == "conformational-b":

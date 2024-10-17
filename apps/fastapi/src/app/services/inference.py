@@ -1,7 +1,6 @@
 import json
 
 import boto3
-import pandas as pd
 
 from app.core.config import settings
 
@@ -22,12 +21,11 @@ def get_predictions(requests, endpoint_name, model_name, model_type="mme"):
             )
             res = json.loads(response["Body"].read().decode("utf-8"))[0]
         else:
-            # XGBoost by default does not allow application/json
             response = sagemaker_runtime.invoke_endpoint(
-                ContentType="csv",
+                ContentType="application/json",
                 EndpointName=endpoint_name,
-                Body=pd.DataFrame(data=[request]).to_csv(index=False, header=False),
+                Body=json.dumps(request),
             )
-            res = float(response["Body"].read().decode("utf-8"))
+            res = json.loads(response["Body"].read().decode("utf-8"))
         responses.append(res)
     return responses
