@@ -1,14 +1,11 @@
-from typing import List
+from typing import Any, List
 
 from app.core.utils import get_endpoint
-from app.schemas.input_object import InputObject
 from app.services.inference import get_predictions
-from app.services.postprocess import do_postprocessing
-from app.services.preprocess import do_preprocess
 
 
 def run(
-    input_objects: List[InputObject],
+    input_objects: List[Any],
     endpoint_name: str,
     model_name=None,
     model_type="mme",
@@ -30,12 +27,18 @@ def run(
     if model_name is None:
         model_name = endpoint_name
 
-    preprocessed_df = do_preprocess(input_objects)
+    # Preprocess the inputs
+    preprocess = [obj for obj in input_objects]
+
+    # Run inference
     model_responses = get_predictions(
-        preprocessed_df.values.tolist(),
+        preprocess,
         endpoint_name,
         model_name,
         model_type=model_type,
     )
-    predictions = do_postprocessing(model_responses)
+
+    # Postprocess the inferences
+    predictions = model_responses
+
     return predictions

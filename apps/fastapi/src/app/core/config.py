@@ -44,6 +44,10 @@ class Settings(BaseSettings):
     SUPERUSER_PASSWORD: str = Field(..., env="SUPERUSER_PASSWORD")
     JWT_SECRET: str = Field(..., env="JWT_SECRET")
     S3_BUCKET_NAME: str = Field(default="fastapi-csv", env="S3_BUCKET_NAME")
+    SAGEMAKER_ENDPOINT_NAME: str = Field(
+        default="huggingface-pytorch-inference-2024-10-16-20-16-41-824",
+        env="SAGEMAKER_ENDPOINT_NAME",
+    )
 
     # Optional
     HUGGINGFACE_ACCESS_TOKEN: str = Field(None, env="HUGGINGFACE_ACCESS_TOKEN")
