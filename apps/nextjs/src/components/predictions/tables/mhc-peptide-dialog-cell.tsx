@@ -81,7 +81,7 @@ export function MhcPeptideDialogCell({ rowData }: PeptideDialogProps) {
       <DialogContent className="max-w-3xl">
         <DialogHeader>
           <DialogTitle>{Peptide_Sequence}</DialogTitle>
-          <DialogDescription>
+          <DialogDescription asChild>
             <div>
               <dl>
                 <div className="flex gap-1">

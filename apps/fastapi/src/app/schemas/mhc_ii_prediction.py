@@ -8,9 +8,9 @@ from app.schemas.base import CreateBase, InDBBase, JobMixin, ResponseBase, Updat
 # Define the structure of the CSV data for MHC-II as a Pydantic model
 class MhcIIPredictionResult(BaseModel):
     Peptide_Sequence: str
-    ClassI_TCR_Recognition: Optional[float] = Field(default=None)
-    ClassI_MHC_Binding_Affinity: Optional[str] = Field(default="")
-    ClassI_pMHC_Stability: Optional[str] = Field(default="")
+    ClassII_TCR_Recognition: Optional[float] = Field(default=None)
+    ClassII_MHC_Binding_Affinity: Optional[str] = Field(default="")
+    ClassII_pMHC_Stability: Optional[str] = Field(default="")
     Best_Binding_Affinity: Optional[str] = Field(default="")
     Best_pMHC_Stability: Optional[str] = Field(default="")
 

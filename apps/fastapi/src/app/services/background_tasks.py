@@ -7,14 +7,17 @@ from supabase._async.client import AsyncClient
 from app.crud.crud_conformational_b_prediction import crud_conformational_b_prediction
 from app.crud.crud_job import crud_job
 from app.crud.crud_linear_b_prediction import crud_linear_b_prediction
-from app.crud.crud_mhc_ii_prediction import crud_mhc_ii_prediction
-from app.services.inference import run_netmhci_binding_affinity_classI
+from app.services.inference import (
+    run_netmhci_binding_affinity_classI,
+    run_netmhcii_binding_affinity_classII,
+)
 from app.services.postprocess import (
     postprocess_mhc_i_prediction,
+    postprocess_mhc_ii_prediction,
     process_classI_results,
+    process_classII_results,
     process_conformational_b_prediction,
     process_linear_b_prediction,
-    process_mhc_ii_prediction,
 )
 from app.services.preprocess import preprocess_protein_sequence
 
@@ -90,12 +93,24 @@ async def process_and_update_prediction(
                 prediction_type=prediction_type,
             )
         elif prediction_type == "mhc-ii":
-            # Step 1: Split protein sequence into peptides
+            # Step 1: Split protein sequence into peptides (preprocessing)
             peptides = preprocess_protein_sequence(sequence, prediction_type)
 
-            results = await process_mhc_ii_prediction(sequence=sequence)
-            await crud_mhc_ii_prediction.update_result(
-                db=db, job_id=job_id, result=results
+            # Step 2: Run NetMHCIIpan-4.3 binding affinity predictions (inference)
+            netmhcii_results = await run_netmhcii_binding_affinity_classII(
+                peptides, alleles
+            )
+
+            # Step 3: Process NetMHCIIpan-4.3 results (postprocessing)
+            processed_results = await process_classII_results(netmhcii_results)
+
+            # Step 4: Process the results (postprocessing)
+            await postprocess_mhc_ii_prediction(
+                db=db,
+                job_id=job_id,
+                results=processed_results,  # Passing results from inference
+                user_id=user_id,
+                prediction_type=prediction_type,
             )
         else:
             raise HTTPException(status_code=400, detail="Unsupported prediction type.")

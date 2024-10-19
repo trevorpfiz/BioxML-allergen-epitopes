@@ -46,9 +46,9 @@ const MhcIForm: React.FC = () => {
     defaultValues: {
       sequence: "",
       alleles: [],
-      tcrRecognitionProbabilityMethod: "",
-      mhcBindingAffinityMethod: "",
-      pmhcStabilityMethod: "",
+      tcrRecognitionProbabilityMethod: "mix-tcr-pred",
+      mhcBindingAffinityMethod: "netmhcpan-4.1",
+      pmhcStabilityMethod: "method-1",
     },
   });
 
@@ -201,6 +201,18 @@ const MhcIForm: React.FC = () => {
               const isHlaAIndeterminate =
                 HLA_A_ALLELES.some((allele) => field.value.includes(allele)) &&
                 !isHlaASelected;
+              const isHlaBSelected = HLA_B_ALLELES.every((allele) =>
+                field.value.includes(allele),
+              );
+              const isHlaBIndeterminate =
+                HLA_B_ALLELES.some((allele) => field.value.includes(allele)) &&
+                !isHlaBSelected;
+              const isHlaCSelected = HLA_C_ALLELES.every((allele) =>
+                field.value.includes(allele),
+              );
+              const isHlaCIndeterminate =
+                HLA_C_ALLELES.some((allele) => field.value.includes(allele)) &&
+                !isHlaCSelected;
 
               return (
                 <FormItem>
@@ -255,9 +267,7 @@ const MhcIForm: React.FC = () => {
                   <FormItem className="flex flex-row items-center space-x-2 space-y-0 py-2">
                     <FormControl>
                       <Checkbox
-                        checked={HLA_B_ALLELES.every((allele) =>
-                          field.value.includes(allele),
-                        )}
+                        checked={isHlaBSelected || isHlaBIndeterminate}
                         onCheckedChange={(checked) =>
                           toggleGroup(
                             HLA_B_ALLELES,
@@ -302,9 +312,7 @@ const MhcIForm: React.FC = () => {
                   <FormItem className="flex flex-row items-center space-x-2 space-y-0 py-2">
                     <FormControl>
                       <Checkbox
-                        checked={HLA_C_ALLELES.every((allele) =>
-                          field.value.includes(allele),
-                        )}
+                        checked={isHlaCSelected || isHlaCIndeterminate}
                         onCheckedChange={(checked) =>
                           toggleGroup(
                             HLA_C_ALLELES,
@@ -368,9 +376,7 @@ const MhcIForm: React.FC = () => {
                     </SelectTrigger>
                   </FormControl>
                   <SelectContent>
-                    <SelectItem value="method-1">Method 1</SelectItem>
-                    <SelectItem value="method-2">Method 2</SelectItem>
-                    <SelectItem value="method-3">Method 3</SelectItem>
+                    <SelectItem value="mix-tcr-pred">MixTCRpred</SelectItem>
                   </SelectContent>
                 </Select>
                 <FormMessage />
@@ -395,9 +401,7 @@ const MhcIForm: React.FC = () => {
                     </SelectTrigger>
                   </FormControl>
                   <SelectContent>
-                    <SelectItem value="method-1">Method 1</SelectItem>
-                    <SelectItem value="method-2">Method 2</SelectItem>
-                    <SelectItem value="method-3">Method 3</SelectItem>
+                    <SelectItem value="netmhcpan-4.1">NetMHCpan 4.1</SelectItem>
                   </SelectContent>
                 </Select>
                 <FormMessage />
@@ -423,8 +427,6 @@ const MhcIForm: React.FC = () => {
                   </FormControl>
                   <SelectContent>
                     <SelectItem value="method-1">Method 1</SelectItem>
-                    <SelectItem value="method-2">Method 2</SelectItem>
-                    <SelectItem value="method-3">Method 3</SelectItem>
                   </SelectContent>
                 </Select>
                 <FormMessage />

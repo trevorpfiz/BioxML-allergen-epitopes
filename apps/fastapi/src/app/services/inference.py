@@ -42,7 +42,9 @@ def get_sagemaker_predictions(requests, endpoint_name, model_name, model_type="m
     return responses
 
 
-timeout = httpx.Timeout(10.0, read=60.0)  # 10 seconds connect, 60 seconds read timeout
+timeout = httpx.Timeout(
+    10.0, read=3000.0
+)  # 10 seconds connect, 50 minutes read timeout
 
 
 async def run_netmhci_binding_affinity_classI(
@@ -70,6 +72,40 @@ async def run_netmhci_binding_affinity_classI(
         logger.error(f"Request error: {e}")
         # Return an error in the same structure as successful results
         return [{"peptides": peptides, "error": str(e)}]  # List with error
+    except httpx.HTTPStatusError as e:
+        logger.error(
+            f"HTTP error: {e.response.status_code}, details: {e.response.text}"
+        )
+        return {"error": e.response.text}
+    except Exception as e:
+        logger.error(f"Unexpected error: {e}")
+        return {"error": str(e)}
+
+
+async def run_netmhcii_binding_affinity_classII(
+    peptides: List[str], alleles: List[str]
+) -> List[Dict[str, Any]]:
+    """
+    Calls the NetMHCIIpan API with peptides and alleles to get class II binding affinity results.
+
+    Args:
+        peptides (List[str]): List of peptide sequences.
+        alleles (List[str]): List of HLA alleles for predictions.
+
+    Returns:
+        List[Dict[str, Any]]: List of prediction results.
+    """
+    payload = {"peptides": peptides, "alleles": alleles}
+
+    try:
+        async with httpx.AsyncClient(timeout=timeout) as client:
+            response = await client.post(CLASSII_URL, json=payload)
+            response.raise_for_status()
+            results = response.json()
+            return results
+    except (httpx.RequestError, httpx.HTTPStatusError) as e:
+        logger.error(f"Request error: {e}")
+        return [{"peptides": peptides, "error": str(e)}]
     except httpx.HTTPStatusError as e:
         logger.error(
             f"HTTP error: {e.response.status_code}, details: {e.response.text}"
