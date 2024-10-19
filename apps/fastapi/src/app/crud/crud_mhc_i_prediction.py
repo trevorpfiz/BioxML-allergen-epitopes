@@ -50,7 +50,12 @@ class CRUDMhcIPrediction(
         return self.model(**created_prediction)
 
     async def update_result(
-        self, db: AsyncClient, *, job_id: str, result: List[MhcIPredictionResult]
+        self,
+        db: AsyncClient,
+        *,
+        job_id: str,
+        result: List[MhcIPredictionResult],
+        csv_download_url: str,
     ) -> MhcIPrediction:
         prediction = await self.get_by_job_id(db=db, job_id=job_id)
         if not prediction:
@@ -59,7 +64,12 @@ class CRUDMhcIPrediction(
         # Update the result field
         updated_prediction = (
             await db.table(self.model.table_name)
-            .update({"result": [res.model_dump() for res in result]})
+            .update(
+                {
+                    "result": [res.model_dump() for res in result],
+                    "csv_download_url": csv_download_url,
+                }
+            )
             .eq("job_id", job_id)
             .execute()
         )

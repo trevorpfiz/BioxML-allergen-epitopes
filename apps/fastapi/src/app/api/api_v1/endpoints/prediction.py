@@ -97,7 +97,9 @@ async def create_mhc_i_prediction(
         process_and_update_prediction,
         job_id=job.id,
         sequence=prediction_in.sequence,
+        alleles=prediction_in.alleles,
         prediction_type="mhc-i",
+        user_id=user.id,
         db=db,
     )
 
@@ -124,6 +126,7 @@ async def create_mhc_ii_prediction(
         process_and_update_prediction,
         job_id=job.id,
         sequence=prediction_in.sequence,
+        alleles=prediction_in.alleles,
         prediction_type="mhc-ii",
         db=db,
     )

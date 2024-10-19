@@ -3,6 +3,8 @@ from typing import Any, Dict, Optional
 
 from fastapi import HTTPException
 
+from app.core.utils import get_default_peptide_lengths, split_protein_sequence
+
 logger = logging.getLogger(__name__)
 
 """
@@ -114,3 +116,12 @@ def validate_pdb_data(pdb_data: dict, chain: Optional[str] = None) -> Dict[str, 
     sequence = extract_sequence(pdb_data)
     structure = extract_structure(pdb_data) if chain else None
     return {"sequence": sequence, "structure": structure}
+
+
+def preprocess_protein_sequence(protein_sequence: str, prediction_type: str):
+    """
+    Preprocess the protein sequence based on prediction type by splitting into peptides.
+    """
+    min_length, max_length = get_default_peptide_lengths(prediction_type)
+    peptides = split_protein_sequence(protein_sequence, min_length, max_length)
+    return peptides

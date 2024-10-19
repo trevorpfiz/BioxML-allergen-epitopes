@@ -8,8 +8,8 @@ from app.schemas.base import CreateBase, InDBBase, JobMixin, ResponseBase, Updat
 # Define the structure of the CSV data for Linear B as a Pydantic model
 class LBPredictionResult(BaseModel):
     Peptide_Sequence: str
-    Linear_B_Cell_Immunogenicity: Optional[float]
-    Linear_BCR_Recognition: float
+    Linear_B_Cell_Immunogenicity: Optional[float] = Field(default=None)
+    Linear_BCR_Recognition: Optional[float] = Field(default=None)
 
 
 class LinearBPredictionCreate(CreateBase, JobMixin):
