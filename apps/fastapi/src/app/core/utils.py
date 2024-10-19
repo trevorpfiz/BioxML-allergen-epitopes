@@ -62,7 +62,7 @@ def read_s3_csv(
 # CRUD Sagemaker Endpoints
 def get_endpoints(endpoint_name_filter, sagemaker_client=None):
     if sagemaker_client is None:
-        sagemaker_client = boto3.client("sagemaker", region_name=settings.REGION)
+        sagemaker_client = boto3.client("sagemaker", region_name=settings.AWS_REGION)
     # Retrieve all endpoints for filtered name
     response = sagemaker_client.list_endpoints(
         SortBy="Name", NameContains=endpoint_name_filter, MaxResults=100
@@ -87,7 +87,7 @@ def get_endpoints(endpoint_name_filter, sagemaker_client=None):
 
 def get_endpoint(endpoint_name_filter, sagemaker_client=None):
     if sagemaker_client is None:
-        sagemaker_client = boto3.client("sagemaker", region_name=settings.REGION)
+        sagemaker_client = boto3.client("sagemaker", region_name=settings.AWS_REGION)
     endpoints = get_endpoints(endpoint_name_filter, sagemaker_client=sagemaker_client)
     if len(endpoints) == 0:
         return None
@@ -230,11 +230,16 @@ async def upload_csv_to_s3(results: List[T], s3_key: str):
 
     csv_content = output.getvalue()
 
-    # Upload the CSV to S3
-    async with aioboto3.client("s3", region_name=settings.AWS_REGION) as s3_client:
+    # Create an aioboto3 session
+    session = aioboto3.Session()
+
+    # Use the session to create an S3 client with async context manager
+    async with session.client("s3", region_name=settings.AWS_REGION) as s3_client:
         try:
             await s3_client.put_object(
                 Bucket=settings.S3_BUCKET_NAME, Key=s3_key, Body=csv_content
             )
-        except Exception:
-            raise HTTPException(status_code=500, detail="Failed to upload CSV to S3")
+        except Exception as e:
+            raise HTTPException(
+                status_code=500, detail=f"Failed to upload CSV to S3: {str(e)}"
+            )

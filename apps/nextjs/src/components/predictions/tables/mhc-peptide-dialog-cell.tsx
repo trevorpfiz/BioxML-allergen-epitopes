@@ -82,20 +82,22 @@ export function MhcPeptideDialogCell({ rowData }: PeptideDialogProps) {
         <DialogHeader>
           <DialogTitle>{Peptide_Sequence}</DialogTitle>
           <DialogDescription>
-            <dl>
-              <div className="flex gap-1">
-                <dt>TCR Recognition:</dt>
-                <dd>{tcrRecognition}</dd>
-              </div>
-              <div className="flex gap-1">
-                <dt>Best Binding Affinity:</dt>
-                <dd>{Best_Binding_Affinity}</dd>
-              </div>
-              <div className="flex gap-1">
-                <dt>Best pMHC Stability:</dt>
-                <dd>{Best_pMHC_Stability}</dd>
-              </div>
-            </dl>
+            <div>
+              <dl>
+                <div className="flex gap-1">
+                  <dt>TCR Recognition:</dt>
+                  <dd>{tcrRecognition}</dd>
+                </div>
+                <div className="flex gap-1">
+                  <dt>Best Binding Affinity:</dt>
+                  <dd>{Best_Binding_Affinity}</dd>
+                </div>
+                <div className="flex gap-1">
+                  <dt>Best pMHC Stability:</dt>
+                  <dd>{Best_pMHC_Stability}</dd>
+                </div>
+              </dl>
+            </div>
           </DialogDescription>
         </DialogHeader>
 

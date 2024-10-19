@@ -1,0 +1,8 @@
+{
+  "name": "prediction-tools-fastapi",
+  "version": "0.1.0",
+  "scripts": {
+    "dev": "uv run fastapi dev src/app/main.py",
+    "prod": "uv run fastapi run src/app/main.py --port 8000"
+  }
+}

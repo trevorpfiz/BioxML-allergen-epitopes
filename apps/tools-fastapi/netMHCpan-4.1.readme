@@ -1,0 +1,186 @@
+NetMHCpan 4.1              INSTALLATION INSTRUCTIONS
+
+
+   DESCRIPTION
+
+   The NetMHCpan 4.1 software predicts  binding of peptides  to any
+   known MHC molecule using artificial neural networks (ANNs). The
+   method is trained on a combination of more than 850,000 quantitative
+   Binding Affinity (BA) and Mass-Spectrometry Eluted Ligands (EL)
+   peptides. The BA data covers 201 MHC molecules from human (HLA-A, B,
+   C, E), mouse (H-2), cattle (BoLA), primates (Patr, Mamu, Gogo), swine
+   (SLA) and equine (Eqca). The EL data covers 289 MHC molecules from
+   human (HLA-A, B, C, E), mouse (H-2), cattle (BoLA), primates (Patr,
+   Mamu, Gogo), swine (SLA), equine (Eqca) and dog (DLA). Furthermore,
+   the user can obtain predictions to any custom MHC class I molecule
+   by uploading a full length MHC protein sequence. Predictions can be
+   made for peptides of any length.
+
+   Version 4.1 is described in the following publication:
+
+   NetMHCpan-4.1 and NetMHCIIpan-4.0: Improved predictions of MHC antigen
+   presentation by concurrent motif deconvolution and integration of MS
+   MHC eluted ligand data.
+   Birkir Reynisson, Bruno Alvarez, Sinu Paul, Bjoern Peters and Morten Nielsen
+   Submitted, 2020
+
+
+   Earlier Version. 4.0:
+
+   NetMHCpan-4.0: Improved Peptide-MHC Class I Interaction Predictions
+   Integrating Eluted Ligand and Peptide Binding Affinity Data
+
+   Vanessa Jurtz, Sinu Paul, Massimo Andreatta, Paolo Marcatili, Bjoern Peters,
+   and Morten Nielsen
+   The Journal of Immunology (2017) ji1700893; DOI: 10.4049/jimmunol.1700893
+
+   The original paper:
+   NetMHCpan, a Method for Quantitative Predictions of Peptide Binding to Any
+   HLA-A and -B Locus Protein of Known Sequence.
+   Morten Nielsen et al.
+   PLoS ONE 2(8): e796. doi:10.1371/journal.pone.0000796, 2007.
+
+   More information about the method, including instructions, guidelines, and
+   output description can be found at:
+
+        http://www.cbs.dtu.dk/services/NetMHCpan/
+
+
+   DOWNLOAD
+
+   The netMHCpan 4.1 software package is a property of Department of
+   Health Technology, Section of Bioinformatics The Technical University
+   of Denmark It may be downloaded  only  by special agreement.
+   For academic users there is a download site at:
+
+        http://www.cbs.dtu.dk/cgi-bin/nph-sw_request?netMHCpan
+
+   Other users are requested to contact software@cbs.dtu.dk.
+
+   PRE-INSTALLATION
+
+   netMHCpan 4.1 currently runs under  Darwin (MacOSX), and Linux.
+   The package consists of two files:
+
+      netMHCpan-4.1.readme         this file
+      netMHCpan-4.1.<unix>.tar.gz   compressed TAR archive
+
+    where 'unix' is the UNIX platform on which you are about to install. After
+   installation the software will occupy less than 45 MB of diskspace.
+
+   INSTALLATION
+
+   1. Uncompress and untar the package:
+
+      cat netMHCpan-4.1.<unix>.tar.gz | uncompress | tar xvf -
+
+      This will produce a directory 'netMHCpan-4.1'.
+
+   2. From the CBS website download the file:
+
+      https://services.healthtech.dtu.dk/services/NetMHCpan-4.1/data.tar.gz
+
+      Put it in the 'netMHCpan-4.1' directory and
+      then untar it:
+
+      tar -xvf data.tar.gz
+
+      This will produce a directory 'data'.  It is necessary  for the
+      NetMHCpan 4.1 software to operate;  once it is installed you may delete
+      the 'data.tar.gz' file; it will not be needed.
+
+   2. In the 'netMHCpan-4.1' directory edit the script 'netMHCpan':
+
+      a. At the top of the file  locate the part labelled  "GENERAL SETTINGS:
+         CUSTOMIZE TO YOUR SITE"  and set  the 'NMHOME' variable  to the full
+             path to the 'netMHCpan-4.1' directory on your system;
+
+      b. Set TMPDIR to the full path to the temporary directory of you choice. It must
+         be user-writable. You may for example set it to $NMHOME/tmp (and create
+         the tmp folder in the netMHCpan-4.1 directory).
+   
+   3. In the 'netMHCpan-4.1/test' directory test the software:
+
+      > ../netMHCpan -p test.pep > test.pep.myout
+      > ../netMHCpan test.fsa > test.fsa.myout
+      > ../netMHCpan -hlaseq B0702.fsa -p test.pep > test.pep_userMHC.myout
+      > ../netMHCpan -p test.pep -BA > test.pep_BA.out
+      > ../netMHCpan -p test.pep -BA -xls -a HLA-A01:01,HLA-A02:01 -xlsfile my_NetMHCpan_out.xls
+
+      The resulting ".myout" files  should not differ  from the corresponding
+      ".out" files provided in the package  other than in the directory names
+          and small rounding errors.
+
+   4. Finish the installation:
+
+      a. Copy or link the 'netMHCpan' file to a directory in the users' path.
+
+      b. Copy the 'netMHCpan.1' file to a location  in your manual system. If
+         you need a compiled version try running:
+
+         man -d netMHCpan.1 | compress >netMHCpan.Z
+
+         or:
+
+         neqn netMHCpan.1 | tbl | nroff -man | col | compress >netMHCpan.Z
+
+   5. Enjoy ...
+
+PROBLEMS
+
+   Contact packages@cbs.dtu.dk in case of problems.
+
+   Questions on the scientific aspects of the netMHCpan method should be sent
+   to Dr. Morten Nielsen, morni@dtu.dk.
+
+   DTU,  24 April 2020
+   M. Nielsen
+
+--------------------------------------------------------------------------------
+
+#! /bin/tcsh -f
+
+# This the main NetMHCpan 4.1 script. It only acts as the frontend to the
+# software proper, a compiled binary.
+# 
+# VERSION:      2019 Dec 9 launch
+# 
+
+###############################################################################
+#               GENERAL SETTINGS: CUSTOMIZE TO YOUR SITE
+###############################################################################
+
+# full path to the NetMHCpan 4.0 directory (mandatory)
+setenv  NMHOME  /opt/netMHCpan-4.1
+
+# determine where to store temporary files (must be writable to all users)
+
+if ( ${?TMPDIR} == 0 ) then
+        setenv  TMPDIR  $NMHOME/tmp
+endif
+
+echo "Using TMPDIR: " $TMPDIR
+
+# determine platform (do not change this unless you don't have 'uname'!)
+setenv  UNIX    `uname -s`
+setenv  AR      `uname -m`
+
+###############################################################################
+#               NOTHING SHOULD NEED CHANGING BELOW THIS LINE!
+###############################################################################
+
+# other settings
+set PLATFORM = `echo $UNIX $AR | awk '{print $1"_"$2}'`
+setenv NETMHCpan $NMHOME/$PLATFORM
+setenv DTUIBSWWW www
+setenv NetMHCpanWWWPATH /services/NetMHCpan/tmp/
+setenv NetMHCpanWWWDIR /usr/opt/www/pub/CBS/services/NetMHCpan/tmp
+
+# main ========================================================================
+if ( -x $NETMHCpan/bin/netMHCpan ) then
+   $NETMHCpan/bin/netMHCpan $*
+else
+   echo netMHCpan: no binaries found for $PLATFORM $NETMHCpan/bin/netMHCpan
+endif
+
+# end of script ===============================================================

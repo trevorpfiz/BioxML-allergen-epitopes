@@ -23,7 +23,6 @@ load_dotenv()
 
 class Settings(BaseSettings):
     ENV: str = Field(default="", env="ENV")
-    AWS_REGION: str = Field(default="us-east-1", env="AWS_REGION")
     BACKEND_CORS_ORIGINS: Union[List[AnyHttpUrl], List[str]] = Field(
         default=["http://localhost:3000"], env="BACKEND_CORS_ORIGINS"
     )
@@ -38,29 +37,10 @@ class Settings(BaseSettings):
             return v
         raise ValueError("Invalid format for BACKEND_CORS_ORIGINS")
 
-    SUPABASE_URL: str = Field(..., env="SUPABASE_URL")
-    SUPABASE_KEY: str = Field(..., env="SUPABASE_KEY")
-    SUPERUSER_EMAIL: str = Field(..., env="SUPERUSER_EMAIL")
-    SUPERUSER_PASSWORD: str = Field(..., env="SUPERUSER_PASSWORD")
-    JWT_SECRET: str = Field(..., env="JWT_SECRET")
-    S3_BUCKET_NAME: str = Field(default="fastapi-csv", env="S3_BUCKET_NAME")
-    SAGEMAKER_ENDPOINT_NAME: str = Field(
-        default="huggingface-pytorch-inference-2024-10-16-20-16-41-824",
-        env="SAGEMAKER_ENDPOINT_NAME",
-    )
-    EC2_TOOLS_API_URL: str = Field(
-        ...,
-        env="EC2_TOOLS_API_URL",
-    )
-
-    # Optional
-    HUGGINGFACE_ACCESS_TOKEN: str = Field(None, env="HUGGINGFACE_ACCESS_TOKEN")
-    OPENAI_API_KEY: str = Field(None, env="OPENAI_API_KEY")
-
     # Project details
     API_VERSION: str = "/api/v1"
-    PROJECT_NAME: str = "B-cell and T-cell Epitope Prediction FastAPI"
-    PROJECT_DESCRIPTION: str = "B-cell and T-cell Epitope Prediction"
+    PROJECT_NAME: str = "Epitope Prediction Tools FastAPI"
+    PROJECT_DESCRIPTION: str = "A simple FastAPI app"
 
     # Pydantic configuration to load environment variables from .env
     model_config = SettingsConfigDict(env_file=".env")

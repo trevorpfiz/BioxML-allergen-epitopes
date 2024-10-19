@@ -9,7 +9,7 @@ from supabase import AsyncClient
 
 from app.core.config import settings
 from app.core.utils import generate_csv_key, read_s3_csv, upload_csv_to_s3
-from app.crud import crud_mhc_i_prediction
+from app.crud.crud_mhc_i_prediction import crud_mhc_i_prediction
 from app.schemas.conformational_b_prediction import PredictionResult
 from app.schemas.linear_b_prediction import LBPredictionResult
 from app.schemas.mhc_i_prediction import MhcIPredictionResult
@@ -81,29 +81,48 @@ async def process_classI_results(
     results: List[Dict[str, Any]],
 ) -> List[MhcIPredictionResult]:
     """
-    Processes the Class I results returned by the IEDB API.
+    Processes the Class I results returned by the IEDB API or similar prediction tool.
+    - Extracts relevant peptide, allele, and affinity data.
+    - Formats the results and calculates the best binding affinity.
     """
     peptide_data = {}
 
+    # Check if there's an error in the results
+    if isinstance(results, dict) and "error" in results:
+        logger.error(f"Error in results: {results['error']}")
+        raise HTTPException(status_code=400, detail=results["error"])
+
     for res in results:
         if "result" in res:
-            try:
-                df = pd.read_csv(StringIO(res["result"]), sep="\t")
-                if {"peptide", "allele", "ic50"}.issubset(df.columns):
-                    for _, row in df.iterrows():
-                        peptide = row["peptide"]
-                        allele = row["allele"]
-                        ic50 = row["ic50"]
-                        peptide_data.setdefault(peptide, {"binding_affinities": []})
-                        peptide_data[peptide]["binding_affinities"].append(
-                            (allele, float(ic50))
-                        )
-                else:
-                    logger.warning(f"Unexpected columns in API response: {df.columns}")
-            except pd.errors.EmptyDataError:
-                logger.warning(
-                    f"Received empty data from API for allele {res['allele']} and length {res['length']}."
-                )
+            # Check if the result is a list of dictionaries instead of a string
+            if isinstance(res["result"], list):
+                # Handle the case where the result is a list of dictionaries
+                df = pd.DataFrame(
+                    res["result"]
+                )  # Directly convert the list of dicts to a DataFrame
+            else:
+                try:
+                    # Handle the case where the result is a string
+                    df = pd.read_csv(StringIO(res["result"]), sep="\t")
+                except Exception as e:
+                    logger.error(f"Error reading data for result {res}: {str(e)}")
+                    raise HTTPException(
+                        status_code=500, detail="Error processing results."
+                    )
+
+            # Check for required columns
+            if {"peptide", "allele", "affinity"}.issubset(df.columns):
+                for _, row in df.iterrows():
+                    peptide = row["peptide"]
+                    allele = row["allele"]
+                    affinity = row["affinity"]  # Using 'affinity' instead of 'ic50'
+
+                    peptide_data.setdefault(peptide, {"binding_affinities": []})
+                    peptide_data[peptide]["binding_affinities"].append(
+                        (allele, float(affinity))
+                    )
+            else:
+                logger.warning(f"Unexpected columns in API response: {df.columns}")
         else:
             # Handle errors if any
             for peptide in res["peptides"]:
@@ -114,15 +133,36 @@ async def process_classI_results(
     processed_results = []
     for peptide, data in peptide_data.items():
         binding_affinities = data.get("binding_affinities", [])
-        binding_affinity_str = "|".join(
-            [f"{allele}={ic50} nM" for allele, ic50 in binding_affinities]
-        )
+
+        # Ensure binding_affinities is a list and each element is a tuple of (allele, affinity)
+        if isinstance(binding_affinities, list) and all(
+            isinstance(x, tuple) and len(x) == 2 for x in binding_affinities
+        ):
+            # Log for debugging
+            logger.debug(
+                f"Binding affinities for peptide {peptide}: {binding_affinities}"
+            )
+
+            binding_affinity_str = "|".join(
+                [
+                    f"{allele}={affinity:.2f} nM"
+                    for allele, affinity in binding_affinities
+                ]
+            )
+        else:
+            logger.warning(
+                f"Binding affinities for peptide {peptide} is not formatted correctly: {binding_affinities}"
+            )
+            binding_affinity_str = ""
+
+        # Determine the best binding affinity (minimum affinity value)
         best_binding_affinity = (
             f"{min(binding_affinities, key=lambda x: x[1])}"
             if binding_affinities
             else ""
         )
 
+        # Append the formatted result for this peptide
         processed_results.append(
             MhcIPredictionResult(
                 Peptide_Sequence=peptide,
