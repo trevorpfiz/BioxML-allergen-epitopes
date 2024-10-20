@@ -42,19 +42,6 @@ async def process_and_update_prediction(
         # Update job status to 'running'
         await crud_job.update_status(db=db, id=job_id, status="running")
 
-        # Sample input
-        glp_1_receptor = "MAGAPGPLRLALLLLGMVGRAGPRPQGATVSLWETVQKWREYRRQCQRSLTEDPPPATDLFCNRTFDEYACWPDGEPGSFVNVSCPWYLPWASSVPQGHVYRFCTAEGLWLQKDNSSLPWRDLSECEESKRGERSSPEEQLLFLYIIYTVGYALSFSALVIASAILLGFRHLHCTRNYIHLNLFASFILRALSVFIKDAALKWMYSTAAQQHQWDGLLSYQDSLSCRLVFLLMQYCVAANYYWLLVEGVYLYTLLAFSVLSEQWIFRLYVSIGWGVPLLFVVPWGIVKYLYEDEGCWTRNSNMNYWLIIRLPILFAIGVNFLIFVRVICIVVSKLKANLMCKTDIKCRLAKSTLTLIPLLGTHEVIFAFVMDEHARGTLRFIKLFTELSFTSFQGLMVAILYCFVNNEVQLEFRKSWERWRLEHLHIQRDSSMKPLKCPTSSLSSGATAGSSMYTATCQASCS"
-        sample = {"inputs": glp_1_receptor}
-
-        # Run prediction pipeline
-        # predictions = run(
-        #     input_objects=[sample],
-        #     endpoint_name=settings.SAGEMAKER_ENDPOINT_NAME,
-        #     model_type="single",
-        # )
-
-        # logger.info(predictions)
-
         # Process the prediction based on its type
         if prediction_type == "conformational-b":
             if is_structure_based:

@@ -66,8 +66,12 @@ class ESM1vForTokenClassification(nn.Module):
     def __init__(self, num_labels=2, pretrained_no=1):
         super().__init__()
         self.num_labels = num_labels
+        self.model_name = (
+            esm.pretrained.esm2_t33_650M_UR50D()
+        )  # load_model_and_alphabet_hub(self.model_name)
+
         # Load the pretrained ESM model
-        self.esm1v, self.esm1v_alphabet = esm.pretrained.esm1v_t33_650M_UR90S_1()
+        self.esm1v, self.esm1v_alphabet = esm.pretrained.esm2_t33_650M_UR50D()
         self.classifier = nn.Linear(1280, self.num_labels)
 
     def forward(self, token_ids, labels=None):
