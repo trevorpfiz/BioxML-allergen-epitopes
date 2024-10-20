@@ -44,6 +44,7 @@ async def create_conformational_b_prediction(
         chain=prediction_in.chain,
         is_structure_based=prediction_in.is_structure_based,
         prediction_type="conformational-b",
+        user_id=user.id,
         db=db,
     )
 
@@ -71,6 +72,7 @@ async def create_linear_b_prediction(
         job_id=job.id,
         sequence=prediction_in.sequence,
         prediction_type="linear-b",
+        user_id=user.id,
         db=db,
     )
 
@@ -97,7 +99,9 @@ async def create_mhc_i_prediction(
         process_and_update_prediction,
         job_id=job.id,
         sequence=prediction_in.sequence,
+        alleles=prediction_in.alleles,
         prediction_type="mhc-i",
+        user_id=user.id,
         db=db,
     )
 
@@ -124,7 +128,9 @@ async def create_mhc_ii_prediction(
         process_and_update_prediction,
         job_id=job.id,
         sequence=prediction_in.sequence,
+        alleles=prediction_in.alleles,
         prediction_type="mhc-ii",
+        user_id=user.id,
         db=db,
     )
 

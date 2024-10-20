@@ -46,8 +46,8 @@ const ConformationalBForm: React.FC = () => {
       sequence: "",
       pdbId: "",
       chain: "",
-      bcrRecognitionProbabilityMethod: "",
-      surfaceAccessibilityMethod: "",
+      bcrRecognitionProbabilityMethod: "esm-2",
+      surfaceAccessibilityMethod: "method-1",
     },
   });
   const { watch, setValue } = form;
@@ -282,9 +282,7 @@ const ConformationalBForm: React.FC = () => {
                     </SelectTrigger>
                   </FormControl>
                   <SelectContent>
-                    <SelectItem value="method-1">Method 1</SelectItem>
-                    <SelectItem value="method-2">Method 2</SelectItem>
-                    <SelectItem value="method-3">Method 3</SelectItem>
+                    <SelectItem value="esm-2">ESM2</SelectItem>
                   </SelectContent>
                 </Select>
                 <FormMessage />
@@ -309,9 +307,7 @@ const ConformationalBForm: React.FC = () => {
                     </SelectTrigger>
                   </FormControl>
                   <SelectContent>
-                    <SelectItem value="method-a">Method A</SelectItem>
-                    <SelectItem value="method-b">Method B</SelectItem>
-                    <SelectItem value="method-c">Method C</SelectItem>
+                    <SelectItem value="method-1">Method 1</SelectItem>
                   </SelectContent>
                 </Select>
                 <FormMessage />

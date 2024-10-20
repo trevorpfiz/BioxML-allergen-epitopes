@@ -23,7 +23,7 @@ load_dotenv()
 
 class Settings(BaseSettings):
     ENV: str = Field(default="", env="ENV")
-    REGION: str = Field(default="us-east-1", env="REGION")
+    AWS_REGION: str = Field(default="us-east-1", env="AWS_REGION")
     BACKEND_CORS_ORIGINS: Union[List[AnyHttpUrl], List[str]] = Field(
         default=["http://localhost:3000"], env="BACKEND_CORS_ORIGINS"
     )
@@ -48,6 +48,10 @@ class Settings(BaseSettings):
         default="huggingface-pytorch-inference-2024-10-16-20-16-41-824",
         env="SAGEMAKER_ENDPOINT_NAME",
     )
+    EC2_TOOLS_API_URL: str = Field(
+        ...,
+        env="EC2_TOOLS_API_URL",
+    )
 
     # Optional
     HUGGINGFACE_ACCESS_TOKEN: str = Field(None, env="HUGGINGFACE_ACCESS_TOKEN")
@@ -55,8 +59,8 @@ class Settings(BaseSettings):
 
     # Project details
     API_VERSION: str = "/api/v1"
-    PROJECT_NAME: str = "FastAPI App"
-    PROJECT_DESCRIPTION: str = "A simple FastAPI app"
+    PROJECT_NAME: str = "B-cell and T-cell Epitope Prediction FastAPI"
+    PROJECT_DESCRIPTION: str = "B-cell and T-cell Epitope Prediction"
 
     # Pydantic configuration to load environment variables from .env
     model_config = SettingsConfigDict(env_file=".env")

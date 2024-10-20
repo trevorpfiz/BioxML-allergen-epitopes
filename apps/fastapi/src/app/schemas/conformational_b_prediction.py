@@ -16,11 +16,11 @@ class PredictionResult(BaseModel):
     AA: str
     Epitope_score: float
     N_glyco_label: int
-    Hydrophilicity: Optional[float] = None  # fix
-    Charge: Optional[int] = None  # fix
-    ASA: Optional[float] = None
-    RSA: Optional[float] = None
-    B_Factor: Optional[float] = None
+    Hydrophilicity: Optional[float] = Field(default=None)
+    Charge: Optional[int] = Field(default=None)
+    ASA: Optional[float] = Field(default=None)
+    RSA: Optional[float] = Field(default=None)
+    B_Factor: Optional[float] = Field(default=None)
 
 
 class ConformationalBPredictionCreate(CreateBase, JobMixin):

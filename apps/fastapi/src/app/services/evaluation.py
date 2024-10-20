@@ -10,7 +10,9 @@ def get_predictions(requests, endpoint_name, model_name, model_type="mme"):
     """
     Pass preprocessed requests to the specific endpoint (mme or single)
     """
-    sagemaker_runtime = boto3.client("sagemaker-runtime", region_name=settings.REGION)
+    sagemaker_runtime = boto3.client(
+        "sagemaker-runtime", region_name=settings.AWS_REGION
+    )
     responses = []
     for request in requests:
         if model_type == "mme":

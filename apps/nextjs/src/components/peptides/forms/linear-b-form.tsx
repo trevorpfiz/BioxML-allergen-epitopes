@@ -43,8 +43,8 @@ const LinearBForm: React.FC = () => {
     schema: LinearBFormSchema,
     defaultValues: {
       sequence: "",
-      bCellImmunogenicityMethod: undefined,
-      bcrRecognitionProbabilityMethod: "",
+      bCellImmunogenicityMethod: "method-1",
+      bcrRecognitionProbabilityMethod: "bepipred-2",
     },
   });
 
@@ -208,9 +208,7 @@ const LinearBForm: React.FC = () => {
                     </SelectTrigger>
                   </FormControl>
                   <SelectContent>
-                    <SelectItem value="method-1">Method 1</SelectItem>
-                    <SelectItem value="method-2">Method 2</SelectItem>
-                    <SelectItem value="method-3">Method 3</SelectItem>
+                    <SelectItem value="bepipred-2">BepiPred 2.0</SelectItem>
                   </SelectContent>
                 </Select>
                 <FormMessage />

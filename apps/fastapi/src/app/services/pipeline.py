@@ -1,7 +1,7 @@
 from typing import Any, List
 
 from app.core.utils import get_endpoint
-from app.services.inference import get_predictions
+from app.services.inference import get_sagemaker_predictions
 
 
 def run(
@@ -31,7 +31,7 @@ def run(
     preprocess = [obj for obj in input_objects]
 
     # Run inference
-    model_responses = get_predictions(
+    model_responses = get_sagemaker_predictions(
         preprocess,
         endpoint_name,
         model_name,

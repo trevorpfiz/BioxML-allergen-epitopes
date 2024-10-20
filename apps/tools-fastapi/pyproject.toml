@@ -1,0 +1,29 @@
+[project]
+name = "prediction-tools-fastapi"
+version = "0.1.0"
+description = "FastAPI for B-cell and T-cell epitope prediction tools."
+authors = [
+    {name = "trevorpfiz", email = "elektrikspark@gmail.com"},
+    {name = "zacharypfiz", email = "ztpfizcode@gmail.com"},
+]
+readme = "README.md"
+requires-python = ">=3.12"
+dependencies = [
+    "fastapi[standard]>=0.115.0",
+    "httpx>=0.27.2",
+    "mhctools>=1.9.0",
+    "pandas>=2.2.3",
+    "pydantic-settings>=2.5.2",
+    "requests>=2.32.3",
+]
+
+[tool.uv]
+dev-dependencies = [
+    "pylint-pydantic>=0.3.2",
+    "pytest>=8.3.3",
+    "python-dotenv>=1.0.1",
+    "ruff>=0.6.8",
+]
+
+[tool.uv.sources]
+mhctools = { git = "https://github.com/hammerlab/mhctools.git" }

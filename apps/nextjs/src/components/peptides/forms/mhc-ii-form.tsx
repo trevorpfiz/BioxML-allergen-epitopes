@@ -50,9 +50,9 @@ const MhcIIForm: React.FC = () => {
     defaultValues: {
       sequence: "",
       alleles: [],
-      tcrRecognitionProbabilityMethod: "",
-      mhcBindingAffinityMethod: "",
-      pmhcStabilityMethod: "",
+      tcrRecognitionProbabilityMethod: "mix-tcr-pred",
+      mhcBindingAffinityMethod: "netmhciipan-4.3",
+      pmhcStabilityMethod: "method-1",
     },
   });
 
@@ -199,6 +199,20 @@ const MhcIIForm: React.FC = () => {
                 HLA_DRB_ALLELES.some((allele) =>
                   field.value.includes(allele),
                 ) && !isDrbSelected;
+              const isDqaDqbSelected = HLA_DQA_DQB_ALLELES.every((allele) =>
+                field.value.includes(allele),
+              );
+              const isDqaDqbIndeterminate =
+                HLA_DQA_DQB_ALLELES.some((allele) =>
+                  field.value.includes(allele),
+                ) && !isDqaDqbSelected;
+              const isDpaDpbSelected = HLA_DPA_DPB_ALLELES.every((allele) =>
+                field.value.includes(allele),
+              );
+              const isDpaDpbIndeterminate =
+                HLA_DPA_DPB_ALLELES.some((allele) =>
+                  field.value.includes(allele),
+                ) && !isDpaDpbSelected;
 
               return (
                 <FormItem>
@@ -253,9 +267,7 @@ const MhcIIForm: React.FC = () => {
                   <FormItem className="flex flex-row items-center space-x-2 space-y-0 py-2">
                     <FormControl>
                       <Checkbox
-                        checked={HLA_DQA_DQB_ALLELES.every((allele) =>
-                          field.value.includes(allele),
-                        )}
+                        checked={isDqaDqbSelected || isDqaDqbIndeterminate}
                         onCheckedChange={(checked) =>
                           toggleGroup(
                             HLA_DQA_DQB_ALLELES,
@@ -300,9 +312,7 @@ const MhcIIForm: React.FC = () => {
                   <FormItem className="flex flex-row items-center space-x-2 space-y-0 py-2">
                     <FormControl>
                       <Checkbox
-                        checked={HLA_DPA_DPB_ALLELES.every((allele) =>
-                          field.value.includes(allele),
-                        )}
+                        checked={isDpaDpbSelected || isDpaDpbIndeterminate}
                         onCheckedChange={(checked) =>
                           toggleGroup(
                             HLA_DPA_DPB_ALLELES,
@@ -366,9 +376,7 @@ const MhcIIForm: React.FC = () => {
                     </SelectTrigger>
                   </FormControl>
                   <SelectContent>
-                    <SelectItem value="method-1">Method 1</SelectItem>
-                    <SelectItem value="method-2">Method 2</SelectItem>
-                    <SelectItem value="method-3">Method 3</SelectItem>
+                    <SelectItem value="mix-tcr-pred">MixTCRpred</SelectItem>
                   </SelectContent>
                 </Select>
                 <FormMessage />
@@ -393,9 +401,9 @@ const MhcIIForm: React.FC = () => {
                     </SelectTrigger>
                   </FormControl>
                   <SelectContent>
-                    <SelectItem value="method-1">Method 1</SelectItem>
-                    <SelectItem value="method-2">Method 2</SelectItem>
-                    <SelectItem value="method-3">Method 3</SelectItem>
+                    <SelectItem value="netmhciipan-4.3">
+                      NetMHCIIpan 4.3
+                    </SelectItem>
                   </SelectContent>
                 </Select>
                 <FormMessage />
@@ -421,8 +429,6 @@ const MhcIIForm: React.FC = () => {
                   </FormControl>
                   <SelectContent>
                     <SelectItem value="method-1">Method 1</SelectItem>
-                    <SelectItem value="method-2">Method 2</SelectItem>
-                    <SelectItem value="method-3">Method 3</SelectItem>
                   </SelectContent>
                 </Select>
                 <FormMessage />

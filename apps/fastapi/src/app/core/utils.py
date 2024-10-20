@@ -1,9 +1,11 @@
 import csv
+import io
 import logging
 import re
 from io import StringIO
 from typing import List, Optional, Type, TypeVar
 
+import aioboto3
 import boto3
 import httpx
 from fastapi import HTTPException
@@ -60,7 +62,7 @@ def read_s3_csv(
 # CRUD Sagemaker Endpoints
 def get_endpoints(endpoint_name_filter, sagemaker_client=None):
     if sagemaker_client is None:
-        sagemaker_client = boto3.client("sagemaker", region_name=settings.REGION)
+        sagemaker_client = boto3.client("sagemaker", region_name=settings.AWS_REGION)
     # Retrieve all endpoints for filtered name
     response = sagemaker_client.list_endpoints(
         SortBy="Name", NameContains=endpoint_name_filter, MaxResults=100
@@ -85,7 +87,7 @@ def get_endpoints(endpoint_name_filter, sagemaker_client=None):
 
 def get_endpoint(endpoint_name_filter, sagemaker_client=None):
     if sagemaker_client is None:
-        sagemaker_client = boto3.client("sagemaker", region_name=settings.REGION)
+        sagemaker_client = boto3.client("sagemaker", region_name=settings.AWS_REGION)
     endpoints = get_endpoints(endpoint_name_filter, sagemaker_client=sagemaker_client)
     if len(endpoints) == 0:
         return None
@@ -168,4 +170,76 @@ async def fetch_pdb_data(pdb_id: str, chain: Optional[str] = None) -> dict:
             raise HTTPException(
                 status_code=response.status_code,
                 detail=f"Error fetching PDB data: {response.status_code}",
+            )
+
+
+def split_protein_sequence(
+    protein_sequence: str, min_length: int, max_length: int
+) -> List[str]:
+    """
+    Splits a protein sequence into peptides based on the provided min and max lengths.
+    """
+    peptides = []
+    for length in range(min_length, max_length + 1):
+        peptides.extend(
+            [
+                protein_sequence[i : i + length]
+                for i in range(len(protein_sequence) - length + 1)
+            ]
+        )
+    return peptides
+
+
+def get_default_peptide_lengths(prediction_type: str):
+    if prediction_type == "mhc-i":
+        return 8, 11
+    elif prediction_type == "mhc-ii":
+        return 13, 25
+    # Add other prediction types if needed
+    return 8, 11  # Fallback default lengths
+
+
+def generate_csv_key(
+    user_id: str, job_id: str, timestamp: str, prediction_type: str
+) -> str:
+    """
+    Generates a unique S3 key for the CSV file based on user ID, job ID, and timestamp.
+    """
+    return f"predictions/{user_id}/{job_id}_{prediction_type}_{timestamp}.csv"
+
+
+async def upload_csv_to_s3(results: List[T], s3_key: str):
+    """
+    Uploads the processed results to S3 as a CSV file, using the Pydantic schema to generate the columns.
+    :param results: List of Pydantic models (MhcIPredictionResult, MhcIIPredictionResult, etc.)
+    :param s3_key: The key (path) where the CSV will be stored in S3.
+    """
+    if not results:
+        raise HTTPException(status_code=400, detail="No results to upload")
+
+    # Dynamically get the field names (columns) from the Pydantic schema
+    fieldnames = list(results[0].model_fields.keys())
+
+    output = io.StringIO()
+    writer = csv.DictWriter(output, fieldnames=fieldnames, quoting=csv.QUOTE_NONNUMERIC)
+    writer.writeheader()
+
+    # Convert results (Pydantic models) to dictionaries for CSV writing
+    for result in results:
+        writer.writerow(result.model_dump())
+
+    csv_content = output.getvalue()
+
+    # Create an aioboto3 session
+    session = aioboto3.Session()
+
+    # Use the session to create an S3 client with async context manager
+    async with session.client("s3", region_name=settings.AWS_REGION) as s3_client:
+        try:
+            await s3_client.put_object(
+                Bucket=settings.S3_BUCKET_NAME, Key=s3_key, Body=csv_content
+            )
+        except Exception as e:
+            raise HTTPException(
+                status_code=500, detail=f"Failed to upload CSV to S3: {str(e)}"
             )

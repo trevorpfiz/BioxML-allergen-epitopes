@@ -1,0 +1,142 @@
+NetMHCIIpan 4.3          INSTALLATION INSTRUCTIONS
+
+
+   DESCRIPTION
+
+   The NetMHCIIpan 4.3 software predicts  binding of peptides to MHC class II
+   molecules. The predictions are available for all three human MHC class II
+   isotypes: HLA-DR, HLA-DP and HLA-DQ, as well as for mouse molecules (H-2) and
+   cattle molecules (BoLA).
+   Version 4.3 is a new update to NetMHCIIpan-4.2 retrained on an extended set of
+   HLA-DP EL data as well as new data for HLA-DR and BoLA-DRB3. Further, the method
+   uses an updated version of the NNAlign_MA framework, allowing for prediction of
+   inverted peptide binders.
+
+   The 4.3 method is described in detail in the following articles:
+
+   Accurate prediction of HLA class II antigen presentation across all loci using
+   tailored data acquisition and refined machine learning
+   Jonas B. Nilsson, Saghar Kaabinejadian, Hooman Yari, Michel G. D. Kester,
+   Peter van Balen, William H. Hildebrand and Morten Nielsen
+   Science Advances, 24 Nov 2023. https://www.science.org/doi/10.1126/sciadv.adj6367
+
+   Previous version (4.2):
+   Machine learning reveals limited contribution of trans-only encoded variants to
+   the HLA-DQ immunopeptidome
+   Jonas Birkelund Nilsson, Saghar Kaabinejadian, Hooman Yari, Bjoern Peters,
+   Carolina Barra, Loren Gragert, William Hildebrand and Morten Nielsen
+   Communications Biology, 21 April 2023. https://doi.org/10.1038/s42003-023-04749-7
+
+   Previous version (4.1):
+   Accurate MHC Motif Deconvolution of Immunopeptidomics Data Reveals a Significant
+   Contribution of DRB3, 4 and 5 to the Total DR Immunopeptidome
+   Kaabinejadian S, Barra C, Alvarez B, Yari H, Hildebrand WH and Nielsen M
+   Front. Immunol. 13:835454. Published: 26 January 2022. doi: 10.3389/fimmu.2022.835454
+
+   Previous version (4.0):
+   Improved prediction of MHC II antigen presentation through integration and motif
+   deconvolution of mass spectrometry MHC eluted ligand data.
+   Reynisson B, Barra C, Kaabinejadian S, Hildebrand WH, Peters B, Nielsen M
+   J Proteome Res 2020 Apr 30. doi: 10.1021/acs.jproteome.9b00874.
+
+   Previous version (3.2):
+   Improved methods for predicting peptide binding affinity to MHC class II molecules.
+   Jensen KK, Andreatta M, Marcatili P, Buus S, Greenbaum JA, Yan Z, Sette A,
+   Peters B, Nielsen M.
+   Immunology. 2018 Jan 6. doi: 10.1111/imm.12889.
+
+   The previous version (3.1):
+
+   Accurate pan-specific prediction of peptide-MHC class II binding
+   affinity with improved binding core identification.
+   Andreatta M, Karosiene E, Rasmussen M, Stryhn A, Buus S and Nielsen M.
+   Immunogenetics, Epub ahead of print, PubMed 26416257, Sep 29, 2015.
+
+   The previous version (3.0):
+
+   NetMHCIIpan-3.0, a common pan-specific MHC class II prediction method
+   including all three human MHC class II isotypes, HLA-DR, HLA-DP and HLA-DQ
+   Karosiene E, Rasmussen M, Blicher T, Lund O, Buus S, and Nielsen M.
+   Immunogenetics Oct;65(10):711-24, 2013.
+
+   More information about the method can be found at:
+
+   https://services.healthtech.dtu.dk/services/NetMHCIIpan-4.3/
+
+   DOWNLOAD
+
+   The NetMHCIIpan 4.3 software is a property of DTU Section for Bioinformatics
+   It may be downloaded only by special agreement.  For
+   academic users there is a download site at:
+
+   
+        https://services.healthtech.dtu.dk/software.php
+
+   Other users are requested to contact health-software@dtu.dk.
+
+
+   PRE-INSTALLATION
+
+   netMHCIIpan 4.3  currently runs under Darwin (macOS x86_64 or arm64)  and Linux  (several
+   vendors). The package consists of two files:
+
+      netMHCIIpan-4.3.readme         this file
+      netMHCIIpan-4.3.<unix>.tar.Z   compressed TAR archive
+
+   where 'unix' is the UNIX platform on which you are about to install.
+
+   INSTALLATION
+
+   1. Uncompress and untar the package:
+
+      tar -xvf netMHCIIpan-4.3.<unix>.tar.gz
+
+      This will produce a directory 'netMHCIIpan-4.3.
+
+   2. In the 'netMHCIIpan-4.3' directory edit the script 'netMHCIIpan':
+
+      a. At the top of the file  locate the part labelled  "GENERAL SETTINGS:
+         CUSTOMIZE TO YOUR SITE"  and set  the 'NMHOME' variable  to the full
+         path to the 'netMHCIIpan-4.3' directory on your system;
+
+      b. Set TMPDIR to the full path to the tmp directory of you choice (must
+         be user writable);
+
+   3. In the 'netMHCIIpan-4.3/test' directory test the software:
+
+   > ../netMHCIIpan -inptype 1 -f example.pep > example.pep.out
+      > ../netMHCIIpan -inptype 1 -f example.pep_context -context > example.pep_context.out
+      > ../netMHCIIpan -inptype 0 -f example.fsa > example.fsa.out
+      > ../netMHCIIpan -inptype 0 -f example.fsa -context -termAcon > example.fsa_context.out
+      > ../netMHCIIpan -f example.fsa -s -u > example.fsa.sorted.out
+      > ../netMHCIIpan -f example.fsa -hlaseqA DQA1_0101.fsa -hlaseq DQB1_0201.fsa > example.fsa_hlaseq_A+B.out
+
+      The resulting "*.myout" files  should be identical to the corresponding
+      "*.out" files provided in the package.
+
+   4. Finish the installation:
+
+      a. Copy or link  the 'netMHCIIpan' script  to a directory in the users'
+         path.
+
+      b. Copy the 'netMHCIIpan.1' file  to a location  in your manual system.
+         If you need a compiled version try running:
+
+         man -d netMHCIIpan.1 |compress >netMHCIIpan.Z
+
+         or:
+
+         neqn netMHCIIpan.1 |tbl |nroff -man |col |compress >netMHCIIpan.Z
+
+   5. Enjoy ...
+
+
+   PROBLEMS
+
+   Contact health-software@dtu.dk, in case of problems.
+
+   Questions on the _scientific_ aspects of the NetMHCIIpan method  should be
+   sent to dr Morten Nielsen, morni@dtu.dk.
+
+   9 Oct 2023
+   M. Nielsen
