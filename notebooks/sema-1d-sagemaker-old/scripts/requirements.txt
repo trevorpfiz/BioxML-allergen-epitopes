@@ -1,7 +1,9 @@
 accelerate
-fair-esm
+bitsandbytes
+datasets
 evaluate
 nvidia-ml-py3
+peft
 scikit-learn
 transformers
 torchinfo

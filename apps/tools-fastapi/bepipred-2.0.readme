@@ -1,0 +1,103 @@
+BepiPred-2.0
+Sequence based B-cell epitope prediction tool
+==========================
+
+0. Prerequisites
+   In order to install BepiPred-2.0, you will need the NetsurfP installed
+   either globally, so the "netsurfp" global command is available or
+   an environmental variable named NETSURFP_BIN with the path to the
+   binary of netsurfp.
+
+   To download and install NetsurfP, visit the download page;
+   http://www.cbs.dtu.dk/cgi-bin/sw_request?netsurfp+1.0
+   
+   
+1. Installation
+   BepiPred-2.0 is compatible with python version 2.7 and above. It is highly adviced to use
+   a python virtual environment to avoid version conflicts:
+   cd your_VE_folder
+   virtualenv bp2
+   source ./bp2/bin/activate
+
+   If source fails try the following instead;
+   source ./bp2/bin/activate.csh
+
+   *** NOTE ***
+   It is highly recommended if netsurfp is not globally avaiable to add the full
+   path to netsurfp to avoid to have to set the environmental variable everytime
+   you enter your virtual environment.
+
+   If activate works, edit the activate file below the line "export VIRTUAL_ENV"
+   to contain;
+   export NETSURFP_BIN="Fullpath to netsurfp binary"
+
+   If activate.csh works, edit the activate.csh file below the
+   line "setenv PATH "$VIRTUAL_ENV/bin:$PATH"" to contain;
+
+   setenv NETSURFP_BIN "Fullpath to netsurfp binary"
+   *************
+
+   You can install BepiPred-2.0 by using pip:
+
+   pip install bepipred-2.0/
+
+   You can check your installation with
+   
+   BepiPred-2.0 bepipred-2.0/bepipred2/data/example.fasta
+
+   It will install all the python required packages. To uninstall, use
+   pip uninstall bepipred2
+
+2. Usage
+  After installing, BepiPred-2.0 can be used both from commandline and
+  be intergrated into your own personal python script. How to use either
+  is described below.
+
+  2.1 Using BepiPred-2.0 from the commandline
+    The package will install the executable BepiPred-2.0. This
+    executable allows the prediction of B-cell epitopes using only
+    an antigen's amino acid sequence. 
+
+    *** NOTE ***
+    If you have multiple antigen sequences, it is highly recommended to submit
+    a single fasta file containing all and not call it separately, due to a 
+    large computational performance gain.
+    ************
+
+    The basic usage is the following:
+
+    BepiPred-2.0 sequence.fasta
+
+    where sequence.fasta is a fasta format file containing the
+    amino acid sequence of an antigen or multiple antigens.
+
+    The additional following options are available:
+
+    usage: BepiPred-2.0 [-h] [-t THRESHOLD] fastafile
+
+    positional arguments:
+      fastafile             Fasta file containing antigen(s)
+
+    optional arguments:
+      -h, --help            show this help message and exit
+      -t THRESHOLD, --threshold THRESHOLD
+                            Threshold on when to consider residues, epitope
+                            residues
+
+  2.2 Integrating BepiPred-2.0 into a python script
+    After installation, it is possible to import BepiPred-2.0 into a python
+    script. To try it, open a python terminal in the environment where BepiPred-2.0
+    is available. Then write the following;
+
+    import bepipred2 as bp2 #imports BepiPred-2.0
+    bp2.utils.RF_MODEL = bp2.utils.init_rf() #Unloads the random forest predictor
+
+    seq = 'cdafvgtwKLVssenfddymkevgvgfatrkvagMAKpnmiisvngdlvtirsesTfkn' #Amino acid sequence
+    id  = 'Example1' #Name/identifier of sequence
+    AG = bp2.Antigen(id, seq) #Sets up antigen class object
+    AG.pred_netsurfp() #Predicts surface and secondary structure of antigen 
+    AG.get_features() #Sets up the feature space for predicting
+    AG.predict() #Predicts the epitopes of the antigen
+
+
+    The predictions of the sequence can then be found in class variable, AG.predicted.

@@ -1,37 +1,129 @@
+import os
+
+import esm
 import torch
-from transformers import AutoTokenizer, EsmForTokenClassification
+from torch import nn
+from transformers.modeling_outputs import SequenceClassifierOutput
 
 
-# Load the model and tokenizer
 def model_fn(model_dir):
-    # Load the EsmForTokenClassification model for regression
-    model = EsmForTokenClassification.from_pretrained(
-        model_dir,
-        device_map="auto",
-        num_labels=1,  # Since it's a regression task
+    """
+    Load the model and ESM batch converter from the model directory.
+
+    Args:
+        model_dir (str): Directory where the model artifacts are saved.
+
+    Returns:
+        Tuple[torch.nn.Module, esm.pretrained.Alphabet]: The loaded model and ESM batch converter.
+    """
+    device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
+
+    # Define the custom model class
+    class ESM1vForTokenClassification(nn.Module):
+        def __init__(self, num_labels=2, pretrained_no=1):
+            super().__init__()
+            self.num_labels = num_labels
+            self.model_name = "esm1v_t33_650M_UR90S_" + str(pretrained_no)
+
+            # Load the pretrained ESM-1v model and alphabet
+            self.esm1v, self.esm1v_alphabet = esm.pretrained.esm1v_t33_650M_UR90S_1()
+            self.classifier = nn.Linear(1280, self.num_labels)
+
+        def forward(self, token_ids, labels=None):
+            outputs = self.esm1v.forward(token_ids, repr_layers=[33])[
+                "representations"
+            ][33]
+            outputs = outputs[:, 1:-1, :]  # Remove start and end tokens
+            logits = self.classifier(outputs)
+            return SequenceClassifierOutput(logits=logits)
+
+    # Initialize and load the model
+    model = ESM1vForTokenClassification().to(device)
+
+    # Load the state_dict from 'model.pth'
+    model.load_state_dict(
+        torch.load(os.path.join(model_dir, "model.pth"), map_location=device)
     )
-    tokenizer = AutoTokenizer.from_pretrained(model_dir)
-
-    return model, tokenizer
-
-
-# Prediction function
-def predict_fn(data, model_and_tokenizer):
-    model, tokenizer = model_and_tokenizer
     model.eval()
 
-    # Prepare input data for the model
-    inputs = data.pop("inputs", data)
-    encoding = tokenizer(inputs, return_tensors="pt")
-    encoding = {k: v.to(model.device) for k, v in encoding.items()}
+    # Initialize the ESM batch converter
+    _, esm1v_alphabet = esm.pretrained.esm1v_t33_650M_UR90S_1()
+    batch_converter = esm1v_alphabet.get_batch_converter()
 
-    # Run inference
+    return model, batch_converter
+
+
+def input_fn(request_body, request_content_type):
+    """
+    Parse the incoming request body.
+
+    Args:
+        request_body (str): The body of the request.
+        request_content_type (str): The content type of the request.
+
+    Returns:
+        str: The protein sequence.
+    """
+    import json
+
+    if request_content_type == "application/json":
+        data = json.loads(request_body)
+        if "sequence" in data:
+            return data["sequence"]
+        else:
+            raise ValueError("JSON input must contain 'sequence' key.")
+    elif request_content_type == "text/plain":
+        return request_body
+    else:
+        raise ValueError(f"Unsupported content type: {request_content_type}")
+
+
+def predict_fn(input_data, model_and_batch_converter):
+    """
+    Perform prediction using the loaded model and batch converter.
+
+    Args:
+        input_data (str): The protein sequence.
+        model_and_batch_converter (Tuple[torch.nn.Module, esm.pretrained.Alphabet]): The loaded model and batch converter.
+
+    Returns:
+        List[float]: Per-residue epitope probabilities.
+    """
+    model, batch_converter = model_and_batch_converter
+    device = next(model.parameters()).device
+
+    # Prepare the batch
+    batch = batch_converter([("", input_data)])
+    token_ids = batch[2].to(device)
+
     with torch.no_grad():
-        results = model(**encoding)
+        outputs = model(token_ids)
+        logits = outputs.logits
+        probs = torch.sigmoid(logits)  # Apply sigmoid for binary classification
+        probs = probs.cpu().numpy()
 
-    # For regression, we directly use the logits as the predicted value
-    predictions = results.logits.cpu().numpy()
+    # Extract per-residue epitope probabilities (class 1 in a binary classification)
+    epitope_probs = probs[0, :, 1].tolist()
 
-    return {
-        "predicted_contact_number": predictions[0].tolist()
-    }  # Return prediction(s) as a list
+    return epitope_probs
+
+
+def output_fn(prediction, response_content_type):
+    """
+    Format the prediction output.
+
+    Args:
+        prediction (List[float]): The prediction probabilities.
+        response_content_type (str): The desired content type of the response.
+
+    Returns:
+        Tuple[str, str]: The response body and its content type.
+    """
+    import json
+
+    if response_content_type == "application/json":
+        return json.dumps({"epitope_probabilities": prediction}), response_content_type
+    elif response_content_type == "text/plain":
+        return str(prediction), response_content_type
+    else:
+        raise ValueError(f"Unsupported response content type: {response_content_type}")
