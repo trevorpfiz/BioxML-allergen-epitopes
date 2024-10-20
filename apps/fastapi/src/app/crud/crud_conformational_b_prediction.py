@@ -55,7 +55,7 @@ class CRUDConformationalBPrediction(
         *,
         job_id: str,
         result: List[PredictionResult],
-        csv_download_url: str,
+        # csv_download_url: str,
     ) -> ConformationalBPrediction:
         prediction = await self.get_by_job_id(db=db, job_id=job_id)
         if not prediction:
@@ -67,7 +67,7 @@ class CRUDConformationalBPrediction(
             .update(
                 {
                     "result": [res.model_dump() for res in result],
-                    "csv_download_url": csv_download_url,
+                    # "csv_download_url": csv_download_url,
                 }
             )
             .eq("job_id", job_id)

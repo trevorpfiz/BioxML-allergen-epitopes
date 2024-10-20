@@ -1,4 +1,4 @@
-from fastapi import APIRouter, BackgroundTasks, Depends, HTTPException
+from fastapi import APIRouter, Depends, HTTPException
 from pydantic import BaseModel
 from supabase._async.client import AsyncClient
 
@@ -23,7 +23,6 @@ class PredictionProcessingResponse(BaseModel):
     "/conformational-b/", response_model=PredictionProcessingResponse, status_code=201
 )
 async def create_conformational_b_prediction(
-    background_tasks: BackgroundTasks,
     prediction_in: ConformationalBPredictionCreate,
     user: CurrentUser,
     db: AsyncClient = Depends(get_db),
@@ -36,8 +35,7 @@ async def create_conformational_b_prediction(
             status_code=403, detail="Not authorized to add prediction to this job"
         )
 
-    background_tasks.add_task(
-        process_and_update_prediction,
+    await process_and_update_prediction(
         job_id=job.id,
         sequence=prediction_in.sequence,
         pdb_id=prediction_in.pdb_id,
@@ -48,13 +46,12 @@ async def create_conformational_b_prediction(
         db=db,
     )
 
-    return {"message": "Prediction processing started", "job_id": job.id}
+    return {"message": "Prediction processing completed", "job_id": job.id}
 
 
 # Endpoint for Linear B prediction
 @router.post("/linear-b/", response_model=PredictionProcessingResponse, status_code=201)
 async def create_linear_b_prediction(
-    background_tasks: BackgroundTasks,
     prediction_in: LinearBPredictionCreate,
     user: CurrentUser,
     db: AsyncClient = Depends(get_db),
@@ -67,8 +64,7 @@ async def create_linear_b_prediction(
             status_code=403, detail="Not authorized to add prediction to this job"
         )
 
-    background_tasks.add_task(
-        process_and_update_prediction,
+    await process_and_update_prediction(
         job_id=job.id,
         sequence=prediction_in.sequence,
         prediction_type="linear-b",
@@ -76,13 +72,12 @@ async def create_linear_b_prediction(
         db=db,
     )
 
-    return {"message": "Prediction processing started", "job_id": job.id}
+    return {"message": "Prediction processing completed", "job_id": job.id}
 
 
 # Endpoint for MHC-I prediction
 @router.post("/mhc-i/", response_model=PredictionProcessingResponse, status_code=201)
 async def create_mhc_i_prediction(
-    background_tasks: BackgroundTasks,
     prediction_in: MhcIPredictionCreate,
     user: CurrentUser,
     db: AsyncClient = Depends(get_db),
@@ -95,8 +90,7 @@ async def create_mhc_i_prediction(
             status_code=403, detail="Not authorized to add prediction to this job"
         )
 
-    background_tasks.add_task(
-        process_and_update_prediction,
+    await process_and_update_prediction(
         job_id=job.id,
         sequence=prediction_in.sequence,
         alleles=prediction_in.alleles,
@@ -105,13 +99,12 @@ async def create_mhc_i_prediction(
         db=db,
     )
 
-    return {"message": "Prediction processing started", "job_id": job.id}
+    return {"message": "Prediction processing completed", "job_id": job.id}
 
 
 # Endpoint for MHC-II prediction
 @router.post("/mhc-ii/", response_model=PredictionProcessingResponse, status_code=201)
 async def create_mhc_ii_prediction(
-    background_tasks: BackgroundTasks,
     prediction_in: MhcIIPredictionCreate,
     user: CurrentUser,
     db: AsyncClient = Depends(get_db),
@@ -124,8 +117,7 @@ async def create_mhc_ii_prediction(
             status_code=403, detail="Not authorized to add prediction to this job"
         )
 
-    background_tasks.add_task(
-        process_and_update_prediction,
+    await process_and_update_prediction(
         job_id=job.id,
         sequence=prediction_in.sequence,
         alleles=prediction_in.alleles,
@@ -134,4 +126,4 @@ async def create_mhc_ii_prediction(
         db=db,
     )
 
-    return {"message": "Prediction processing started", "job_id": job.id}
+    return {"message": "Prediction processing completed", "job_id": job.id}
