@@ -135,10 +135,7 @@ const MhcIIForm: React.FC = () => {
 
   // Ara h 2.0101 - AAK96887
   const fillExampleValues = () => {
-    form.setValue(
-      "sequence",
-      "MAKLTILVALALFLLAAHASARQQWELQGDRRCQSQLERANLRPCEQHLMQKIQRDEDSYERDPYSPSQDPYSPSPYDRRGAGSSQHQERCCNELNEFENNQRCMCEALQQIMENQSDRLQGRQQEQQFKRELRNLPQQCGLRAPQRCDLDVESGG",
-    );
+    form.setValue("sequence", "MAKLTILVALALFLLAAHA");
   };
 
   const toggleGroup = (
