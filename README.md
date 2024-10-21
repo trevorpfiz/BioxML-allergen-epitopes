@@ -33,7 +33,7 @@
 
 ## Demo
 
-Coming soon
+https://devpost.com/software/epitope-prediction-web-platform
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
@@ -45,6 +45,7 @@ Coming soon
 
 - **Next.js** web platform for B-cell and T-cell epitope predictions powered by ESM-3.
 - **FastAPI** for hosting ESM-3 and predicting epitopes.
+- **Tools FastAPI** for hosting DTU Health Tech tools.
 
 ### Features
 
@@ -83,9 +84,12 @@ apps
   |   ├─ React 18
   |   ├─ Tailwind CSS
   |   └─ E2E Typesafe API Server & Client
-  └─ fastapi
-      ├─ FastAPI for uploading and processing protein sequences
-      └─ ESM-3 for epitope predictions
+  ├─ fastapi
+  |   ├─ FastAPI for uploading and processing protein sequences
+  |   ├─ ESM-3 for epitope predictions
+  └─ tools-fastapi
+      └─ FastAPI to call DTU Health Tech tools hosted on EC2
+
 notebooks
   └─ working with the models
 packages
